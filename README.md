@@ -1,35 +1,90 @@
-# network_optmise
+# Telco Network Optimization Suite
 
-##This is a demo of Snowflake's geospatial, advanced analytics and text2chat capability against telco network data
+A multi-page Streamlit application for visualizing and analyzing cell tower performance and customer support data.
 
-Note this demo builds on top of two projects you should be familar with:
+## Features
 
-Optimising Network Operations Quickstart: A hands on lab to generate some data and deliver some analytics against it
-https://quickstarts.snowflake.com/guide/optimizing-network-operations-with-cortex-ai-call-transcripts-and-tower-data-analysis/index.html?index=..%2F..index#0
+- **Home Dashboard**: Overview of network statistics and navigation
+- **Cell Tower Lookup**: Interactive map for examining individual cell tower performance metrics
+- **Heatmap Overlay**: Visualize support ticket density and sentiment data
+- **Additional Analysis Pages**: Coming soon!
 
-Cortex Analyst Charting: A Streamlit in Snowflake app that produces nice charts on top of Cortex Analyst
-https://github.com/sfc-gh-sweingartner/CortexCharts/tree/main
+## Setup Instructions
 
+### 1. File Structure
 
-### How to Deploy the geospatial and advanced analytics SIS demo 
-1) In Snowsight, open a SQL worksheet and run this with ACCOUNTADMIN to allow your env to see this GIT project:
-    CREATE OR REPLACE API INTEGRATION git_sweingartner
-    API_PROVIDER = git_https_api
-    API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-sweingartner')
-    ENABLED = TRUE;
-2) click Projects > Streamlit
-3) Tick the drop downbox next to the blue "+ Streamlit App" and select "create from repository"
-4) Click "Create Git Repository"
-5) In the Repository URL field, enter: https://github.com/sfc-gh-sweingartner/network_optmise
-6) In the API Integration drop down box, choose GIT_SWEINGARTNER
-7) Deploy it into any DB, Schema and use any WH
-8) Click Home.py then "Select File"
-9) Click create
-10) Optional - In a SQL worksheet, run the statements in modify_support_tickets.sql against the table created in the quickstart.  (This increases the support ticket count for cell's where the sentiment is low)  
-11) Go to mapbox.com and create a free account.  This is a mapping service.  Log in and you will be provided an API key.   In a Snowflake SQL worksheet open mapbox_access_setup.sql and enter in your key in line 7
-12) Run the App.
+The application follows Snowflake's multi-page Streamlit app structure:
 
+```
+/
+├── main.py                       # Main landing page
+├── pages/                        # Subdirectory for individual pages
+│   ├── 1_Cell_Tower_Lookup.py    # Cell tower lookup page
+│   ├── 2_Heatmap_Overlay.py      # Interactive heatmap page
+│   ├── 3_Customer_Impact.py      # Customer impact dashboard (placeholder)
+│   └── 4_Loyalty_Impact.py       # Loyalty status impact view (placeholder)
+└── README.md                     # Documentation
+```
 
-### How to Deploy the text2sql demo 
-1. Save the telco_network_opt.yaml file into an internal stage.  If you deployed the geospatial app above, you can save it here:  TELCO_NETWORK_OPTIMIZATION_PROD.RAW.DATA/telco_network_opt.yaml
-2. Create a Cortex Analyst charting app per the instructions in the Gitlab above.  
+### 2. Mapbox Configuration
+
+The application uses Mapbox API key configured through Snowflake's secret management. The following has already been done:
+
+```sql
+-- Create secret for Mapbox API key
+CREATE OR REPLACE SECRET mapbox_key
+  TYPE = GENERIC_STRING
+  SECRET_STRING = $MAPBOX_API_KEY;
+
+-- Create external access integration
+CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION map_access_int
+  ALLOWED_NETWORK_RULES = (map_tile_rule)
+  ALLOWED_AUTHENTICATION_SECRETS = (mapbox_key)
+  ENABLED = TRUE;
+
+-- Grant necessary privileges
+GRANT READ ON SECRET mapbox_key TO ROLE IDENTIFIER($APP_CREATOR_ROLE);
+GRANT USAGE ON INTEGRATION map_access_int TO ROLE IDENTIFIER($APP_CREATOR_ROLE);
+
+-- Enable the Streamlit app to use the integration and secret
+ALTER STREAMLIT TELCO_NETWORK_OPTIMIZATION_PROD.RAW.FQYVZ89K8QDAWHRK
+  SET EXTERNAL_ACCESS_INTEGRATIONS = (map_access_int)
+  SECRETS = ('mapbox_key' = TELCO_NETWORK_OPTIMIZATION_PROD.RAW.mapbox_key);
+```
+
+If you create a new Streamlit app or need to reconfigure the existing one, make sure to update the ALTER STREAMLIT statement with your app's identifier.
+
+## Multi-Page Navigation
+
+The application uses Streamlit's built-in multi-page support, which automatically adds navigation in the sidebar. According to Snowflake's documentation:
+
+* The main.py file serves as the landing page
+* Files in the pages/ directory are displayed as navigation options
+* File naming with numbers (e.g., 1_Cell_Tower_Lookup.py) controls the order
+* Each page can be accessed directly via URL paths
+
+## Key Features of the Heatmap Overlay
+
+The Heatmap Overlay page provides several powerful visualizations:
+
+1. **Interactive Heatmap** with options to view:
+   - Cell Tower Failure Rate
+   - Support Ticket Density
+   - Customer Sentiment Distribution
+   - Combined Issue Severity
+
+2. **Correlation Analysis** showing the relationship between:
+   - Failure Rate vs. Support Ticket Count
+   - Failure Rate vs. Sentiment Score
+
+3. **Key Statistics** tables displaying:
+   - Top 5 worst performing cell towers
+   - Areas with the most support tickets
+
+4. **Priority Areas** highlighting the most problematic locations based on a combination of technical and customer impact metrics
+
+## Troubleshooting
+
+- If pages aren't loading correctly, ensure each page has `st.set_page_config()` as the first Streamlit command
+- If maps aren't displaying properly, verify that the Mapbox secret is properly configured
+- For data issues, check the SQL queries in each file to ensure they match your database schema 
