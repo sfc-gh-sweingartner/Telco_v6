@@ -76,33 +76,16 @@ view_state = pdk.ViewState(
     pitch=50,
 )
 
-# Get Mapbox API key from Snowflake secrets
-try:
-    mapbox_key = _snowflake.get_generic_secret_string('mapbox_key')
-    has_mapbox_key = True
-except Exception as e:
-    st.error(f"Error getting Mapbox key: {str(e)}")
-    mapbox_key = ""
-    has_mapbox_key = False
-
-# Display in Streamlit with Mapbox configuration
-if has_mapbox_key:
-    st.session_state.event = st.pydeck_chart(
-        pdk.Deck(
-            map_provider="mapbox",
-            map_style="mapbox://styles/mapbox/light-v9",
-            api_keys={"mapbox": mapbox_key},
-            layers=[grid_layer],
-            initial_view_state=view_state,
-        ), on_select="rerun", selection_mode="single-object"
-    )
-else:
-    st.session_state.event = st.pydeck_chart(
-        pdk.Deck(
-            layers=[grid_layer],
-            initial_view_state=view_state,
-        ), on_select="rerun", selection_mode="single-object"
-    )
+# Display the map using PyDeck without requiring explicit Mapbox API key
+# Snowflake's Streamlit environment provides access to Mapbox tiles by default
+st.session_state.event = st.pydeck_chart(
+    pdk.Deck(
+        map_provider="mapbox",
+        map_style="mapbox://styles/mapbox/light-v9",
+        layers=[grid_layer],
+        initial_view_state=view_state,
+    ), on_select="rerun", selection_mode="single-object"
+)
 
 cell_tower_objects = st.session_state.event.selection.get("objects", {}).get("cell_tower_grid", [])
 selection_data = []
