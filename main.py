@@ -106,8 +106,8 @@ except ImportError:
 
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
-    page_title="Executive Telco Network Suite",
-    page_icon="🏆",
+    page_title="Ericsson Network Intelligence Suite",
+    page_icon="📡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -124,12 +124,23 @@ demo_state = create_executive_demo_controller()
 # Initialize Snowflake session
 session = get_snowflake_session()
 
-# Executive page header with sophisticated styling
+# Ericsson-branded page header with sophisticated styling
 create_page_header(
-    title="Executive Telco Network Intelligence Suite",
-    description="AI-Powered Network Operations Command Center • Real-Time Analytics • Predictive Intelligence • Executive Insights",
-    icon="🏆"
+    title="Ericsson Network Intelligence Suite",
+    description="AI-Powered Network Operations Command Center • Real-Time Analytics • Predictive Intelligence • Executive Insights • Powered by Snowflake Cortex",
+    icon="📡"
 )
+
+# Ericsson brand compliance notice
+st.markdown("""
+<div style="background: linear-gradient(90deg, var(--ericsson-blue) 0%, var(--ericsson-orange) 100%); 
+            color: white; padding: 0.75rem 2rem; margin-bottom: 1rem; border-radius: var(--exec-border-radius);
+            font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; font-size: 0.9rem; text-align: center;">
+    <strong>Ericsson Network Intelligence Suite</strong> | Built in compliance with 
+    <a href="https://mediabank.ericsson.net/admin/mb/?h=dbeb87a1bcb16fa379c0020bdf713872#View%20document" 
+       style="color: white; text-decoration: underline;">Ericsson Brand Guidelines 2025</a>
+</div>
+""", unsafe_allow_html=True)
 
 # Executive alert for live demo status
 if demo_state.get('demo_active', False):
@@ -518,13 +529,18 @@ add_page_footer()
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; background: var(--exec-gradient-primary); color: white; 
-            padding: 2rem; border-radius: var(--exec-border-radius-lg); margin: 2rem 0;">
-    <h3 style="margin: 0 0 1rem 0; color: white;">🏆 Executive Support & Consultation</h3>
+            padding: 2rem; border-radius: var(--exec-border-radius-lg); margin: 2rem 0;
+            font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">
+    <h3 style="margin: 0 0 1rem 0; color: white;">📡 Ericsson Support & Innovation Services</h3>
     <p style="margin: 0; opacity: 0.9; font-size: 1.1rem;">
-        24/7 Executive Support • Strategic AI Consulting • Custom Analytics Development
+        24/7 Network Operations Support • AI-Driven Insights • Custom Network Analytics
     </p>
     <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">
-        Contact your dedicated success manager for personalized insights and strategic guidance
+        Powered by Ericsson's global network expertise and Snowflake Cortex AI technology
+    </p>
+    <p style="margin: 1rem 0 0 0; font-size: 0.75rem; opacity: 0.7;">
+        Designed in compliance with <a href="https://mediabank.ericsson.net/admin/mb/?h=dbeb87a1bcb16fa379c0020bdf713872#View%20document" 
+        style="color: var(--ericsson-orange-light); text-decoration: underline;">Ericsson Brand Guidelines</a>
     </p>
 </div>
 """, unsafe_allow_html=True)

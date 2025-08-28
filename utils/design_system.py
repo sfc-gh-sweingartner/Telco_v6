@@ -71,36 +71,85 @@ def inject_custom_css():
     """Inject professional executive-grade CSS into the Streamlit app"""
     st.markdown("""
     <style>
-    /* Import executive-grade fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    /* Import Ericsson Brand Fonts - Ericsson Hilda and fallbacks */
+    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;500;600;700;800&family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
     
-    /* Root variables for executive theming */
-    :root {
-        --exec-primary: #0A1628;
-        --exec-primary-light: #1B2A41;
-        --exec-primary-accent: #2E4A69;
-        --exec-secondary: #C8102E;
-        --exec-gold: #FFD700;
-        --exec-silver: #C0C0C0;
-        --exec-success: #00A676;
-        --exec-warning: #FF6B35;
-        --exec-bg-primary: #FFFFFF;
-        --exec-bg-secondary: #F8FAFC;
-        --exec-text-primary: #1A202C;
-        --exec-text-secondary: #4A5568;
-        --exec-border: #E2E8F0;
-        --exec-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        --exec-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
-        --exec-gradient-primary: linear-gradient(135deg, #0A1628 0%, #1B2A41 50%, #2E4A69 100%);
-        --exec-gradient-accent: linear-gradient(135deg, #C8102E 0%, #FF6B35 100%);
-        --exec-border-radius: 16px;
-        --exec-border-radius-lg: 24px;
+    /* Ericsson Hilda Font Face Declaration */
+    @font-face {
+        font-family: 'Ericsson Hilda';
+        src: url('https://www.ericsson.com/assets/fonts/ericsson-hilda-regular.woff2') format('woff2'),
+             url('https://www.ericsson.com/assets/fonts/ericsson-hilda-regular.woff') format('woff');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
     }
     
-    /* Main executive app styling */
+    @font-face {
+        font-family: 'Ericsson Hilda';
+        src: url('https://www.ericsson.com/assets/fonts/ericsson-hilda-medium.woff2') format('woff2'),
+             url('https://www.ericsson.com/assets/fonts/ericsson-hilda-medium.woff') format('woff');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+    }
+    
+    @font-face {
+        font-family: 'Ericsson Hilda';
+        src: url('https://www.ericsson.com/assets/fonts/ericsson-hilda-bold.woff2') format('woff2'),
+             url('https://www.ericsson.com/assets/fonts/ericsson-hilda-bold.woff') format('woff');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+    }
+    
+    /* Ericsson Brand Guidelines - Root variables for theming */
+    :root {
+        /* Ericsson Primary Brand Colors */
+        --ericsson-blue: #002561;
+        --ericsson-blue-light: #0066CC;
+        --ericsson-blue-dark: #001B42;
+        --ericsson-navy: #1C1C1C;
+        --ericsson-orange: #FF6600;
+        --ericsson-orange-light: #FF8533;
+        
+        /* Ericsson Secondary Colors */
+        --ericsson-green: #009639;
+        --ericsson-purple: #663399;
+        --ericsson-cyan: #00B7C3;
+        --ericsson-magenta: #E6007E;
+        --ericsson-yellow: #FFB900;
+        
+        /* Ericsson Neutral Colors */
+        --ericsson-white: #FFFFFF;
+        --ericsson-light-grey: #F5F5F5;
+        --ericsson-medium-grey: #CCCCCC;
+        --ericsson-dark-grey: #666666;
+        --ericsson-black: #000000;
+        
+        /* Ericsson Application Variables */
+        --exec-primary: var(--ericsson-blue);
+        --exec-primary-light: var(--ericsson-blue-light);
+        --exec-primary-accent: var(--ericsson-orange);
+        --exec-secondary: var(--ericsson-orange);
+        --exec-success: var(--ericsson-green);
+        --exec-warning: var(--ericsson-yellow);
+        --exec-bg-primary: var(--ericsson-white);
+        --exec-bg-secondary: var(--ericsson-light-grey);
+        --exec-text-primary: var(--ericsson-navy);
+        --exec-text-secondary: var(--ericsson-dark-grey);
+        --exec-border: var(--ericsson-medium-grey);
+        --exec-shadow: 0 10px 40px rgba(0, 37, 97, 0.08);
+        --exec-shadow-lg: 0 20px 60px rgba(0, 37, 97, 0.15);
+        --exec-gradient-primary: linear-gradient(135deg, var(--ericsson-blue) 0%, var(--ericsson-blue-light) 50%, var(--ericsson-orange) 100%);
+        --exec-gradient-accent: linear-gradient(135deg, var(--ericsson-orange) 0%, var(--ericsson-orange-light) 100%);
+        --exec-border-radius: 8px;
+        --exec-border-radius-lg: 16px;
+    }
+    
+    /* Main Ericsson-branded app styling */
     .main > div {
         padding-top: 1rem;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: 'Ericsson Hilda', 'Source Sans Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         background: var(--exec-bg-secondary);
         color: var(--exec-text-primary);
     }
@@ -285,7 +334,7 @@ def inject_custom_css():
         border: none;
         padding: 1rem 2rem;
         font-weight: 600;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Ericsson Hilda', 'Source Sans Pro', 'Inter', sans-serif;
         font-size: 1rem;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: var(--exec-shadow);
@@ -780,16 +829,18 @@ def create_metric_grid(metrics: list, columns: int = 3):
             create_metric_card(**metric)
 
 def create_sidebar_navigation():
-    """Create executive-grade sidebar navigation"""
+    """Create Ericsson-branded executive sidebar navigation"""
     st.sidebar.markdown("""
     <div style="text-align: center; padding: 2rem 1.5rem; background: var(--exec-gradient-primary); 
                 border-radius: var(--exec-border-radius-lg); margin-bottom: 2rem; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; 
-                    background: radial-gradient(circle, rgba(255,215,0,0.1), transparent); border-radius: 50%;"></div>
+                    background: radial-gradient(circle, rgba(255, 102, 0, 0.1), transparent); border-radius: 50%;"></div>
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📡</div>
-            <h3 style="color: white; margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em;">TELCO NETWORK</h3>
-            <p style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 0.8rem; text-transform: uppercase;">Executive Suite</p>
+            <h3 style="color: white; margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; 
+                       font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">ERICSSON</h3>
+            <p style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 0.8rem; text-transform: uppercase;
+                      font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">Network Intelligence Suite</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -824,13 +875,18 @@ def create_sidebar_navigation():
     """, unsafe_allow_html=True)
 
 def add_page_footer():
-    """Add professional page footer"""
+    """Add Ericsson-branded professional page footer"""
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; color: #6c757d; font-size: 0.875rem; padding: 2rem 0 1rem 0;">
+    <div style="text-align: center; color: var(--exec-text-secondary); font-size: 0.875rem; padding: 2rem 0 1rem 0;
+                font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">
         <p style="margin: 0;">🤖 Powered by <strong>Snowflake Cortex AISQL</strong> | Built with <strong>Streamlit</strong></p>
-        <p style="margin: 0.5rem 0 0 0;">© 2024 AI-Enhanced Telco Network Optimization Suite</p>
+        <p style="margin: 0.5rem 0 0 0;">© 2025 <strong style="color: var(--exec-primary);">Ericsson</strong> Network Intelligence Suite</p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; opacity: 0.8;">
+            Compliant with <a href="https://mediabank.ericsson.net/admin/mb/?h=dbeb87a1bcb16fa379c0020bdf713872#View%20document" 
+            style="color: var(--exec-primary-accent); text-decoration: none;">Ericsson Brand Guidelines 2025</a>
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
