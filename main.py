@@ -92,7 +92,7 @@ st.markdown("### 📊 Network Operations Dashboard")
 st.image(
     "https://quickstarts.snowflake.com/guide/optimizing-network-operations-with-cortex-ai-call-transcripts-and-tower-data-analysis/img/dad88af756439cbf.png",
     caption="Optimizing Network Operations with Cortex AI",
-    use_column_width=True
+    use_container_width=True
 )
 
 # Network overview metrics section
