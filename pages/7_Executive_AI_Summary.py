@@ -190,6 +190,16 @@ with st.sidebar:
 # Executive KPI Dashboard
 st.markdown("## 📊 Executive KPI Dashboard")
 
+# Initialize default values for financial calculations
+failure_rate = 0
+total_customers = 0
+total_towers = 0
+customer_satisfaction = 0
+estimated_monthly_revenue = 0
+failure_impact_revenue = 0
+optimization_opportunity = 0
+potential_revenue_impact = 0
+
 if not network_data.empty and not customer_data.empty:
     # Create executive metrics
     exec_col1, exec_col2, exec_col3, exec_col4 = st.columns(4)
@@ -234,7 +244,16 @@ if not network_data.empty and not customer_data.empty:
     failure_rate = network_data.iloc[0]['AVG_FAILURE_RATE'] 
     potential_revenue_impact = failure_rate * total_customers * 0.0012  # Estimated revenue impact
     
+    # Calculate financial impact variables (needed throughout the page)
+    estimated_monthly_revenue = total_customers * 45  # Average monthly revenue per customer
+    failure_impact_revenue = estimated_monthly_revenue * (failure_rate / 100) * 0.15
+    optimization_opportunity = failure_impact_revenue * 0.7
+    
     st.markdown("---")
+else:
+    # Show message when data is not available
+    st.warning("⚠️ Executive dashboard data is currently being loaded. Please check back in a moment.")
+    st.info("💡 Ensure network and customer data is available in the system.")
 
 # AI-Powered Executive Analysis
 st.markdown("## 🤖 AI Executive Intelligence")
@@ -353,11 +372,6 @@ with exec_tab2:
         create_ai_loading_spinner("AI is analyzing financial impact and ROI opportunities...")
         
         try:
-            # Calculate estimated financial impacts
-            estimated_monthly_revenue = total_customers * 45  # Average monthly revenue per customer
-            failure_impact_revenue = estimated_monthly_revenue * (failure_rate / 100) * 0.15
-            optimization_opportunity = failure_impact_revenue * 0.7
-            
             financial_context = f"""
             Financial Impact Analysis - {financial_focus}:
             
