@@ -55,7 +55,7 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="mistral-large"):
+    def create_model_selector(models, default_model="claude-4-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
@@ -73,8 +73,14 @@ except ImportError:
         return FallbackAnalytics()
     def get_ai_processor(session):
         class FallbackProcessor:
-            supported_models = ["mistral-large", "llama3.1-8b", "snowflake-arctic"]
-            default_model = "mistral-large"
+            supported_models = [
+                'claude-4-sonnet', 'claude-4-opus', 'claude-3-5-sonnet', 'claude-3-7-sonnet',
+                'mistral-large', 'mistral-large2', 'mistral-7b', 'mixtral-8x7b',
+                'openai-gpt-4.1', 'openai-o4-mini', 'openai-gpt-5', 'openai-gpt-5-mini',
+                'llama4-maverick', 'llama4-scout', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
+                'snowflake-arctic', 'snowflake-llama-3.3-70b', 'reka-core', 'reka-flash', 'deepseek-r1'
+            ]
+            default_model = "claude-4-sonnet"
             def ai_complete(self, prompt, **kwargs):
                 return "📊 Executive AI analytics are being deployed. Strategic business intelligence will be available shortly!"
         return FallbackProcessor()
@@ -158,8 +164,8 @@ network_data, customer_data = load_executive_metrics()
 with st.sidebar:
     st.markdown("---")
     st.markdown("### 🤖 Executive AI Configuration")
-    models = ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["mistral-large", "llama3.1-8b", "snowflake-arctic"]
-    selected_model = create_model_selector(models, "mistral-large")
+    models = ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["claude-4-sonnet", "mistral-large", "llama3.1-8b", "snowflake-arctic"]
+    selected_model = create_model_selector(models, "claude-4-sonnet")
     
     st.markdown("---")
     st.markdown("### 📊 Report Settings")

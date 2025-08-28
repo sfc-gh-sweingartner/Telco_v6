@@ -334,7 +334,7 @@ with tech_col1:
             <span style="margin-right: 0.5rem;">❄️</span> Snowflake Cortex AISQL
         </h4>
         <ul style="margin: 0; padding-left: 1.5rem; color: #4a5568;">
-            <li><strong>AI_COMPLETE:</strong> LLM-powered analysis using Mistral, Llama, and Arctic models</li>
+            <li><strong>AI_COMPLETE:</strong> LLM-powered analysis using Claude, GPT, Mistral, Llama, and Arctic models</li>
             <li><strong>AI_CLASSIFY:</strong> Intelligent categorization of tickets and issues</li>
             <li><strong>AI_SENTIMENT:</strong> Advanced sentiment analysis for customer feedback</li>
             <li><strong>AI_SUMMARIZE:</strong> Automated executive summaries and insights</li>

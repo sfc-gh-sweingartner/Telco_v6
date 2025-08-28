@@ -47,13 +47,33 @@ class TelcoAISQLProcessor:
         """
         self.session = session
         self.supported_models = [
-            'mistral-large', 'mistral-7b', 'mixtral-8x7b',
-            'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
-            'reka-core', 'reka-flash',
-            'snowflake-arctic',
-            'gemma-7b'
+            # Claude Models (Anthropic)
+            'claude-4-sonnet', 'claude-4-opus', 'claude-3-5-sonnet', 'claude-3-7-sonnet',
+            
+            # Mistral Models
+            'mistral-large', 'mistral-large2', 'mistral-7b', 'mixtral-8x7b',
+            
+            # OpenAI Models 
+            'openai-gpt-4.1', 'openai-o4-mini', 'openai-gpt-5', 'openai-gpt-5-mini', 
+            'openai-gpt-5-nano', 'openai-gpt-5-chat', 'openai-gpt-oss-120b', 'openai-gpt-oss-20b',
+            
+            # Llama Models (Meta)
+            'llama4-maverick', 'llama4-scout', 'llama2-70b-chat',
+            'llama3-8b', 'llama3-70b', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
+            'llama3.2-1b', 'llama3.2-3b', 'llama3.3-70b',
+            
+            # Snowflake-Optimized Models
+            'snowflake-arctic', 'snowflake-llama-3.3-70b', 'snowflake-llama-3.1-405b',
+            'snowflake-arctic-embed-m',
+            
+            # Specialized Models
+            'reka-core', 'reka-flash', 'jamba-instruct', 'jamba-1.5-mini', 'jamba-1.5-large',
+            'deepseek-r1', 'gemma-7b',
+            
+            # Embedding Models
+            'e5-base-v2', 'nv-embed-qa-4', 'multilingual-e5-large', 'voyage-multilingual-2'
         ]
-        self.default_model = 'mistral-large'
+        self.default_model = 'claude-4-sonnet'
         
     def ai_complete(self, prompt: str, model: str = None, max_tokens: int = 500) -> str:
         """
@@ -61,7 +81,7 @@ class TelcoAISQLProcessor:
         
         Args:
             prompt: The input prompt for completion
-            model: LLM model to use (default: mistral-large)
+            model: LLM model to use (default: claude-4-sonnet)
             max_tokens: Maximum tokens to generate
             
         Returns:

@@ -683,7 +683,7 @@ def create_ai_progress_tracker(current_step: int, total_steps: int, step_name: s
     </div>
     """, unsafe_allow_html=True)
 
-def create_model_selector(models: list, default_model: str = "mistral-large") -> str:
+def create_model_selector(models: list, default_model: str = "claude-4-sonnet") -> str:
     """
     Create AI model selector component
     
@@ -697,15 +697,61 @@ def create_model_selector(models: list, default_model: str = "mistral-large") ->
     st.markdown("### 🤖 AI Model Configuration")
     
     model_descriptions = {
-        "mistral-large": "🏆 Mistral Large - Best overall performance, latest capabilities",
-        "mistral-7b": "⚡ Mistral 7B - Fast responses, good for simple tasks",
+        # Claude Models (Anthropic) - Premium reasoning and analysis
+        "claude-4-sonnet": "🎯 Claude 4 Sonnet - DEFAULT: Best balance of speed and intelligence",
+        "claude-4-opus": "🏆 Claude 4 Opus - Maximum intelligence for complex tasks",
+        "claude-3-5-sonnet": "🚀 Claude 3.5 Sonnet - Fast, highly capable",
+        "claude-3-7-sonnet": "📊 Claude 3.7 Sonnet - Enhanced analytical capabilities",
+        
+        # Mistral Models - High performance open-source
+        "mistral-large": "🏆 Mistral Large - Best overall performance",
+        "mistral-large2": "✨ Mistral Large 2 - Latest Mistral flagship",
+        "mistral-7b": "⚡ Mistral 7B - Fast, efficient responses", 
         "mixtral-8x7b": "🎯 Mixtral 8x7B - Balanced performance and speed",
-        "llama3.1-8b": "🦙 Llama 3.1 8B - Meta's efficient model",
-        "llama3.1-70b": "🦙 Llama 3.1 70B - Meta's powerful model",
+        
+        # OpenAI Models - Industry-leading capabilities
+        "openai-gpt-4.1": "🤖 GPT-4.1 - Advanced reasoning and creativity",
+        "openai-o4-mini": "⚡ O4-Mini - Fast GPT-4 level performance",
+        "openai-gpt-5": "🌟 GPT-5 - Next-generation AI model",
+        "openai-gpt-5-mini": "⚡ GPT-5 Mini - Efficient GPT-5 variant",
+        "openai-gpt-5-nano": "🔹 GPT-5 Nano - Ultra-fast responses",
+        "openai-gpt-5-chat": "💬 GPT-5 Chat - Optimized for conversations",
+        "openai-gpt-oss-120b": "🔓 GPT OSS 120B - Open-source large model",
+        "openai-gpt-oss-20b": "🔓 GPT OSS 20B - Open-source medium model",
+        
+        # Llama Models (Meta) - Open-source powerhouses
+        "llama4-maverick": "🦙 Llama 4 Maverick - Next-gen Meta model",
+        "llama4-scout": "🔍 Llama 4 Scout - Specialized for analysis",
+        "llama2-70b-chat": "💬 Llama 2 70B Chat - Conversational AI",
+        "llama3-8b": "🦙 Llama 3 8B - Efficient general purpose",
+        "llama3-70b": "🦙 Llama 3 70B - High-performance reasoning",
+        "llama3.1-8b": "🦙 Llama 3.1 8B - Enhanced efficiency",
+        "llama3.1-70b": "🦙 Llama 3.1 70B - Powerful reasoning",
         "llama3.1-405b": "🦙 Llama 3.1 405B - Meta's largest model",
-        "snowflake-arctic": "❄️ Snowflake Arctic - Optimized for enterprise",
+        "llama3.2-1b": "🦙 Llama 3.2 1B - Ultra-lightweight",
+        "llama3.2-3b": "🦙 Llama 3.2 3B - Compact and efficient",
+        "llama3.3-70b": "🦙 Llama 3.3 70B - Latest Meta release",
+        
+        # Snowflake-Optimized Models - Enterprise-tuned
+        "snowflake-arctic": "❄️ Snowflake Arctic - Enterprise optimized",
+        "snowflake-llama-3.3-70b": "❄️ Snowflake Llama 3.3 70B - Snowflake-tuned",
+        "snowflake-llama-3.1-405b": "❄️ Snowflake Llama 3.1 405B - Enterprise-scale",
+        "snowflake-arctic-embed-m": "❄️ Arctic Embed M - Document embeddings",
+        
+        # Specialized Models - Purpose-built
         "reka-core": "🧠 Reka Core - Advanced reasoning",
-        "reka-flash": "⚡ Reka Flash - Speed optimized"
+        "reka-flash": "⚡ Reka Flash - Speed optimized",
+        "jamba-instruct": "🎯 Jamba Instruct - Instruction following",
+        "jamba-1.5-mini": "⚡ Jamba 1.5 Mini - Compact instruction model",
+        "jamba-1.5-large": "🏆 Jamba 1.5 Large - Advanced instruction model",
+        "deepseek-r1": "🔬 DeepSeek R1 - Research and reasoning",
+        "gemma-7b": "💎 Gemma 7B - Google's efficient model",
+        
+        # Embedding Models - Semantic understanding
+        "e5-base-v2": "🔗 E5 Base v2 - General embeddings",
+        "nv-embed-qa-4": "🔗 NV Embed QA-4 - NVIDIA Q&A embeddings", 
+        "multilingual-e5-large": "🌍 Multilingual E5 Large - Global embeddings",
+        "voyage-multilingual-2": "🌍 Voyage Multilingual 2 - Cross-language embeddings"
     }
     
     # Create selection with descriptions

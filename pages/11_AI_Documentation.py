@@ -153,7 +153,7 @@ elif doc_section == "🤖 AI Features Overview":
     st.success("""
     Our platform leverages **Snowflake Cortex AISQL** - a comprehensive suite of LLM-powered functions 
     that bring AI capabilities directly to your data. This includes advanced language models like 
-    Mistral Large, Llama 3.1, and Snowflake Arctic for diverse analytical needs.
+    Claude 4 Sonnet, GPT-5, Mistral Large, Llama 4, and Snowflake Arctic for diverse analytical needs.
     """)
     
     # Feature breakdown by page
@@ -170,7 +170,7 @@ elif doc_section == "🤖 AI Features Overview":
         {
             "Page": "🧠 AI Insights & Recommendations",
             "AI Features": [
-                "Multi-model AI selection (Mistral, Llama, Arctic)",
+                "Multi-model AI selection (Claude, GPT, Mistral, Llama, Arctic)",
                 "Executive report generation",
                 "Pattern detection and analysis",
                 "Intelligent recommendation engine"
@@ -271,8 +271,26 @@ elif doc_section == "🔧 Technical Reference":
     
     model_data = pd.DataFrame([
         {
+            "Model": "claude-4-sonnet",
+            "Use Case": "DEFAULT: Balanced analysis, executive reporting",
+            "Strengths": "Excellent reasoning, balanced speed & quality",
+            "Typical Response Time": "1.5-2.5 seconds"
+        },
+        {
+            "Model": "claude-4-opus",
+            "Use Case": "Complex analysis, deep reasoning",
+            "Strengths": "Maximum intelligence, highest accuracy",
+            "Typical Response Time": "2-4 seconds"
+        },
+        {
+            "Model": "openai-gpt-5",
+            "Use Case": "Next-generation AI capabilities",
+            "Strengths": "Cutting-edge performance",
+            "Typical Response Time": "2-3 seconds"
+        },
+        {
             "Model": "mistral-large",
-            "Use Case": "Complex analysis, executive reporting",
+            "Use Case": "Open-source alternative, complex analysis",
             "Strengths": "High accuracy, detailed responses",
             "Typical Response Time": "2-3 seconds"
         },
@@ -423,7 +441,8 @@ elif doc_section == "⚡ Best Practices":
         {
             "category": "🔄 Model Selection",
             "practices": [
-                "Use mistral-large for complex strategic analysis",
+                "Use claude-4-sonnet as default for balanced performance",
+                "Use claude-4-opus for complex strategic analysis",
                 "Choose llama3.1-8b for quick operational insights",  
                 "Try different models to compare results",
                 "Consider response time vs accuracy trade-offs"
@@ -481,7 +500,7 @@ elif doc_section == "🔧 Troubleshooting":
         {
             "issue": "⏰ Slow response times", 
             "cause": "High load or complex queries",
-            "solution": "Try using a faster model like llama3.1-8b, reduce max_tokens, or simplify your prompt."
+            "solution": "Try using a faster model like llama3.1-8b or claude-3-5-sonnet, reduce max_tokens, or simplify your prompt."
         },
         {
             "issue": "📊 Incomplete or unclear responses",

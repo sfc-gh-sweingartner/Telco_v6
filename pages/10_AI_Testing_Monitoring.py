@@ -63,8 +63,14 @@ except ImportError:
         return FallbackAnalytics()
     def get_ai_processor(session):
         class FallbackProcessor:
-            supported_models = ["mistral-large", "llama3.1-8b", "snowflake-arctic"]
-            default_model = "mistral-large"
+            supported_models = [
+                'claude-4-sonnet', 'claude-4-opus', 'claude-3-5-sonnet', 'claude-3-7-sonnet',
+                'mistral-large', 'mistral-large2', 'mistral-7b', 'mixtral-8x7b',
+                'openai-gpt-4.1', 'openai-o4-mini', 'openai-gpt-5', 'openai-gpt-5-mini',
+                'llama4-maverick', 'llama4-scout', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
+                'snowflake-arctic', 'snowflake-llama-3.3-70b', 'reka-core', 'reka-flash', 'deepseek-r1'
+            ]
+            default_model = "claude-4-sonnet"
             def ai_complete(self, prompt, **kwargs):
                 return "🔬 AI performance monitoring is being deployed. Advanced testing and optimization tools will be available shortly!"
         return FallbackProcessor()
@@ -155,8 +161,8 @@ with test_tab1:
         
         test_models = st.multiselect(
             "Models to Test:",
-            ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["mistral-large", "llama3.1-8b"],
-            default=["mistral-large"]
+                    ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["claude-4-sonnet", "mistral-large", "llama3.1-8b"],
+        default=["claude-4-sonnet"]
         )
         
         if st.button("🚀 Run AI Tests", type="primary", key="run_tests"):
@@ -409,10 +415,10 @@ with test_tab4:
         st.markdown("#### 🎯 Model Optimization")
         
         model_performance = pd.DataFrame({
-            'Model': ['mistral-large', 'llama3.1-8b', 'snowflake-arctic'],
-            'Avg Response Time': [2.1, 1.8, 2.5],
-            'Cost per 1K Tokens': [0.002, 0.001, 0.003],
-            'Quality Score': [95, 88, 92]
+            'Model': ['claude-4-sonnet', 'claude-4-opus', 'mistral-large', 'llama3.1-8b', 'snowflake-arctic'],
+            'Avg Response Time': [1.9, 2.3, 2.1, 1.8, 2.5],
+            'Cost per 1K Tokens': [0.003, 0.015, 0.002, 0.001, 0.003],
+            'Quality Score': [98, 99, 95, 88, 92]
         })
         
         st.dataframe(model_performance, use_container_width=True)
