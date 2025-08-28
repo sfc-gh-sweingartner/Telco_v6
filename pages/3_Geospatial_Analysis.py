@@ -14,6 +14,16 @@ except ImportError:
     st.error("h3 library is not installed. Please install it with: pip install h3")
     st.stop()
 
+# Define color palettes for geospatial visualizations
+colors_yellow_blue = ['#fafa6e','#e1f46e','#caee70','#b3e773','#9ddf77','#89d77b','#75cf7f','#62c682',
+                       '#51bd86','#40b488','#31aa89','#24a08a','#199689','#138c87','#138284','#17787f',
+                       '#1d6e79','#226472','#265b6b','#285162','#2a4858']
+colors_yellow_red = ['#ffff00', '#ffdd00', '#ffbb00', '#ff9900', '#ff5500', '#ff0000']
+colors_blue_green = ['#0000ff', '#0044ff', '#0088ff', '#00ccff', '#00ee99', '#00ff00']
+colors_white_blue = ['#ffffff', '#ddddff', '#bbbbff', '#9999ff', '#7777ff', '#1F00FF']
+colors_white_red  = ['#ffffff', '#ffdddd', '#ffbbbb', '#ff9999', '#ff7777', '#FF1F00']
+colors_white_green = ['#ffffff', '#ddffdd', '#bbffbb', '#99ff99', '#77ff77', '#00FF1F']
+
 # Add utils to path for imports
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils'))
 
@@ -580,7 +590,7 @@ def prepare_visualization_data(metric_name, config):
     opacity = config['opacity']
     style = config['style_option']
     colors_hex_list = [] 
-    # (Assume color definitions like colors_yellow_blue etc. are still available globally or defined earlier)
+    # Map style selection to predefined color palettes
     if style == "Yellow Blue": colors_hex_list = colors_yellow_blue
     elif style == "Yellow-Red": colors_hex_list = colors_yellow_red
     elif style == "Blue-Green": colors_hex_list = colors_blue_green
