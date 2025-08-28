@@ -265,7 +265,7 @@ class TelcoAISQLProcessor:
     
     def ai_summarize_agg(self, texts: List[str]) -> str:
         """
-        Summarize multiple texts together
+        Summarize multiple texts together using AI_COMPLETE instead of AI_SUMMARIZE_AGG
         
         Args:
             texts: List of texts to summarize
@@ -274,18 +274,18 @@ class TelcoAISQLProcessor:
             Aggregated summary
         """
         try:
-            # Create temporary table with texts
-            text_data = [{"text": text} for text in texts]
-            temp_df = self.session.create_dataframe(text_data)
-            temp_table = f"temp_summary_table_{int(time.time())}"
-            temp_df.write.save_as_table(temp_table, mode="overwrite", table_type="temporary")
+            # Instead of using temporary tables, combine texts and use AI_COMPLETE
+            combined_text = "\n\n---\n\n".join(texts[:10])  # Limit to 10 texts, separated clearly
             
-            query = f"""
-            SELECT SNOWFLAKE.CORTEX.AI_SUMMARIZE_AGG(text) as summary
-            FROM {temp_table}
-            """
-            result = self.session.sql(query).collect()
-            return result[0]['SUMMARY'] if result else ""
+            prompt = f"""
+            Please provide a comprehensive summary of the following texts. Focus on the key insights, patterns, and important information:
+            
+            {combined_text}
+            
+            Summary:"""
+            
+            # Use AI_COMPLETE instead of AI_SUMMARIZE_AGG to avoid temporary table issues
+            return self.ai_complete(prompt, max_tokens=500)
         except Exception as e:
             st.error(f"AI Summarize Aggregation Error: {e}")
             return ""
