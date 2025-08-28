@@ -116,13 +116,15 @@ class TelcoAISQLProcessor:
             Classified category
         """
         try:
-            categories_str = str(categories).replace("'", "''")
+            # Properly format categories as SQL array using ARRAY_CONSTRUCT
+            categories_escaped = [cat.replace("'", "''") for cat in categories]
+            categories_sql = "ARRAY_CONSTRUCT(" + ", ".join([f"'{cat}'" for cat in categories_escaped]) + ")"
             text_escaped = text.replace("'", "''")
             
             query = f"""
             SELECT SNOWFLAKE.CORTEX.AI_CLASSIFY(
                 '{text_escaped}', 
-                {categories_str}
+                {categories_sql}
             ) as classification
             """
             result = self.session.sql(query).collect()
