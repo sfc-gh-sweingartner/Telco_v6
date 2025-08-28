@@ -64,207 +64,521 @@ class Spacing:
     XXL = "3rem"
 
 # =============================================================================
-# CUSTOM CSS
+# EXECUTIVE-GRADE CSS SYSTEM
 # =============================================================================
 
 def inject_custom_css():
-    """Inject professional custom CSS into the Streamlit app"""
+    """Inject professional executive-grade CSS into the Streamlit app"""
     st.markdown("""
     <style>
-    /* Import professional fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    /* Import executive-grade fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
     
-    /* Main app styling */
-    .main > div {
-        padding-top: 2rem;
-        font-family: 'Inter', sans-serif;
+    /* Root variables for executive theming */
+    :root {
+        --exec-primary: #0A1628;
+        --exec-primary-light: #1B2A41;
+        --exec-primary-accent: #2E4A69;
+        --exec-secondary: #C8102E;
+        --exec-gold: #FFD700;
+        --exec-silver: #C0C0C0;
+        --exec-success: #00A676;
+        --exec-warning: #FF6B35;
+        --exec-bg-primary: #FFFFFF;
+        --exec-bg-secondary: #F8FAFC;
+        --exec-text-primary: #1A202C;
+        --exec-text-secondary: #4A5568;
+        --exec-border: #E2E8F0;
+        --exec-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        --exec-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+        --exec-gradient-primary: linear-gradient(135deg, #0A1628 0%, #1B2A41 50%, #2E4A69 100%);
+        --exec-gradient-accent: linear-gradient(135deg, #C8102E 0%, #FF6B35 100%);
+        --exec-border-radius: 16px;
+        --exec-border-radius-lg: 24px;
     }
     
-    /* Hide Streamlit elements */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    /* Main executive app styling */
+    .main > div {
+        padding-top: 1rem;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--exec-bg-secondary);
+        color: var(--exec-text-primary);
+    }
     
-    /* Professional header styling */
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    header {visibility: hidden !important;}
+    .stDeployButton {visibility: hidden !important;}
+    
+    /* Executive header styling */
     .app-header {
-        background: linear-gradient(135deg, #1f4e79 0%, #2d6ba0 100%);
+        background: var(--exec-gradient-primary);
         color: white;
-        padding: 2rem;
-        border-radius: 12px;
+        padding: 3rem 2.5rem;
+        border-radius: var(--exec-border-radius-lg);
         margin-bottom: 2rem;
-        box-shadow: 0 8px 32px rgba(31, 78, 121, 0.2);
+        box-shadow: var(--exec-shadow-lg);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .app-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        transform: translate(50px, -50px);
     }
     
     .app-header h1 {
         margin: 0;
-        font-weight: 600;
-        font-size: 2.5rem;
-        line-height: 1.2;
+        font-weight: 700;
+        font-size: 3rem;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        background: linear-gradient(45deg, #FFFFFF, #FFD700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
     .app-header p {
-        margin: 0.5rem 0 0 0;
-        opacity: 0.9;
-        font-size: 1.1rem;
-        font-weight: 300;
+        margin: 1rem 0 0 0;
+        opacity: 0.95;
+        font-size: 1.25rem;
+        font-weight: 400;
+        line-height: 1.5;
+        max-width: 80%;
     }
     
-    /* Professional metric cards */
+    /* Executive metric cards */
     .metric-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        border-left: 4px solid #1f4e79;
-        margin-bottom: 1rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background: var(--exec-bg-primary);
+        padding: 2rem 1.5rem;
+        border-radius: var(--exec-border-radius);
+        box-shadow: var(--exec-shadow);
+        border: 1px solid var(--exec-border);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--exec-gradient-accent);
+        transition: width 0.3s ease;
     }
     
     .metric-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: var(--exec-shadow-lg);
+        border-color: var(--exec-primary-accent);
+    }
+    
+    .metric-card:hover::before {
+        width: 8px;
     }
     
     .metric-card h3 {
-        color: #1f4e79;
-        margin: 0 0 0.5rem 0;
-        font-size: 1.25rem;
+        color: var(--exec-text-primary);
+        margin: 0 0 0.75rem 0;
+        font-size: 0.95rem;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.8;
     }
     
     .metric-card .metric-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #2d6ba0;
-        margin: 0;
-        line-height: 1;
+        font-size: 2.75rem;
+        font-weight: 800;
+        color: var(--exec-primary);
+        margin: 0 0 0.5rem 0;
+        line-height: 0.9;
+        letter-spacing: -0.02em;
     }
     
     .metric-card .metric-delta {
         font-size: 0.875rem;
-        margin-top: 0.5rem;
-        font-weight: 500;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
     }
     
-    /* Professional info boxes */
+    .metric-delta.positive {
+        color: var(--exec-success);
+    }
+    
+    .metric-delta.negative {
+        color: var(--exec-secondary);
+    }
+    
+    .metric-delta.neutral {
+        color: var(--exec-text-secondary);
+    }
+    
+    /* Executive info boxes */
     .info-box {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 1rem 1.25rem;
-        margin: 1rem 0;
+        background: var(--exec-bg-primary);
+        border: 1px solid var(--exec-border);
+        border-radius: var(--exec-border-radius);
+        padding: 1.5rem 2rem;
+        margin: 1.5rem 0;
         font-weight: 500;
+        font-size: 1rem;
+        line-height: 1.6;
+        box-shadow: var(--exec-shadow);
+        transition: all 0.3s ease;
     }
     
     .info-box.success {
-        background: #d4edda;
-        border-color: #c3e6cb;
-        color: #155724;
+        background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+        border-color: var(--exec-success);
+        color: #14532D;
+        border-left: 4px solid var(--exec-success);
     }
     
     .info-box.warning {
-        background: #fff3cd;
-        border-color: #ffeaa7;
-        color: #856404;
+        background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+        border-color: var(--exec-warning);
+        color: #92400E;
+        border-left: 4px solid var(--exec-warning);
     }
     
     .info-box.error {
-        background: #f8d7da;
-        border-color: #f1aeb5;
-        color: #721c24;
+        background: linear-gradient(135deg, #FEF2F2, #FECACA);
+        border-color: var(--exec-secondary);
+        color: #991B1B;
+        border-left: 4px solid var(--exec-secondary);
     }
     
-    /* Loading spinner */
+    /* Executive loading spinner */
     .loading-spinner {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 4rem 2rem;
         text-align: center;
+        background: var(--exec-bg-primary);
+        border-radius: var(--exec-border-radius-lg);
+        box-shadow: var(--exec-shadow);
     }
     
-    /* Professional buttons */
+    /* Executive buttons */
     .stButton > button {
-        background: linear-gradient(135deg, #1f4e79 0%, #2d6ba0 100%);
+        background: var(--exec-gradient-primary);
         color: white;
-        border-radius: 8px;
+        border-radius: var(--exec-border-radius);
         border: none;
-        padding: 0.75rem 1.5rem;
+        padding: 1rem 2rem;
         font-weight: 600;
         font-family: 'Inter', sans-serif;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(31, 78, 121, 0.2);
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--exec-shadow);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stButton > button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
     }
     
     .stButton > button:hover {
-        background: linear-gradient(135deg, #163d61 0%, #1f4e79 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 16px rgba(31, 78, 121, 0.3);
+        background: var(--exec-gradient-accent);
+        transform: translateY(-2px);
+        box-shadow: var(--exec-shadow-lg);
     }
     
-    /* Sidebar styling */
+    .stButton > button:hover::before {
+        left: 100%;
+    }
+    
+    /* Executive sidebar styling */
     .css-1d391kg {
-        background-color: #f8f9fa;
-        border-right: 1px solid #e9ecef;
+        background: var(--exec-bg-primary);
+        border-right: 2px solid var(--exec-border);
+        box-shadow: var(--exec-shadow);
     }
     
-    /* Chart containers */
+    .css-1d391kg .stSelectbox > div > div {
+        background: var(--exec-bg-secondary);
+        border: 1px solid var(--exec-border);
+        border-radius: var(--exec-border-radius);
+    }
+    
+    /* Executive chart containers */
     .chart-container {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        margin-bottom: 1.5rem;
+        background: var(--exec-bg-primary);
+        padding: 2rem;
+        border-radius: var(--exec-border-radius-lg);
+        box-shadow: var(--exec-shadow);
+        border: 1px solid var(--exec-border);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
     }
     
-    /* Data tables */
+    .chart-container:hover {
+        box-shadow: var(--exec-shadow-lg);
+        transform: translateY(-2px);
+    }
+    
+    /* Executive data tables */
     .dataframe {
-        border-radius: 8px;
+        border-radius: var(--exec-border-radius);
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--exec-shadow);
+        border: 1px solid var(--exec-border);
         font-family: 'Inter', sans-serif;
+        background: var(--exec-bg-primary);
     }
     
-    /* Status indicators */
+    /* Executive status indicators */
     .status-indicator {
         display: inline-block;
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
         border-radius: 50%;
-        margin-right: 8px;
+        margin-right: 10px;
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
-    .status-success { background-color: #28a745; }
-    .status-warning { background-color: #ffc107; }
-    .status-error { background-color: #dc3545; }
-    .status-neutral { background-color: #6c757d; }
+    .status-success { background-color: var(--exec-success); }
+    .status-warning { background-color: var(--exec-warning); }
+    .status-error { background-color: var(--exec-secondary); }
+    .status-neutral { background-color: var(--exec-text-secondary); }
     
-    /* Professional section headers */
+    /* Executive section headers */
     .section-header {
-        background: linear-gradient(90deg, #f8f9fa 0%, transparent 100%);
-        padding: 1rem 0;
-        border-left: 4px solid #1f4e79;
-        padding-left: 1rem;
-        margin: 2rem 0 1rem 0;
+        background: linear-gradient(135deg, var(--exec-bg-primary) 0%, var(--exec-bg-secondary) 100%);
+        padding: 2rem 1.5rem;
+        border-radius: var(--exec-border-radius);
+        border-left: 6px solid var(--exec-primary);
+        box-shadow: var(--exec-shadow);
+        margin: 3rem 0 2rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .section-header::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(10,22,40,0.05));
     }
     
     .section-header h3 {
         margin: 0;
-        color: #1f4e79;
-        font-weight: 600;
+        color: var(--exec-primary);
+        font-weight: 700;
+        font-size: 1.5rem;
+        letter-spacing: -0.01em;
     }
     
-    /* Responsive improvements */
+    /* Executive navigation cards */
+    .exec-nav-card {
+        background: var(--exec-bg-primary);
+        padding: 2rem 1.5rem;
+        border-radius: var(--exec-border-radius-lg);
+        box-shadow: var(--exec-shadow);
+        border: 1px solid var(--exec-border);
+        margin-bottom: 1.5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .exec-nav-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--exec-gradient-accent);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .exec-nav-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--exec-shadow-lg);
+        border-color: var(--exec-primary-accent);
+    }
+    
+    .exec-nav-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .exec-nav-card h4 {
+        color: var(--exec-primary);
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin: 0 0 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .exec-nav-card p {
+        color: var(--exec-text-secondary);
+        line-height: 1.6;
+        margin: 0 0 1.5rem 0;
+        font-size: 1rem;
+    }
+    
+    .exec-nav-card .badge {
+        background: var(--exec-gradient-accent);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-block;
+    }
+    
+    /* Executive dashboard grid */
+    .exec-dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+    
+    /* Executive KPI cards */
+    .exec-kpi-card {
+        background: var(--exec-bg-primary);
+        padding: 2.5rem 2rem;
+        border-radius: var(--exec-border-radius-lg);
+        box-shadow: var(--exec-shadow);
+        border: 1px solid var(--exec-border);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .exec-kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: var(--exec-gradient-primary);
+    }
+    
+    .exec-kpi-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--exec-shadow-lg);
+    }
+    
+    .exec-kpi-card .kpi-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+    }
+    
+    .exec-kpi-card .kpi-value {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--exec-primary);
+        line-height: 1;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.02em;
+    }
+    
+    .exec-kpi-card .kpi-label {
+        font-size: 1rem;
+        color: var(--exec-text-secondary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 1rem 0;
+    }
+    
+    .exec-kpi-card .kpi-trend {
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+    
+    /* Executive responsive improvements */
+    @media (max-width: 1200px) {
+        .exec-dashboard {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+    }
+    
     @media (max-width: 768px) {
         .app-header {
+            padding: 2rem 1.5rem;
+        }
+        
+        .app-header h1 {
+            font-size: 2.5rem;
+        }
+        
+        .metric-card .metric-value {
+            font-size: 2.25rem;
+        }
+        
+        .exec-nav-card {
             padding: 1.5rem;
+        }
+        
+        .exec-kpi-card {
+            padding: 2rem 1.5rem;
+        }
+        
+        .exec-kpi-card .kpi-value {
+            font-size: 2.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .exec-dashboard {
+            grid-template-columns: 1fr;
         }
         
         .app-header h1 {
             font-size: 2rem;
         }
         
-        .metric-card .metric-value {
+        .exec-kpi-card .kpi-value {
             font-size: 2rem;
         }
     }
@@ -466,11 +780,46 @@ def create_metric_grid(metrics: list, columns: int = 3):
             create_metric_card(**metric)
 
 def create_sidebar_navigation():
-    """Create professional sidebar navigation"""
+    """Create executive-grade sidebar navigation"""
     st.sidebar.markdown("""
-    <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #1f4e79 0%, #2d6ba0 100%); border-radius: 12px; margin-bottom: 1.5rem;">
-        <h3 style="color: white; margin: 0; font-weight: 600;">📡 Telco Network</h3>
-        <p style="color: rgba(255,255,255,0.9); margin: 0.5rem 0 0 0; font-size: 0.9rem;">Optimization Suite</p>
+    <div style="text-align: center; padding: 2rem 1.5rem; background: var(--exec-gradient-primary); 
+                border-radius: var(--exec-border-radius-lg); margin-bottom: 2rem; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; 
+                    background: radial-gradient(circle, rgba(255,215,0,0.1), transparent); border-radius: 50%;"></div>
+        <div style="position: relative; z-index: 2;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📡</div>
+            <h3 style="color: white; margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em;">TELCO NETWORK</h3>
+            <p style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 0.8rem; text-transform: uppercase;">Executive Suite</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Executive quick stats in sidebar
+    st.sidebar.markdown("""
+    <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius); 
+                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); margin-bottom: 1rem;">
+        <h4 style="color: var(--exec-primary); margin: 0 0 1rem 0; font-size: 0.9rem; font-weight: 600; text-transform: uppercase;">Live Network Status</h4>
+        <div style="margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.8rem; color: var(--exec-text-secondary);">Network Health</span>
+                <span style="font-size: 0.9rem; font-weight: 600; color: var(--exec-success);">94.2%</span>
+            </div>
+            <div style="background: var(--exec-border); height: 4px; border-radius: 2px; margin-top: 0.25rem;">
+                <div style="background: var(--exec-success); width: 94.2%; height: 100%; border-radius: 2px;"></div>
+            </div>
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.8rem; color: var(--exec-text-secondary);">Active Towers</span>
+                <span style="font-size: 0.9rem; font-weight: 600; color: var(--exec-primary);">2,847</span>
+            </div>
+        </div>
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.8rem; color: var(--exec-text-secondary);">Critical Issues</span>
+                <span style="font-size: 0.9rem; font-weight: 600; color: var(--exec-secondary);">12</span>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -856,6 +1205,216 @@ def format_ai_response(response: str, title: str = "AI Insights") -> None:
         """, unsafe_allow_html=True)
     else:
         st.warning(f"No {title.lower()} available at this time.")
+
+# =============================================================================
+# EXECUTIVE COMPONENTS
+# =============================================================================
+
+def create_executive_dashboard(kpis: dict, trends: dict = None) -> None:
+    """
+    Create executive-grade dashboard with synchronized KPIs and trends
+    
+    Args:
+        kpis: Dictionary of KPI name -> {value, trend, icon} 
+        trends: Optional trending data for visualization
+    """
+    st.markdown('<div class="exec-dashboard">', unsafe_allow_html=True)
+    
+    # Create KPI grid
+    cols = st.columns(min(4, len(kpis)))
+    
+    for i, (kpi_name, kpi_data) in enumerate(kpis.items()):
+        with cols[i % len(cols)]:
+            value = kpi_data.get('value', 'N/A')
+            trend = kpi_data.get('trend', 0)
+            icon = kpi_data.get('icon', '📊')
+            trend_icon = "📈" if trend > 0 else "📉" if trend < 0 else "📊"
+            trend_class = "positive" if trend > 0 else "negative" if trend < 0 else "neutral"
+            trend_color = "var(--exec-success)" if trend > 0 else "var(--exec-secondary)" if trend < 0 else "var(--exec-text-secondary)"
+            
+            st.markdown(f"""
+            <div class="exec-kpi-card">
+                <div class="kpi-icon">{icon}</div>
+                <div class="kpi-value">{value}</div>
+                <div class="kpi-label">{kpi_name}</div>
+                <div class="kpi-trend" style="color: {trend_color};">
+                    {trend_icon} {abs(trend):.1f}%
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+def create_executive_navigation_grid(nav_items: list) -> None:
+    """
+    Create executive navigation cards grid
+    
+    Args:
+        nav_items: List of navigation items with title, description, icon, badge
+    """
+    cols = st.columns(3)
+    
+    for i, item in enumerate(nav_items):
+        with cols[i % 3]:
+            title = item.get('title', 'Navigation Item')
+            description = item.get('description', '')
+            icon = item.get('icon', '📊')
+            badge = item.get('badge', 'AVAILABLE')
+            page_key = item.get('page_key', '')
+            
+            st.markdown(f"""
+            <div class="exec-nav-card" onclick="document.querySelector('[data-testid=\\"stSelectbox\\"] input').value='{page_key}'; document.querySelector('[data-testid=\\"stSelectbox\\"] input').dispatchEvent(new Event('change'));">
+                <h4>{icon} {title}</h4>
+                <p>{description}</p>
+                <div class="badge">{badge}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+def create_executive_summary_card(title: str, content: str, metrics: dict = None, icon: str = "📋") -> None:
+    """
+    Create executive summary card with key insights
+    
+    Args:
+        title: Summary title
+        content: Main summary content
+        metrics: Optional key metrics to display
+        icon: Card icon
+    """
+    metrics_html = ""
+    if metrics:
+        metrics_html = "<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--exec-border);'>"
+        for metric_name, metric_value in metrics.items():
+            metrics_html += f"""
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--exec-primary); margin-bottom: 0.25rem;">{metric_value}</div>
+                <div style="font-size: 0.8rem; color: var(--exec-text-secondary); text-transform: uppercase; font-weight: 600;">{metric_name}</div>
+            </div>
+            """
+        metrics_html += "</div>"
+    
+    st.markdown(f"""
+    <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius-lg); 
+                padding: 2.5rem; box-shadow: var(--exec-shadow-lg); border: 1px solid var(--exec-border);
+                margin: 2rem 0; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--exec-gradient-primary);"></div>
+        <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+            <span style="font-size: 2rem; margin-right: 1rem;">{icon}</span>
+            <h2 style="margin: 0; color: var(--exec-primary); font-weight: 700; font-size: 1.5rem;">{title}</h2>
+        </div>
+        <div style="color: var(--exec-text-primary); line-height: 1.7; font-size: 1.1rem; margin-bottom: 1rem;">
+            {content}
+        </div>
+        {metrics_html}
+    </div>
+    """, unsafe_allow_html=True)
+
+def create_executive_alert_banner(message: str, alert_type: str = "info", dismissible: bool = True) -> None:
+    """
+    Create executive alert banner for important notifications
+    
+    Args:
+        message: Alert message
+        alert_type: Type of alert (success, warning, error, info)
+        dismissible: Whether alert can be dismissed
+    """
+    color_map = {
+        "success": "var(--exec-success)",
+        "warning": "var(--exec-warning)", 
+        "error": "var(--exec-secondary)",
+        "info": "var(--exec-primary)"
+    }
+    
+    icon_map = {
+        "success": "✅",
+        "warning": "⚠️",
+        "error": "🚨", 
+        "info": "ℹ️"
+    }
+    
+    color = color_map.get(alert_type, color_map["info"])
+    icon = icon_map.get(alert_type, icon_map["info"])
+    
+    dismiss_button = """
+    <button style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; 
+                    padding: 0; margin-left: 1rem;" onclick="this.parentElement.style.display='none'">×</button>
+    """ if dismissible else ""
+    
+    st.markdown(f"""
+    <div style="background: {color}; color: white; padding: 1rem 2rem; border-radius: var(--exec-border-radius);
+                margin: 1rem 0; display: flex; align-items: center; justify-content: space-between;
+                box-shadow: var(--exec-shadow); font-weight: 500;">
+        <div style="display: flex; align-items: center;">
+            <span style="font-size: 1.2rem; margin-right: 0.75rem;">{icon}</span>
+            <span>{message}</span>
+        </div>
+        {dismiss_button}
+    </div>
+    """, unsafe_allow_html=True)
+
+def create_executive_demo_controller() -> dict:
+    """
+    Create executive demo controller with synchronized state management
+    
+    Returns:
+        Dictionary with demo state and controls
+    """
+    if 'exec_demo_state' not in st.session_state:
+        st.session_state.exec_demo_state = {
+            'current_scenario': 'baseline',
+            'demo_speed': 'normal',
+            'auto_advance': False,
+            'demo_active': False
+        }
+    
+    with st.sidebar:
+        st.markdown("---")
+        st.markdown("### 🎬 Executive Demo Controls")
+        
+        demo_scenarios = [
+            "baseline", "network_issue", "ai_response", "resolution"
+        ]
+        
+        current_scenario = st.selectbox(
+            "Demo Scenario:",
+            demo_scenarios,
+            index=demo_scenarios.index(st.session_state.exec_demo_state['current_scenario']),
+            format_func=lambda x: x.replace('_', ' ').title()
+        )
+        
+        demo_speed = st.selectbox(
+            "Demo Speed:",
+            ["slow", "normal", "fast"],
+            index=["slow", "normal", "fast"].index(st.session_state.exec_demo_state['demo_speed'])
+        )
+        
+        auto_advance = st.checkbox(
+            "Auto Advance Scenarios", 
+            value=st.session_state.exec_demo_state['auto_advance']
+        )
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("▶️ Start Demo", type="primary"):
+                st.session_state.exec_demo_state['demo_active'] = True
+        
+        with col2:
+            if st.button("⏹️ Reset Demo"):
+                st.session_state.exec_demo_state = {
+                    'current_scenario': 'baseline',
+                    'demo_speed': 'normal', 
+                    'auto_advance': False,
+                    'demo_active': False
+                }
+                st.rerun()
+        
+        # Update state
+        st.session_state.exec_demo_state.update({
+            'current_scenario': current_scenario,
+            'demo_speed': demo_speed,
+            'auto_advance': auto_advance
+        })
+    
+    return st.session_state.exec_demo_state
 
 def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "🤖") -> None:
     """
