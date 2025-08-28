@@ -240,12 +240,12 @@ if network_summary and tickets_summary:
                 except Exception as e:
                     st.error(f"Error analyzing patterns: {e}")
 
-# AI-Enhanced Navigation Cards
-st.markdown("### 🚀 AI-Powered Analytics Tools")
-col1, col2, col3 = st.columns(3)
+    # AI-Enhanced Navigation Cards
+    st.markdown("### 🚀 AI-Powered Analytics Tools")
+    col1, col2, col3 = st.columns(3)
 
-with col1:
-    st.markdown("""
+    with col1:
+        st.markdown("""
     <div style="padding: 1.5rem; background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #4caf50; height: 200px; cursor: pointer;" onclick="window.location.href='?page=Customer_Profile'">
         <div style="display: flex; align-items: center; margin-bottom: 1rem;">
             <span style="font-size: 2rem; margin-right: 0.75rem;">👤</span>
@@ -263,8 +263,8 @@ with col1:
     </div>
     """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
+    with col2:
+        st.markdown("""
     <div style="padding: 1.5rem; background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #ff9800; height: 200px;">
         <div style="display: flex; align-items: center; margin-bottom: 1rem;">
             <span style="font-size: 2rem; margin-right: 0.75rem;">🗺️</span>
@@ -282,8 +282,8 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
 
-with col3:
-    st.markdown("""
+    with col3:
+        st.markdown("""
     <div style="padding: 1.5rem; background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #9c27b0; height: 200px;">
         <div style="display: flex; align-items: center; margin-bottom: 1rem;">
             <span style="font-size: 2rem; margin-right: 0.75rem;">💬</span>
@@ -301,7 +301,7 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
 
-# Add fallback message if no network data is available
+# Add fallback message if no network data is available  
 else:
     st.warning("⚠️ Unable to load network data. Please check your database connection and try again.")
     
