@@ -242,26 +242,41 @@ if len(customer_tickets) > 0:
         tickets_display = customer_tickets[['TICKET_ID', 'SERVICE_TYPE', 'SENTIMENT_SCORE', 'CONTACT_PREFERENCE']].copy()
         tickets_display.columns = ['Ticket ID', 'Service Type', 'Sentiment Score', 'Contact Preference']
         
-        # Color code sentiment scores
-        def format_sentiment(score):
+        # Format sentiment scores without HTML (st.dataframe doesn't render HTML)
+        def format_sentiment_simple(score):
             if score > 0:
-                return f"<span style='color: #28a745; font-weight: 600;'>+{score:.2f}</span>"
+                return f"✅ +{score:.2f}"
             elif score < -0.3:
-                return f"<span style='color: #dc3545; font-weight: 600;'>{score:.2f}</span>"
+                return f"❌ {score:.2f}"
             else:
-                return f"<span style='color: #ffc107; font-weight: 600;'>{score:.2f}</span>"
+                return f"⚠️ {score:.2f}"
         
-        tickets_display['Sentiment Score'] = tickets_display['Sentiment Score'].apply(format_sentiment)
+        tickets_display['Sentiment Score'] = tickets_display['Sentiment Score'].apply(format_sentiment_simple)
         
         st.markdown("""
         <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
         """, unsafe_allow_html=True)
         
-        st.dataframe(
-            tickets_display,
-            use_container_width=True,
-            hide_index=True
-        )
+        # Use column_config for better styling (if available in Streamlit version)
+        try:
+            st.dataframe(
+                tickets_display,
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Sentiment Score": st.column_config.TextColumn(
+                        "Sentiment Score",
+                        help="Customer sentiment: ✅ Positive, ⚠️ Neutral, ❌ Negative"
+                    )
+                }
+            )
+        except:
+            # Fallback for older Streamlit versions
+            st.dataframe(
+                tickets_display,
+                use_container_width=True,
+                hide_index=True
+            )
         
         st.markdown("</div>", unsafe_allow_html=True)
     
