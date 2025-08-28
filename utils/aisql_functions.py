@@ -75,17 +75,17 @@ class TelcoAISQLProcessor:
         ]
         self.default_model = 'claude-3-5-sonnet'  # Fast, highly capable Claude model
         
-    def ai_complete(self, prompt: str, model: str = None, max_tokens: int = 500) -> str:
+    def ai_complete(self, prompt: str, model: str = None, max_tokens: int = 150) -> str:
         """
-        Generate AI completions using Snowflake Cortex AI_COMPLETE
+        Generate AI completions using Snowflake Cortex AI_COMPLETE (limited to ~100 words)
         
         Args:
             prompt: The input prompt for completion
             model: LLM model to use (default: claude-3-5-sonnet)
-            max_tokens: Maximum tokens to generate
+            max_tokens: Maximum tokens to generate (default 150 ≈ 100 words)
             
         Returns:
-            Generated completion text
+            Generated completion text (max 100 words)
         """
         if model is None:
             model = self.default_model
@@ -176,13 +176,15 @@ class TelcoAISQLProcessor:
             full_prompt = f"""
             {prompt}
             
-            Please analyze the following data points and provide aggregated insights:
+            Analyze these data points and provide insights in EXACTLY 100 words:
             
             {combined_text}
+            
+            Be concise, specific, and actionable. LIMIT: 100 words maximum.
             """
             
-            # Use AI_COMPLETE instead of AI_AGG to avoid temporary table issues
-            return self.ai_complete(full_prompt, max_tokens=600)
+            # Use AI_COMPLETE with 100-word limit
+            return self.ai_complete(full_prompt, max_tokens=150)
         except Exception as e:
             st.error(f"AI Aggregation Error: {e}")
             return ""
@@ -411,21 +413,21 @@ class TelcoAIAnalytics:
             # Generate AI insights
             insights = {}
             if issues:
-                # Root cause analysis
+                # Root cause analysis (100 words max)
                 insights['root_causes'] = self.ai.ai_agg(
                     issues,
-                    "Identify the top 3 root causes of network failures based on the technical metrics provided"
+                    "Identify top 3 root causes of network failures in EXACTLY 100 words. Be specific and technical."
                 )
                 
-                # Priority recommendations
+                # Priority recommendations (100 words max)  
                 insights['recommendations'] = self.ai.ai_agg(
                     issues,
-                    "Provide 5 specific technical recommendations to resolve these network issues, prioritized by impact"
+                    "List 3 priority technical recommendations to fix network issues. Format: 1) Action 2) Timeline 3) Impact. LIMIT: 100 words."
                 )
                 
-                # Risk assessment
+                # Risk assessment (100 words max)
                 insights['risk_assessment'] = self.ai.ai_complete(
-                    f"Based on these network issues, provide a risk assessment for customer impact and business continuity: {issues[0][:500]}..."
+                    f"Assess business risk from network issues in EXACTLY 100 words: customer impact, revenue risk, mitigation priorities: {issues[0][:300]}"
                 )
             
             return insights
@@ -509,21 +511,16 @@ class TelcoAIAnalytics:
             """
             
             prompt = f"""
-            As a senior telco network analyst, provide an executive summary based on this data:
+            As a senior telco network analyst, provide a CRISP executive summary in EXACTLY 100 words based on this data:
             
             {context}
             
-            Include:
-            1. Overall network health status
-            2. Key performance indicators
-            3. Critical issues requiring immediate attention
-            4. Customer satisfaction insights
-            5. Strategic recommendations for the next quarter
+            Cover: 1) Network health status 2) Key metrics 3) Critical issues 4) Customer satisfaction 5) Top 2 strategic actions
             
-            Keep it concise, executive-level, and actionable.
+            Format: Professional, concise, actionable. LIMIT: 100 words maximum.
             """
             
-            return self.ai.ai_complete(prompt, max_tokens=800)
+            return self.ai.ai_complete(prompt, max_tokens=150)
         except Exception as e:
             st.error(f"Executive Summary Error: {e}")
             return "Unable to generate executive summary at this time."

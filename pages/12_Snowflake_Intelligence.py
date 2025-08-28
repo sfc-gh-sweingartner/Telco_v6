@@ -388,10 +388,9 @@ with tab2:
                         
                         User Question: "{user_input}"
                         
-                        Respond as this specialized agent would, providing insights relevant to your expertise area.
-                        Be conversational but professional. Offer specific, actionable insights when possible."""
+                        Respond as this specialized agent in EXACTLY 100 words. Be specific and actionable."""
                         
-                        agent_response = ai_processor.ai_complete(agent_prompt, max_tokens=400)
+                        agent_response = ai_processor.ai_complete(agent_prompt, max_tokens=150)
                         
                         if agent_response:
                             # Add agent response
@@ -500,9 +499,8 @@ with tab3:
                         
                         {analytics_context}
                         
-                        Generate insights that would be discovered by Snowflake Intelligence's advanced AI algorithms.
-                        Include specific metrics, confidence levels, and actionable recommendations.""",
-                        max_tokens=700
+                                                    Generate insights in EXACTLY 100 words with specific metrics and actionable recommendations.""",
+                            max_tokens=150
                     )
                     
                     if analytics_insights:

@@ -320,7 +320,7 @@ with tab1:
         # Quick AI fact generation
         if st.button("💡 Generate Quick Insight", key="quick_insight"):
             quick_insight = ai_processor.ai_complete(
-                "Based on telecom network data analysis, provide one key insight about optimizing cellular network performance in 2-3 sentences.",
+                "Provide ONE key telecom network optimization insight in EXACTLY 100 words. Be specific and actionable.",
                 max_tokens=150
             )
             if quick_insight:
@@ -543,7 +543,7 @@ with tab4:
             Format each recommendation clearly with implementation steps.
             """
             
-            recommendations_text = ai_processor.ai_complete(context_prompt, max_tokens=800)
+            recommendations_text = ai_processor.ai_complete(context_prompt + " LIMIT: 100 words exactly.", max_tokens=150)
             
             if recommendations_text:
                 create_ai_insights_card(
@@ -555,7 +555,7 @@ with tab4:
                 
                 # Generate specific action items
                 action_prompt = f"Based on these recommendations, list 8 specific action items that can be implemented immediately:\n\n{recommendations_text[:300]}..."
-                action_items = ai_processor.ai_complete(action_prompt, max_tokens=400)
+                action_items = ai_processor.ai_complete(action_prompt + " LIMIT: 100 words maximum.", max_tokens=150)
                 
                 if action_items:
                     action_list = [item.strip() for item in action_items.split('\n') if item.strip() and not item.strip().startswith('#')]

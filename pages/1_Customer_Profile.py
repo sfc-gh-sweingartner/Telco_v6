@@ -302,8 +302,8 @@ with ai_tab1:
         if ticket_count > 0:
             # Generate a quick customer summary
             quick_summary = ai_processor.ai_complete(
-                f"In 2-3 sentences, summarize this telecom customer: {ticket_count} support tickets, avg sentiment {avg_sentiment:.2f}, {risk_score}% churn risk.",
-                max_tokens=100
+                f"Summarize telecom customer in EXACTLY 100 words: {ticket_count} tickets, sentiment {avg_sentiment:.2f}, {risk_score}% churn risk. Include status and actions.",
+                max_tokens=150
             )
             
             if quick_summary:
