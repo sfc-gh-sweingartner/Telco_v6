@@ -155,35 +155,53 @@ with col1:
     segment = get_customer_field('CUSTOMER_SEGMENT', 'N/A')
     status = get_customer_field('ACCOUNT_STATUS', 'Unknown')
     
+    # Customer header
     st.markdown(f"""
     <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #1f4e79;">
-        <h2 style="color: #1f4e79; margin: 0 0 1rem 0;">{first_name} {last_name}</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-            <div>
-                <strong style="color: #6c757d;">Customer ID:</strong><br>
-                <span style="font-size: 1.1rem; color: #1f4e79;">{customer_id_display}</span>
-            </div>
-            <div>
-                <strong style="color: #6c757d;">Email:</strong><br>
-                <span style="font-size: 1.1rem; color: #495057;">{email}</span>
-            </div>
-            <div>
-                <strong style="color: #6c757d;">Service Type:</strong><br>
-                <span style="font-size: 1.1rem; color: #495057;">{service_type}</span>
-            </div>
-            <div>
-                <strong style="color: #6c757d;">Segment:</strong><br>
-                <span style="font-size: 1.1rem; color: #495057;">{segment}</span>
-            </div>
+        <h2 style="color: #1f4e79; margin: 0 0 1.5rem 0;">{first_name} {last_name}</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Customer details using Streamlit columns for better reliability
+    st.markdown("**Customer Details:**")
+    
+    detail_col1, detail_col2 = st.columns(2)
+    
+    with detail_col1:
+        st.markdown(f"""
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+            <strong style="color: #6c757d;">Customer ID:</strong><br>
+            <span style="font-size: 1.1rem; color: #1f4e79; font-weight: 600;">{customer_id_display}</span>
         </div>
+        """, unsafe_allow_html=True)
         
-        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
-            <strong style="color: #1f4e79;">Account Status:</strong> 
-            <span style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: #d4edda; color: #155724; border-radius: 20px; font-size: 0.875rem; font-weight: 500;">
-                ✓ {status}
-            </span>
+        st.markdown(f"""
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+            <strong style="color: #6c757d;">Service Type:</strong><br>
+            <span style="font-size: 1.1rem; color: #495057;">{service_type}</span>
         </div>
+        """, unsafe_allow_html=True)
+    
+    with detail_col2:
+        st.markdown(f"""
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+            <strong style="color: #6c757d;">Email:</strong><br>
+            <span style="font-size: 1.1rem; color: #495057;">{email}</span>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+            <strong style="color: #6c757d;">Segment:</strong><br>
+            <span style="font-size: 1.1rem; color: #495057;">{segment}</span>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Account status
+    st.markdown(f"""
+    <div style="background: #d4edda; padding: 1rem; border-radius: 8px; border-left: 4px solid #28a745; margin-top: 1rem;">
+        <strong style="color: #155724;">Account Status:</strong> 
+        <span style="margin-left: 0.5rem; font-weight: 600; color: #155724;">✓ {status}</span>
     </div>
     """, unsafe_allow_html=True)
 
