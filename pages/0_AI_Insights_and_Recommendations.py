@@ -177,6 +177,73 @@ if not AI_FUNCTIONS_AVAILABLE:
     if st.button("🔄 Check AI Status", type="primary"):
         st.rerun()
 
+# Optimized data loading function with caching
+@st.cache_data(ttl=120)  # Cache for 2 minutes for faster subsequent loads
+def load_executive_dashboard_data_fast(session):
+    """Load both network and customer data in a single optimized query"""
+    try:
+        # Combined query to reduce database round trips  
+        combined_query = """
+        WITH network_stats AS (
+            SELECT 
+                COUNT(DISTINCT CELL_ID) as total_towers,
+                AVG(NVL(PM_RRC_CONN_ESTAB_SUCC, 0) / NULLIF(PM_RRC_CONN_ESTAB_ATT, 0)) as avg_success_rate,
+                COUNT(CASE WHEN PM_ERAB_REL_ABNORMAL_ENB > 50 THEN 1 END) as critical_issues,
+                AVG(NVL(PM_PRB_UTIL_DL, 0)) as avg_utilization,
+                AVG(NVL(PM_ACTIVE_UE_DL_SUM, 0)) as avg_downlink_throughput
+            FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.CELL_TOWER 
+            WHERE EVENT_DATE >= DATEADD(day, -3, CURRENT_DATE())  -- Reduced from 7 to 3 days for speed
+        ),
+        ticket_stats AS (
+            SELECT 
+                COUNT(*) as total_tickets,
+                AVG(NVL(SENTIMENT_SCORE, 0)) as avg_sentiment,
+                COUNT(CASE WHEN SENTIMENT_SCORE < -0.5 THEN 1 END) as critical_tickets,
+                COUNT(DISTINCT CUSTOMER_NAME) as unique_customers,
+                COUNT(CASE WHEN SERVICE_TYPE = 'Cellular' THEN 1 END) as cellular_tickets
+            FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
+            WHERE CREATED_DATE >= DATEADD(day, -7, CURRENT_DATE())  -- Recent tickets only
+        )
+        SELECT 
+            -- Network data
+            ns.total_towers, ns.avg_success_rate, ns.critical_issues, 
+            ns.avg_utilization, ns.avg_downlink_throughput,
+            -- Ticket data  
+            ts.total_tickets, ts.avg_sentiment, ts.critical_tickets,
+            ts.unique_customers, ts.cellular_tickets
+        FROM network_stats ns, ticket_stats ts
+        """
+        
+        result = session.sql(combined_query).collect()
+        if not result:
+            return None
+            
+        data = result[0]
+        
+        # Network summary
+        network_summary = {
+            'total_towers': data['TOTAL_TOWERS'] or 0,
+            'avg_success_rate': data['AVG_SUCCESS_RATE'] or 0,
+            'critical_issues': data['CRITICAL_ISSUES'] or 0,
+            'avg_utilization': data['AVG_UTILIZATION'] or 0,
+            'avg_downlink_throughput': data['AVG_DOWNLINK_THROUGHPUT'] or 0
+        }
+        
+        # Ticket summary
+        ticket_summary = {
+            'total_tickets': data['TOTAL_TICKETS'] or 0,
+            'avg_sentiment': data['AVG_SENTIMENT'] or 0,
+            'critical_tickets': data['CRITICAL_TICKETS'] or 0,
+            'unique_customers': data['UNIQUE_CUSTOMERS'] or 0,
+            'cellular_tickets': data['CELLULAR_TICKETS'] or 0
+        }
+        
+        return network_summary, ticket_summary
+        
+    except Exception as e:
+        st.error(f"Data loading error: {e}")
+        return None
+
 # AI Model Selection
 with st.sidebar:
     st.markdown("---")
@@ -203,81 +270,45 @@ with tab1:
     
     with col1:
         if st.button("🚀 Generate AI Executive Report", type="primary", key="exec_report"):
-            # Show progress tracker
-            create_ai_progress_tracker(1, 4, "Loading network data...")
+            # Streamlined progress - only 2 steps for speed
+            create_ai_progress_tracker(1, 2, "⚡ Loading data & analyzing patterns...")
             
-            # Load network summary data
+            # Load both network and customer data in single optimized query
             try:
-                network_query = """
-                SELECT 
-                    COUNT(DISTINCT CELL_ID) as total_towers,
-                    AVG(NVL(PM_RRC_CONN_ESTAB_SUCC, 0) / NULLIF(PM_RRC_CONN_ESTAB_ATT, 0)) as avg_success_rate,
-                    COUNT(CASE WHEN PM_ERAB_REL_ABNORMAL_ENB > 50 THEN 1 END) as critical_issues,
-                    AVG(NVL(PM_PRB_UTIL_DL, 0)) as avg_utilization,
-                    AVG(NVL(PM_ACTIVE_UE_DL_SUM, 0)) as avg_downlink_throughput
-                FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.CELL_TOWER 
-                WHERE EVENT_DATE >= DATEADD(day, -7, CURRENT_DATE())
-                """
-                network_data = session.sql(network_query).collect()[0]
+                # Combined query for faster execution
+                combined_data = load_executive_dashboard_data_fast(session)
                 
-                create_ai_progress_tracker(2, 4, "Loading customer data...")
-                
-                tickets_query = """
-                SELECT 
-                    COUNT(*) as total_tickets,
-                    AVG(SENTIMENT_SCORE) as avg_sentiment,
-                    COUNT(CASE WHEN SENTIMENT_SCORE < -0.5 THEN 1 END) as critical_tickets,
-                    COUNT(DISTINCT CUSTOMER_NAME) as unique_customers,
-                    COUNT(CASE WHEN SERVICE_TYPE = 'Cellular' THEN 1 END) as cellular_tickets
-                FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
-                """
-                tickets_data = session.sql(tickets_query).collect()[0]
-                
-                create_ai_progress_tracker(3, 4, "AI is analyzing data patterns...")
-                
-                # Generate executive summary
-                network_summary = {
-                    'total_towers': network_data['TOTAL_TOWERS'] or 0,
-                    'avg_success_rate': network_data['AVG_SUCCESS_RATE'] or 0,
-                    'critical_issues': network_data['CRITICAL_ISSUES'] or 0,
-                    'avg_utilization': network_data['AVG_UTILIZATION'] or 0,
-                    'avg_downlink_throughput': network_data['AVG_DOWNLINK_THROUGHPUT'] or 0
-                }
-                
-                ticket_summary = {
-                    'total_tickets': tickets_data['TOTAL_TICKETS'] or 0,
-                    'avg_sentiment': tickets_data['AVG_SENTIMENT'] or 0,
-                    'critical_tickets': tickets_data['CRITICAL_TICKETS'] or 0,
-                    'unique_customers': tickets_data['UNIQUE_CUSTOMERS'] or 0,
-                    'cellular_tickets': tickets_data['CELLULAR_TICKETS'] or 0
-                }
-                
-                create_ai_progress_tracker(4, 4, "Generating insights...")
-                
-                executive_summary = ai_analytics.generate_executive_summary(
-                    network_summary, ticket_summary
-                )
-                
-                if executive_summary:
-                    create_ai_insights_card(
-                        "🎯 Executive Network Analysis", 
-                        executive_summary, 
-                        confidence=0.89, 
-                        icon="📈"
+                if combined_data:
+                    network_summary, ticket_summary = combined_data
+                    
+                    create_ai_progress_tracker(2, 2, "🧠 Generating AI insights...")
+                    
+                    executive_summary = ai_analytics.generate_executive_summary(
+                        network_summary, ticket_summary
                     )
                     
-                    # Create executive metrics
-                    exec_metrics = {
-                        "Network Health": f"{(network_summary['avg_success_rate'] * 100):.1f}%",
-                        "Critical Issues": str(network_summary['critical_issues']),
-                        "Customer Satisfaction": f"{ticket_summary['avg_sentiment']:.2f}",
-                        "Risk Score": "Medium" if ticket_summary['critical_tickets'] > 10 else "Low"
-                    }
-                    
-                    create_ai_metrics_dashboard(exec_metrics)
-                    
+                    if executive_summary:
+                        create_ai_insights_card(
+                            "🎯 Executive Network Analysis", 
+                            executive_summary, 
+                            confidence=0.89, 
+                            icon="📈"
+                        )
+                        
+                        # Create executive metrics
+                        exec_metrics = {
+                            "Network Health": f"{(network_summary['avg_success_rate'] * 100):.1f}%",
+                            "Critical Issues": str(network_summary['critical_issues']),
+                            "Customer Satisfaction": f"{ticket_summary['avg_sentiment']:.2f}",
+                            "Risk Score": "Medium" if ticket_summary['critical_tickets'] > 10 else "Low"
+                        }
+                        
+                        create_ai_metrics_dashboard(exec_metrics)
+                        
+                    else:
+                        st.error("Unable to generate executive summary at this time.")
                 else:
-                    st.error("Unable to generate executive summary. Please check your AI configuration.")
+                    st.error("⚠️ Unable to load network data. Please try again in a moment.")
                     
             except Exception as e:
                 st.error(f"Error generating executive summary: {e}")
