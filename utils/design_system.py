@@ -15,35 +15,55 @@ import time
 # =============================================================================
 
 class Colors:
-    """Professional color palette for the application"""
-    # Primary brand colors
-    PRIMARY = "#1f4e79"          # Deep professional blue
-    PRIMARY_LIGHT = "#2d6ba0"    # Lighter blue for highlights
-    PRIMARY_DARK = "#163d61"     # Darker blue for emphasis
+    """Professional executive color palette - solid colors only"""
+    # Ericsson Brand Colors (Primary)
+    ERICSSON_BLUE = "#002561"         # Primary Ericsson Blue
+    ERICSSON_BLUE_LIGHT = "#0066CC"   # Light blue for accents
+    ERICSSON_BLUE_DARK = "#001B47"    # Dark blue for depth
+    ERICSSON_ORANGE = "#FF6600"       # Ericsson Orange accent
     
-    # Secondary colors
-    SECONDARY = "#28a745"        # Success green
-    WARNING = "#ffc107"          # Warning yellow
-    DANGER = "#dc3545"           # Error red
-    INFO = "#17a2b8"            # Info teal
+    # Professional UI Colors
+    PRIMARY = "#002561"               # Ericsson Blue as primary
+    SECONDARY = "#FF6600"             # Ericsson Orange as secondary
     
-    # Neutral colors
-    WHITE = "#ffffff"
-    LIGHT_GRAY = "#f8f9fa"
-    MEDIUM_GRAY = "#6c757d"
-    DARK_GRAY = "#343a40"
-    BLACK = "#000000"
+    # Semantic Colors
+    SUCCESS = "#0F7B0F"              # Professional green
+    WARNING = "#FF9800"              # Professional orange
+    DANGER = "#D32F2F"               # Professional red
+    INFO = "#1976D2"                 # Professional blue
     
-    # Status colors
-    SUCCESS = "#28a745"
-    ERROR = "#dc3545"
-    NEUTRAL = "#6c757d"
+    # Neutral Professional Palette
+    WHITE = "#FFFFFF"
+    LIGHT_GRAY = "#F5F5F5"           # Very light background
+    MEDIUM_GRAY = "#9E9E9E"          # Text secondary
+    DARK_GRAY = "#424242"            # Text primary
+    BLACK = "#212121"                # Deep text
     
-    # Chart colors (professional palette)
+    # Background Colors
+    BG_PRIMARY = "#FAFAFA"           # Main background
+    BG_SECONDARY = "#F5F5F5"         # Card backgrounds
+    BG_ACCENT = "#E3F2FD"            # Light blue accent background
+    
+    # Chart Colors (Professional Corporate Palette)
     CHART_COLORS = [
-        "#1f4e79", "#28a745", "#ffc107", "#dc3545", "#17a2b8",
-        "#6f42c1", "#fd7e14", "#20c997", "#e83e8c", "#6c757d"
+        "#002561",  # Ericsson Blue
+        "#0F7B0F",  # Success Green  
+        "#FF6600",  # Ericsson Orange
+        "#1976D2",  # Info Blue
+        "#FF9800",  # Warning Orange
+        "#7B1FA2",  # Professional Purple
+        "#D32F2F",  # Danger Red
+        "#455A64",  # Blue Grey
+        "#6A1B9A",  # Deep Purple
+        "#424242"   # Dark Grey
     ]
+    
+    # Status Indicators
+    STATUS_EXCELLENT = "#0F7B0F"     # Green
+    STATUS_GOOD = "#689F38"          # Light Green  
+    STATUS_WARNING = "#FF9800"       # Orange
+    STATUS_CRITICAL = "#D32F2F"      # Red
+    STATUS_OFFLINE = "#616161"       # Grey
 
 class Typography:
     """Typography system for consistent text styling"""
@@ -140,8 +160,8 @@ def inject_custom_css():
         --exec-border: var(--ericsson-medium-grey);
         --exec-shadow: 0 10px 40px rgba(0, 37, 97, 0.08);
         --exec-shadow-lg: 0 20px 60px rgba(0, 37, 97, 0.15);
-        --exec-gradient-primary: linear-gradient(135deg, var(--ericsson-blue) 0%, var(--ericsson-blue-light) 50%, var(--ericsson-orange) 100%);
-        --exec-gradient-accent: linear-gradient(135deg, var(--ericsson-orange) 0%, var(--ericsson-orange-light) 100%);
+        --exec-solid-primary: var(--ericsson-blue);
+        --exec-solid-accent: var(--ericsson-orange);
         --exec-border-radius: 8px;
         --exec-border-radius-lg: 16px;
     }
@@ -162,7 +182,7 @@ def inject_custom_css():
     
     /* Executive header styling */
     .app-header {
-        background: var(--exec-gradient-primary);
+        background: var(--exec-solid-primary);
         color: white;
         padding: 3rem 2.5rem;
         border-radius: var(--exec-border-radius-lg);
@@ -179,7 +199,7 @@ def inject_custom_css():
         right: 0;
         width: 200px;
         height: 200px;
-        background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+        background: rgba(255,215,0,0.05);
         border-radius: 50%;
         transform: translate(50px, -50px);
     }
@@ -190,9 +210,7 @@ def inject_custom_css():
         font-size: 3rem;
         line-height: 1.1;
         letter-spacing: -0.02em;
-        background: linear-gradient(45deg, #FFFFFF, #FFD700);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: white;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
@@ -225,7 +243,7 @@ def inject_custom_css():
         left: 0;
         width: 4px;
         height: 100%;
-        background: var(--exec-gradient-accent);
+        background: var(--exec-solid-accent);
         transition: width 0.3s ease;
     }
     
@@ -293,21 +311,21 @@ def inject_custom_css():
     }
     
     .info-box.success {
-        background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+        background: #F0FDF4;
         border-color: var(--exec-success);
         color: #14532D;
         border-left: 4px solid var(--exec-success);
     }
     
     .info-box.warning {
-        background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+        background: #FFFBEB;
         border-color: var(--exec-warning);
         color: #92400E;
         border-left: 4px solid var(--exec-warning);
     }
     
     .info-box.error {
-        background: linear-gradient(135deg, #FEF2F2, #FECACA);
+        background: #FEF2F2;
         border-color: var(--exec-secondary);
         color: #991B1B;
         border-left: 4px solid var(--exec-secondary);
@@ -328,7 +346,7 @@ def inject_custom_css():
     
     /* Executive buttons */
     .stButton > button {
-        background: var(--exec-gradient-primary);
+        background: var(--exec-solid-primary);
         color: white;
         border-radius: var(--exec-border-radius);
         border: none;
@@ -351,12 +369,12 @@ def inject_custom_css():
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        background: rgba(255,255,255,0.1);
         transition: left 0.5s;
     }
     
     .stButton > button:hover {
-        background: var(--exec-gradient-accent);
+        background: var(--exec-solid-accent);
         transform: translateY(-2px);
         box-shadow: var(--exec-shadow-lg);
     }
@@ -422,7 +440,7 @@ def inject_custom_css():
     
     /* Executive section headers */
     .section-header {
-        background: linear-gradient(135deg, var(--exec-bg-primary) 0%, var(--exec-bg-secondary) 100%);
+        background: var(--exec-bg-primary);
         padding: 2rem 1.5rem;
         border-radius: var(--exec-border-radius);
         border-left: 6px solid var(--exec-primary);
@@ -439,7 +457,7 @@ def inject_custom_css():
         right: 0;
         width: 100px;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(10,22,40,0.05));
+        background: rgba(10,22,40,0.03);
     }
     
     .section-header h3 {
@@ -471,7 +489,7 @@ def inject_custom_css():
         left: 0;
         width: 100%;
         height: 4px;
-        background: var(--exec-gradient-accent);
+        background: var(--exec-solid-accent);
         transform: scaleX(0);
         transition: transform 0.3s ease;
     }
@@ -504,7 +522,7 @@ def inject_custom_css():
     }
     
     .exec-nav-card .badge {
-        background: var(--exec-gradient-accent);
+        background: var(--exec-solid-accent);
         color: white;
         padding: 0.5rem 1rem;
         border-radius: 20px;
@@ -543,7 +561,7 @@ def inject_custom_css():
         left: 0;
         width: 100%;
         height: 6px;
-        background: var(--exec-gradient-primary);
+        background: var(--exec-solid-primary);
     }
     
     .exec-kpi-card:hover {
@@ -831,10 +849,10 @@ def create_metric_grid(metrics: list, columns: int = 3):
 def create_sidebar_navigation():
     """Create Ericsson-branded executive sidebar navigation"""
     st.sidebar.markdown("""
-    <div style="text-align: center; padding: 2rem 1.5rem; background: var(--exec-gradient-primary); 
+    <div style="text-align: center; padding: 2rem 1.5rem; background: var(--exec-solid-primary); 
                 border-radius: var(--exec-border-radius-lg); margin-bottom: 2rem; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; 
-                    background: radial-gradient(circle, rgba(255, 102, 0, 0.1), transparent); border-radius: 50%;"></div>
+                    background: rgba(255, 102, 0, 0.05); border-radius: 50%;"></div>
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📡</div>
             <h3 style="color: white; margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; 
@@ -845,7 +863,32 @@ def create_sidebar_navigation():
     </div>
     """, unsafe_allow_html=True)
     
+    # Professional navigation menu
+    st.sidebar.markdown("### 📋 Navigation")
+    st.sidebar.markdown("""
+    <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius); 
+                padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--exec-border);">
+        <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem;">
+            <strong>Core Analytics:</strong>
+        </div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Main Dashboard</div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• AI Insights & Recommendations</div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Customer Analysis</div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Cell Tower Lookup</div>
+        <div style="margin-bottom: 1rem; font-size: 0.85rem;">• Geospatial Analysis</div>
+        
+        <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem;">
+            <strong>Executive & AI:</strong>
+        </div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Executive AI Summary</div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Predictive Analytics</div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• AI Network Assistant</div>
+        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Snowflake Intelligence</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     # Executive quick stats in sidebar
+    st.sidebar.markdown("### 📊 System Status")
     st.sidebar.markdown("""
     <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius); 
                 box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); margin-bottom: 1rem;">
@@ -898,7 +941,7 @@ def create_ai_chat_interface():
     st.markdown("""
     <style>
     .ai-chat-container {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+        background: #f8f9fa;
         border-radius: 16px;
         padding: 1.5rem;
         margin: 1rem 0;
@@ -1139,7 +1182,7 @@ def create_ai_recommendation_list(recommendations: list, title: str = "AI Recomm
                     padding: 1.25rem; margin: 0.75rem 0; border-radius: 0 12px 12px 0; 
                     box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border);">
             <div style="display: flex; align-items: flex-start;">
-                <div style="background: var(--ericsson-gradient-accent); color: white; border-radius: 50%; 
+                <div style="background: var(--ericsson-orange); color: white; border-radius: 50%; 
                            width: 28px; height: 28px; display: flex; align-items: center; 
                            justify-content: center; font-size: 0.9rem; font-weight: bold; 
                            margin-right: 1rem; flex-shrink: 0; font-family: 'Ericsson Hilda', sans-serif;">{index}</div>
@@ -1199,7 +1242,7 @@ def create_ai_metrics_dashboard(metrics: dict) -> None:
         with cols[i % len(cols)]:
             icon = icons[i % len(icons)]
             st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); 
+            <div style="background: #2196f3; 
                         color: white; border-radius: 16px; padding: 1.5rem; text-align: center; 
                         box-shadow: 0 4px 20px rgba(33,150,243,0.3); margin-bottom: 1rem;">
                 <div style="font-size: 2rem; margin-bottom: 0.5rem;">{icon}</div>
@@ -1327,7 +1370,7 @@ def format_ai_response(response: str, title: str = "AI Insights") -> None:
     if response:
         st.markdown(f"### 🤖 {title}")
         st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%); 
+        <div style="background: #f8f9fa; 
                     padding: 1.5rem; border-radius: 12px; margin: 1rem 0; 
                     border-left: 4px solid #2196f3; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
             <div style="color: #1565c0; line-height: 1.6;">{response}</div>
@@ -1426,7 +1469,7 @@ def create_executive_summary_card(title: str, content: str, metrics: dict = None
     <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius-lg); 
                 padding: 2.5rem; box-shadow: var(--exec-shadow-lg); border: 1px solid var(--exec-border);
                 margin: 2rem 0; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--exec-gradient-primary);"></div>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: var(--exec-solid-primary);"></div>
         <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
             <span style="font-size: 2rem; margin-right: 1rem;">{icon}</span>
             <h2 style="margin: 0; color: var(--exec-primary); font-weight: 700; font-size: 1.5rem;">{title}</h2>
@@ -1644,7 +1687,7 @@ def create_immediate_action_items(action_items: str, title: str = "💡 Immediat
                     padding: 1.5rem; margin: 0.75rem 0; border-radius: 0 12px 12px 0; 
                     box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border);">
             <div style="display: flex; align-items: flex-start;">
-                <div style="background: var(--ericsson-gradient-accent); color: white; border-radius: 50%; 
+                <div style="background: var(--ericsson-orange); color: white; border-radius: 50%; 
                            width: 32px; height: 32px; display: flex; align-items: center; 
                            justify-content: center; font-size: 1rem; font-weight: bold; 
                            margin-right: 1.25rem; flex-shrink: 0; font-family: 'Ericsson Hilda', sans-serif;">
@@ -1675,7 +1718,7 @@ def create_immediate_action_items(action_items: str, title: str = "💡 Immediat
         <div style="border-top: 3px solid var(--ericsson-orange); padding-top: 1rem;">
             {items_html}
         </div>
-        <div style="margin-top: 2rem; padding: 1.25rem; background: linear-gradient(135deg, var(--exec-bg-secondary), var(--exec-bg-primary)); 
+        <div style="margin-top: 2rem; padding: 1.25rem; background: var(--exec-bg-secondary); 
                     border-radius: var(--exec-border-radius); border: 2px solid var(--ericsson-green);">
             <div style="font-size: 1rem; color: var(--exec-text-primary); font-weight: 500; line-height: 1.6;">
                 <strong style="color: var(--ericsson-blue); font-size: 1.1rem;">🎯 Implementation Priority:</strong><br>
