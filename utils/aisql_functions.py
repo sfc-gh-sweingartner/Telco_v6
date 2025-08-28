@@ -73,7 +73,7 @@ class TelcoAISQLProcessor:
             # Embedding Models
             'e5-base-v2', 'nv-embed-qa-4', 'multilingual-e5-large', 'voyage-multilingual-2'
         ]
-        self.default_model = 'claude-4-sonnet'
+        self.default_model = 'claude-3-5-sonnet'  # Fast, highly capable Claude model
         
     def ai_complete(self, prompt: str, model: str = None, max_tokens: int = 500) -> str:
         """
@@ -81,7 +81,7 @@ class TelcoAISQLProcessor:
         
         Args:
             prompt: The input prompt for completion
-            model: LLM model to use (default: claude-4-sonnet)
+            model: LLM model to use (default: claude-3-5-sonnet)
             max_tokens: Maximum tokens to generate
             
         Returns:

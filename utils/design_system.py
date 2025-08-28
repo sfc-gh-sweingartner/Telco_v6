@@ -683,7 +683,7 @@ def create_ai_progress_tracker(current_step: int, total_steps: int, step_name: s
     </div>
     """, unsafe_allow_html=True)
 
-def create_model_selector(models: list, default_model: str = "claude-4-sonnet") -> str:
+def create_model_selector(models: list, default_model: str = "claude-3-5-sonnet") -> str:
     """
     Create AI model selector component
     
@@ -698,9 +698,9 @@ def create_model_selector(models: list, default_model: str = "claude-4-sonnet") 
     
     model_descriptions = {
         # Claude Models (Anthropic) - Premium reasoning and analysis
-        "claude-4-sonnet": "🎯 Claude 4 Sonnet - DEFAULT: Best balance of speed and intelligence",
+        "claude-4-sonnet": "🎯 Claude 4 Sonnet - Best balance of speed and intelligence",
         "claude-4-opus": "🏆 Claude 4 Opus - Maximum intelligence for complex tasks",
-        "claude-3-5-sonnet": "🚀 Claude 3.5 Sonnet - Fast, highly capable",
+        "claude-3-5-sonnet": "🚀 Claude 3.5 Sonnet - DEFAULT: Fast, highly capable",
         "claude-3-7-sonnet": "📊 Claude 3.7 Sonnet - Enhanced analytical capabilities",
         
         # Mistral Models - High performance open-source

@@ -55,7 +55,7 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="claude-4-sonnet"):
+    def create_model_selector(models, default_model="claude-3-5-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
@@ -108,7 +108,7 @@ except ImportError:
                 # Embedding Models
                 'e5-base-v2', 'nv-embed-qa-4', 'multilingual-e5-large', 'voyage-multilingual-2'
             ]
-            default_model = "claude-4-sonnet"
+            default_model = "claude-3-5-sonnet"  # Fast, highly capable Claude model
             def ai_complete(self, prompt, **kwargs):
                 return "🤖 AI completion service is being updated. Full Snowflake Cortex AISQL capabilities will be available shortly!"
             def ai_classify(self, text, categories):

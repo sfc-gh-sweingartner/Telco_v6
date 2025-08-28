@@ -70,7 +70,7 @@ except ImportError:
                 'llama4-maverick', 'llama4-scout', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
                 'snowflake-arctic', 'snowflake-llama-3.3-70b', 'reka-core', 'reka-flash', 'deepseek-r1'
             ]
-            default_model = "claude-4-sonnet"
+            default_model = "claude-3-5-sonnet"
             def ai_complete(self, prompt, **kwargs):
                 return "🔬 AI performance monitoring is being deployed. Advanced testing and optimization tools will be available shortly!"
         return FallbackProcessor()
@@ -161,8 +161,8 @@ with test_tab1:
         
         test_models = st.multiselect(
             "Models to Test:",
-                    ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["claude-4-sonnet", "mistral-large", "llama3.1-8b"],
-        default=["claude-4-sonnet"]
+                    ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["claude-3-5-sonnet", "mistral-large", "llama3.1-8b"],
+        default=["claude-3-5-sonnet"]
         )
         
         if st.button("🚀 Run AI Tests", type="primary", key="run_tests"):

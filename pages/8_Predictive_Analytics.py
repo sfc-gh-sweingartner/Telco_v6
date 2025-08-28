@@ -54,7 +54,7 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="claude-4-sonnet"):
+    def create_model_selector(models, default_model="claude-3-5-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
@@ -81,7 +81,7 @@ except ImportError:
                 'llama4-maverick', 'llama4-scout', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
                 'snowflake-arctic', 'snowflake-llama-3.3-70b', 'reka-core', 'reka-flash', 'deepseek-r1'
             ]
-            default_model = "claude-4-sonnet"
+            default_model = "claude-3-5-sonnet"
             def ai_complete(self, prompt, **kwargs):
                 return "🔮 AI predictive analytics are being deployed. Advanced forecasting and anomaly detection will be available shortly!"
         return FallbackProcessor()

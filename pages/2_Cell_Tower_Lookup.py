@@ -252,7 +252,7 @@ if len(selection_data) > 0:
     
     # Get AI analysis
     ai_analysis = execute_query_with_loading(
-        f"select snowflake.cortex.complete('claude-4-sonnet', '{prompt}') as res",
+        f"select snowflake.cortex.complete('claude-3-5-sonnet', '{prompt}') as res",
         "Generating AI analysis..."
     )
     
@@ -397,7 +397,7 @@ if len(selection_data) > 0:
         recommendation_prompt = recommendation_prompt.replace("'", "''")
         
         recommendations = execute_query_with_loading(
-            f"select snowflake.cortex.complete('claude-4-sonnet', '{recommendation_prompt}') as res",
+            f"select snowflake.cortex.complete('claude-3-5-sonnet', '{recommendation_prompt}') as res",
             "Generating recommendations..."
         )
         

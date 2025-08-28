@@ -271,8 +271,14 @@ elif doc_section == "🔧 Technical Reference":
     
     model_data = pd.DataFrame([
         {
+            "Model": "claude-3-5-sonnet",
+            "Use Case": "DEFAULT: Fast, highly capable analysis",
+            "Strengths": "Fast responses, excellent reasoning",
+            "Typical Response Time": "1.2-2.0 seconds"
+        },
+        {
             "Model": "claude-4-sonnet",
-            "Use Case": "DEFAULT: Balanced analysis, executive reporting",
+            "Use Case": "Advanced balanced analysis",
             "Strengths": "Excellent reasoning, balanced speed & quality",
             "Typical Response Time": "1.5-2.5 seconds"
         },
@@ -441,7 +447,8 @@ elif doc_section == "⚡ Best Practices":
         {
             "category": "🔄 Model Selection",
             "practices": [
-                "Use claude-4-sonnet as default for balanced performance",
+                "Use claude-3-5-sonnet as default for fast, capable analysis",
+                "Use claude-4-sonnet for advanced balanced performance",
                 "Use claude-4-opus for complex strategic analysis",
                 "Choose llama3.1-8b for quick operational insights",  
                 "Try different models to compare results",
