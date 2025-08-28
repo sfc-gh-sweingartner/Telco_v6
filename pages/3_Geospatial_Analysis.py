@@ -7,6 +7,13 @@ import plotly.graph_objects as go
 import sys
 import os
 
+# Import h3 for hexagonal spatial indexing
+try:
+    import h3
+except ImportError:
+    st.error("h3 library is not installed. Please install it with: pip install h3")
+    st.stop()
+
 # Add utils to path for imports
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils'))
 
