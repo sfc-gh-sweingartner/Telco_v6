@@ -480,7 +480,294 @@ def add_page_footer():
     st.markdown("---")
     st.markdown("""
     <div style="text-align: center; color: #6c757d; font-size: 0.875rem; padding: 2rem 0 1rem 0;">
-        <p style="margin: 0;">🏢 Powered by <strong>Snowflake Data Platform</strong> | Built with <strong>Streamlit</strong></p>
-        <p style="margin: 0.5rem 0 0 0;">© 2024 Telco Network Optimization Suite</p>
+        <p style="margin: 0;">🤖 Powered by <strong>Snowflake Cortex AISQL</strong> | Built with <strong>Streamlit</strong></p>
+        <p style="margin: 0.5rem 0 0 0;">© 2024 AI-Enhanced Telco Network Optimization Suite</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# =================== AI-SPECIFIC DESIGN COMPONENTS ===================
+
+def create_ai_chat_interface():
+    """Create AI chat interface component"""
+    st.markdown("""
+    <style>
+    .ai-chat-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 1px solid #e3f2fd;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .ai-chat-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: #1565c0;
+        font-weight: 600;
+    }
+    .ai-response-box {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        border-left: 4px solid #4caf50;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .ai-thinking {
+        display: flex;
+        align-items: center;
+        color: #666;
+        font-style: italic;
+    }
+    .ai-thinking::before {
+        content: "🤖";
+        margin-right: 8px;
+        animation: thinking 2s infinite;
+    }
+    @keyframes thinking {
+        0%, 50% { opacity: 1; }
+        25%, 75% { opacity: 0.5; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, icon: str = "🧠") -> None:
+    """
+    Create AI insights card with confidence indicator
+    
+    Args:
+        title: Card title
+        insight: AI-generated insight
+        confidence: Confidence score (0-1)
+        icon: Icon to display
+    """
+    confidence_color = "#4caf50" if confidence > 0.8 else "#ff9800" if confidence > 0.6 else "#f44336"
+    confidence_text = "High" if confidence > 0.8 else "Medium" if confidence > 0.6 else "Low"
+    
+    st.markdown(f"""
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; margin: 1rem 0; 
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #2196f3;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center;">
+                <span style="font-size: 1.5rem; margin-right: 0.75rem;">{icon}</span>
+                <h4 style="margin: 0; color: #1565c0; font-weight: 600;">{title}</h4>
+            </div>
+            <div style="background: {confidence_color}; color: white; padding: 0.25rem 0.75rem; 
+                        border-radius: 20px; font-size: 0.8rem; font-weight: 500;">
+                {confidence_text} Confidence
+            </div>
+        </div>
+        <div style="color: #333; line-height: 1.6; font-size: 1rem;">{insight}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def create_ai_loading_spinner(message: str = "AI is analyzing...") -> None:
+    """
+    Create AI-themed loading spinner
+    
+    Args:
+        message: Loading message to display
+    """
+    st.markdown(f"""
+    <div style="text-align: center; padding: 2rem; color: #1565c0;">
+        <div style="font-size: 2rem; margin-bottom: 1rem;">
+            <span style="animation: spin 2s linear infinite;">🤖</span>
+            <span style="animation: pulse 1s ease-in-out infinite;">🧠</span>
+            <span style="animation: spin 2s linear infinite reverse;">⚡</span>
+        </div>
+        <div style="font-weight: 500; color: #666;">{message}</div>
+    </div>
+    <style>
+    @keyframes spin {{
+        0% {{ transform: rotate(0deg); }}
+        100% {{ transform: rotate(360deg); }}
+    }}
+    @keyframes pulse {{
+        0%, 100% {{ opacity: 1; }}
+        50% {{ opacity: 0.5; }}
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+def create_ai_recommendation_list(recommendations: list, title: str = "AI Recommendations") -> None:
+    """
+    Create formatted list of AI recommendations
+    
+    Args:
+        recommendations: List of recommendation strings
+        title: Title for the recommendations section
+    """
+    if not recommendations:
+        return
+        
+    recommendations_html = ""
+    for i, rec in enumerate(recommendations, 1):
+        recommendations_html += f"""
+        <div style="background: #f8f9fa; border-left: 4px solid #4caf50; padding: 1rem; 
+                    margin: 0.5rem 0; border-radius: 0 8px 8px 0;">
+            <div style="display: flex; align-items: flex-start;">
+                <div style="background: #4caf50; color: white; border-radius: 50%; 
+                           width: 24px; height: 24px; display: flex; align-items: center; 
+                           justify-content: center; font-size: 0.8rem; font-weight: bold; 
+                           margin-right: 1rem; flex-shrink: 0;">{i}</div>
+                <div style="flex: 1; color: #333; line-height: 1.5;">{rec}</div>
+            </div>
+        </div>
+        """
+    
+    st.markdown(f"""
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; margin: 1rem 0; 
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <h4 style="color: #1565c0; margin: 0 0 1rem 0; display: flex; align-items: center;">
+            <span style="margin-right: 0.5rem;">💡</span> {title}
+        </h4>
+        {recommendations_html}
+    </div>
+    """, unsafe_allow_html=True)
+
+def create_ai_metrics_dashboard(metrics: dict) -> None:
+    """
+    Create AI metrics dashboard
+    
+    Args:
+        metrics: Dictionary of metric name -> value pairs
+    """
+    if not metrics:
+        return
+        
+    cols = st.columns(min(4, len(metrics)))
+    
+    icons = ["🎯", "📊", "⚡", "🚀", "🔍", "💡", "🎪", "🌟"]
+    
+    for i, (metric, value) in enumerate(metrics.items()):
+        with cols[i % len(cols)]:
+            icon = icons[i % len(icons)]
+            st.markdown(f"""
+            <div style="background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); 
+                        color: white; border-radius: 16px; padding: 1.5rem; text-align: center; 
+                        box-shadow: 0 4px 20px rgba(33,150,243,0.3); margin-bottom: 1rem;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">{icon}</div>
+                <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.25rem;">{value}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">{metric}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+def create_ai_progress_tracker(current_step: int, total_steps: int, step_name: str) -> None:
+    """
+    Create AI process progress tracker
+    
+    Args:
+        current_step: Current step number (1-based)
+        total_steps: Total number of steps
+        step_name: Name of current step
+    """
+    progress = (current_step - 1) / total_steps
+    
+    st.markdown(f"""
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; 
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid #4caf50;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h4 style="margin: 0; color: #1565c0;">🤖 AI Processing Status</h4>
+            <span style="color: #666; font-size: 0.9rem;">Step {current_step} of {total_steps}</span>
+        </div>
+        <div style="background: #e0e0e0; border-radius: 10px; height: 8px; margin-bottom: 1rem;">
+            <div style="background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%); 
+                        height: 100%; border-radius: 10px; width: {progress*100}%; 
+                        transition: width 0.5s ease;"></div>
+        </div>
+        <div style="color: #666; font-size: 0.95rem;">
+            <span style="margin-right: 0.5rem;">⚡</span>{step_name}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def create_model_selector(models: list, default_model: str = "mistral-large") -> str:
+    """
+    Create AI model selector component
+    
+    Args:
+        models: List of available AI models
+        default_model: Default model to select
+        
+    Returns:
+        Selected model name
+    """
+    st.markdown("### 🤖 AI Model Configuration")
+    
+    model_descriptions = {
+        "mistral-large": "🏆 Mistral Large - Best overall performance, latest capabilities",
+        "mistral-7b": "⚡ Mistral 7B - Fast responses, good for simple tasks",
+        "mixtral-8x7b": "🎯 Mixtral 8x7B - Balanced performance and speed",
+        "llama3.1-8b": "🦙 Llama 3.1 8B - Meta's efficient model",
+        "llama3.1-70b": "🦙 Llama 3.1 70B - Meta's powerful model",
+        "llama3.1-405b": "🦙 Llama 3.1 405B - Meta's largest model",
+        "snowflake-arctic": "❄️ Snowflake Arctic - Optimized for enterprise",
+        "reka-core": "🧠 Reka Core - Advanced reasoning",
+        "reka-flash": "⚡ Reka Flash - Speed optimized"
+    }
+    
+    # Create selection with descriptions
+    options = []
+    for model in models:
+        description = model_descriptions.get(model, f"🤖 {model}")
+        options.append(f"{description}")
+    
+    selected_option = st.selectbox(
+        "Choose AI Model:",
+        options,
+        index=models.index(default_model) if default_model in models else 0,
+        help="Different models have different strengths. Larger models are more capable but slower."
+    )
+    
+    # Extract model name from selection
+    selected_model = models[options.index(selected_option)]
+    
+    # Show model info
+    if selected_model in model_descriptions:
+        st.info(f"Selected: {model_descriptions[selected_model]}")
+    
+    return selected_model
+
+def format_ai_response(response: str, title: str = "AI Insights") -> None:
+    """
+    Format and display AI response in Streamlit
+    
+    Args:
+        response: AI generated response
+        title: Title for the response section
+    """
+    if response:
+        st.markdown(f"### 🤖 {title}")
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%); 
+                    padding: 1.5rem; border-radius: 12px; margin: 1rem 0; 
+                    border-left: 4px solid #2196f3; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <div style="color: #1565c0; line-height: 1.6;">{response}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.warning(f"No {title.lower()} available at this time.")
+
+def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "🤖") -> None:
+    """
+    Create AI-specific metric card
+    
+    Args:
+        title: Card title
+        value: Main value to display
+        description: Additional description
+        icon: Icon to display
+    """
+    st.markdown(f"""
+    <div style="background: white; padding: 1.5rem; border-radius: 12px; 
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #4caf50; margin-bottom: 1rem;">
+        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 1.5rem; margin-right: 0.5rem;">{icon}</span>
+            <h4 style="margin: 0; color: #2e7d32; font-weight: 600;">{title}</h4>
+        </div>
+        <div style="font-size: 1.25rem; font-weight: 500; color: #1565c0; margin-bottom: 0.5rem;">{value}</div>
+        {f'<div style="color: #6c757d; font-size: 0.9rem;">{description}</div>' if description else ''}
     </div>
     """, unsafe_allow_html=True)
