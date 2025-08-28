@@ -27,6 +27,11 @@ from typing import List, Dict, Any, Optional, Union
 import json
 import time
 from datetime import datetime
+import hashlib
+import logging
+from functools import wraps
+import threading
+import os
 
 class TelcoAISQLProcessor:
     """
@@ -679,3 +684,247 @@ def create_ai_metric_card(title: str, value: str, description: str = "", icon: s
         {f'<div style="color: #6c757d; font-size: 0.9rem;">{description}</div>' if description else ''}
     </div>
     """, unsafe_allow_html=True)
+
+class AIPerformanceMonitor:
+    """
+    Performance monitoring and cost tracking for AI operations
+    """
+    
+    def __init__(self):
+        self.metrics = {
+            'total_calls': 0,
+            'total_tokens': 0,
+            'total_time': 0,
+            'cache_hits': 0,
+            'cache_misses': 0,
+            'errors': 0,
+            'model_usage': {},
+            'cost_estimate': 0.0
+        }
+        self.lock = threading.Lock()
+    
+    def log_operation(self, model: str, tokens: int, duration: float, cached: bool = False, error: bool = False):
+        """Log an AI operation for monitoring"""
+        with self.lock:
+            self.metrics['total_calls'] += 1
+            self.metrics['total_tokens'] += tokens
+            self.metrics['total_time'] += duration
+            
+            if cached:
+                self.metrics['cache_hits'] += 1
+            else:
+                self.metrics['cache_misses'] += 1
+            
+            if error:
+                self.metrics['errors'] += 1
+            
+            if model not in self.metrics['model_usage']:
+                self.metrics['model_usage'][model] = 0
+            self.metrics['model_usage'][model] += 1
+            
+            # Rough cost estimation (tokens * $0.002 per 1K tokens average)
+            self.metrics['cost_estimate'] += (tokens / 1000) * 0.002
+    
+    def get_metrics(self) -> Dict[str, Any]:
+        """Get current performance metrics"""
+        with self.lock:
+            metrics = self.metrics.copy()
+            metrics['cache_hit_rate'] = (
+                metrics['cache_hits'] / max(1, metrics['cache_hits'] + metrics['cache_misses'])
+            ) * 100
+            metrics['avg_response_time'] = metrics['total_time'] / max(1, metrics['total_calls'])
+            metrics['error_rate'] = (metrics['errors'] / max(1, metrics['total_calls'])) * 100
+            return metrics
+    
+    def reset_metrics(self):
+        """Reset all performance metrics"""
+        with self.lock:
+            self.metrics = {
+                'total_calls': 0,
+                'total_tokens': 0,
+                'total_time': 0,
+                'cache_hits': 0,
+                'cache_misses': 0,
+                'errors': 0,
+                'model_usage': {},
+                'cost_estimate': 0.0
+            }
+
+class AITestSuite:
+    """
+    Comprehensive testing suite for AISQL integrations
+    """
+    
+    def __init__(self, processor: TelcoAISQLProcessor, analytics: TelcoAIAnalytics):
+        self.processor = processor
+        self.analytics = analytics
+        self.test_results = []
+    
+    def run_basic_tests(self) -> Dict[str, Any]:
+        """Run basic functionality tests"""
+        results = {
+            'tests_run': 0,
+            'tests_passed': 0,
+            'tests_failed': 0,
+            'details': []
+        }
+        
+        # Test AI Complete
+        try:
+            response = self.processor.ai_complete("Say 'Hello' in one word", max_tokens=10)
+            success = len(response) > 0 and response.lower().find('hello') >= 0
+            results['details'].append({
+                'test': 'AI Complete Basic',
+                'status': 'PASS' if success else 'FAIL',
+                'response_length': len(response)
+            })
+            if success:
+                results['tests_passed'] += 1
+            else:
+                results['tests_failed'] += 1
+        except Exception as e:
+            results['details'].append({
+                'test': 'AI Complete Basic',
+                'status': 'ERROR',
+                'error': str(e)
+            })
+            results['tests_failed'] += 1
+        
+        results['tests_run'] += 1
+        
+        # Test AI Classify
+        try:
+            result = self.processor.ai_classify("This is excellent service!", ["positive", "negative", "neutral"])
+            success = result in ["positive", "negative", "neutral"]
+            results['details'].append({
+                'test': 'AI Classify Basic',
+                'status': 'PASS' if success else 'FAIL',
+                'result': result
+            })
+            if success:
+                results['tests_passed'] += 1
+            else:
+                results['tests_failed'] += 1
+        except Exception as e:
+            results['details'].append({
+                'test': 'AI Classify Basic',
+                'status': 'ERROR',
+                'error': str(e)
+            })
+            results['tests_failed'] += 1
+        
+        results['tests_run'] += 1
+        
+        # Test AI Sentiment
+        try:
+            sentiment = self.processor.ai_sentiment("I love this service!")
+            success = isinstance(sentiment, float) and -1 <= sentiment <= 1
+            results['details'].append({
+                'test': 'AI Sentiment Basic',
+                'status': 'PASS' if success else 'FAIL',
+                'sentiment_score': sentiment
+            })
+            if success:
+                results['tests_passed'] += 1
+            else:
+                results['tests_failed'] += 1
+        except Exception as e:
+            results['details'].append({
+                'test': 'AI Sentiment Basic',
+                'status': 'ERROR',
+                'error': str(e)
+            })
+            results['tests_failed'] += 1
+        
+        results['tests_run'] += 1
+        return results
+    
+    def run_performance_tests(self) -> Dict[str, Any]:
+        """Run performance and load tests"""
+        results = {
+            'response_times': [],
+            'cache_performance': {},
+            'model_comparison': {}
+        }
+        
+        test_prompt = "Analyze network performance in one sentence."
+        
+        # Test response times
+        for i in range(3):
+            start_time = time.time()
+            try:
+                self.processor.ai_complete(test_prompt, max_tokens=50)
+                response_time = time.time() - start_time
+                results['response_times'].append(response_time)
+            except Exception:
+                results['response_times'].append(None)
+        
+        # Test caching
+        start_time = time.time()
+        self.processor.ai_complete("Cache test query", max_tokens=20)
+        first_time = time.time() - start_time
+        
+        start_time = time.time()
+        self.processor.ai_complete("Cache test query", max_tokens=20)
+        second_time = time.time() - start_time
+        
+        results['cache_performance'] = {
+            'first_call': first_time,
+            'second_call': second_time,
+            'improvement': max(0, first_time - second_time)
+        }
+        
+        return results
+
+def create_ai_cost_dashboard(monitor: AIPerformanceMonitor):
+    """Create a cost monitoring dashboard"""
+    metrics = monitor.get_metrics()
+    
+    st.markdown("### 💰 AI Cost & Performance Dashboard")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("Total AI Calls", f"{metrics['total_calls']:,}")
+    
+    with col2:
+        st.metric("Total Tokens", f"{metrics['total_tokens']:,}")
+    
+    with col3:
+        st.metric("Est. Cost", f"${metrics['cost_estimate']:.2f}")
+    
+    with col4:
+        st.metric("Cache Hit Rate", f"{metrics['cache_hit_rate']:.1f}%")
+    
+    # Performance metrics
+    st.markdown("#### 📊 Performance Metrics")
+    perf_col1, perf_col2, perf_col3 = st.columns(3)
+    
+    with perf_col1:
+        st.metric("Avg Response Time", f"{metrics['avg_response_time']:.2f}s")
+    
+    with perf_col2:
+        st.metric("Error Rate", f"{metrics['error_rate']:.1f}%")
+    
+    with perf_col3:
+        st.metric("Total Operations", f"{metrics['cache_hits'] + metrics['cache_misses']:,}")
+
+@st.cache_resource
+def get_performance_monitor() -> AIPerformanceMonitor:
+    """Get cached performance monitor instance"""
+    return AIPerformanceMonitor()
+
+@st.cache_resource
+def get_ai_test_suite(session) -> AITestSuite:
+    """
+    Get cached AI test suite instance
+    
+    Args:
+        session: Snowflake session
+        
+    Returns:
+        AITestSuite: Test suite instance
+    """
+    processor = get_ai_processor(session)
+    analytics = get_ai_analytics(session)
+    return AITestSuite(processor, analytics)
