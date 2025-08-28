@@ -9,7 +9,7 @@ numpy
 pydeck
 plotly
 matplotlib
-h3-py
+h3
 branca
 
 # Statistical analysis  
