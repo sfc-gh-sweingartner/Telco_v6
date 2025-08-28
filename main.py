@@ -23,7 +23,7 @@ try:
         create_ai_insights_card, create_ai_metrics_dashboard, format_ai_response,
         create_ai_loading_spinner, create_ai_recommendation_list, create_executive_dashboard,
         create_executive_navigation_grid, create_executive_summary_card, 
-        create_executive_alert_banner, create_executive_demo_controller
+        create_executive_alert_banner, create_executive_demo_controller, create_immediate_action_items
     )
 except ImportError:
     # Fallback imports when AI functions are not available
@@ -83,6 +83,9 @@ except ImportError:
             st.info(message)
     def create_executive_demo_controller():
         return {'current_scenario': 'baseline', 'demo_active': False}
+    def create_immediate_action_items(action_items, title="💡 Immediate Action Items"):
+        st.markdown(f"### {title}")
+        st.markdown(action_items)
 
 try:
     from utils.aisql_functions import get_ai_analytics, get_ai_processor, format_ai_response as format_ai_response_util
@@ -329,7 +332,29 @@ if exec_kpis and network_metrics and customer_metrics:
                 "⚫ Compliance Check: All systems meeting regulatory standards - No action required"
             ]
             
-            create_ai_recommendation_list(risk_recommendations, "🎯 AI Risk Assessment & Recommendations")
+            # Generate immediate action items format
+            immediate_actions_text = """1. Install antenna optimization software on central network management system
+- Timeline: Can start today
+- Requires: IT admin access
+
+2. Create baseline performance measurements for all cell sites  
+- Timeline: Next 24-48 hours
+- Requires: Network monitoring tools
+
+3. Schedule automated tilt adjustments during off-peak hours (2-5 AM)
+- Timeline: Can set up today for tonight
+- Requires: Network operations center coordination
+
+4. Document current antenna configurations before making changes
+- Timeline: Today
+- Requires: Site configuration database access
+
+5. Set up automated performance monitoring alerts
+- Timeline: Today
+- Requires: Monitoring system access"""
+
+            create_immediate_action_items(immediate_actions_text, "🎯 AI Priority Action Items")
+            create_ai_recommendation_list(risk_recommendations, "📋 Additional AI Recommendations")
 
 # Add fallback message if no network data is available  
 else:

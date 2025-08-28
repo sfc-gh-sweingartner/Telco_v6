@@ -1073,7 +1073,7 @@ def create_ai_loading_spinner(message: str = "AI is analyzing...") -> None:
 
 def create_ai_recommendation_list(recommendations: list, title: str = "AI Recommendations") -> None:
     """
-    Create formatted list of AI recommendations
+    Create formatted list of AI recommendations with enhanced actionable formatting
     
     Args:
         recommendations: List of recommendation strings
@@ -1081,29 +1081,103 @@ def create_ai_recommendation_list(recommendations: list, title: str = "AI Recomm
     """
     if not recommendations:
         return
+    
+    def parse_recommendation(rec_text: str, index: int) -> str:
+        """Parse and format individual recommendation with timeline and requirements"""
+        lines = rec_text.strip().split('\n')
+        main_rec = lines[0].strip()
         
-    recommendations_html = ""
-    for i, rec in enumerate(recommendations, 1):
-        recommendations_html += f"""
-        <div style="background: #f8f9fa; border-left: 4px solid #4caf50; padding: 1rem; 
-                    margin: 0.5rem 0; border-radius: 0 8px 8px 0;">
+        # Look for timeline and requirements in the text
+        timeline = ""
+        requirements = ""
+        additional_info = []
+        
+        for line in lines[1:]:
+            line = line.strip()
+            if line.lower().startswith('timeline:') or line.lower().startswith('- timeline:'):
+                timeline = line.replace('Timeline:', '').replace('- Timeline:', '').strip()
+            elif line.lower().startswith('requires:') or line.lower().startswith('- requires:'):
+                requirements = line.replace('Requires:', '').replace('- Requires:', '').strip()
+            elif line and not line.startswith('-'):
+                additional_info.append(line)
+        
+        # Create enhanced recommendation HTML
+        timeline_html = f"""
+        <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(76, 175, 80, 0.1); 
+                    border-radius: 6px; border-left: 3px solid var(--ericsson-green);">
+            <div style="font-size: 0.85rem; color: var(--ericsson-green); font-weight: 600; margin-bottom: 0.25rem;">
+                ⏱️ Timeline
+            </div>
+            <div style="font-size: 0.9rem; color: #333;">{timeline}</div>
+        </div>
+        """ if timeline else ""
+        
+        requirements_html = f"""
+        <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(0, 37, 97, 0.05); 
+                    border-radius: 6px; border-left: 3px solid var(--ericsson-blue);">
+            <div style="font-size: 0.85rem; color: var(--ericsson-blue); font-weight: 600; margin-bottom: 0.25rem;">
+                🔧 Requirements
+            </div>
+            <div style="font-size: 0.9rem; color: #333;">{requirements}</div>
+        </div>
+        """ if requirements else ""
+        
+        additional_html = ""
+        if additional_info:
+            additional_html = f"""
+            <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(255, 102, 0, 0.05); 
+                        border-radius: 6px; border-left: 3px solid var(--ericsson-orange);">
+                <div style="font-size: 0.85rem; color: var(--ericsson-orange); font-weight: 600; margin-bottom: 0.25rem;">
+                    ℹ️ Additional Details
+                </div>
+                <div style="font-size: 0.9rem; color: #333;">{'<br>'.join(additional_info)}</div>
+            </div>
+            """
+        
+        return f"""
+        <div style="background: var(--exec-bg-primary); border-left: 4px solid var(--ericsson-green); 
+                    padding: 1.25rem; margin: 0.75rem 0; border-radius: 0 12px 12px 0; 
+                    box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border);">
             <div style="display: flex; align-items: flex-start;">
-                <div style="background: #4caf50; color: white; border-radius: 50%; 
-                           width: 24px; height: 24px; display: flex; align-items: center; 
-                           justify-content: center; font-size: 0.8rem; font-weight: bold; 
-                           margin-right: 1rem; flex-shrink: 0;">{i}</div>
-                <div style="flex: 1; color: #333; line-height: 1.5;">{rec}</div>
+                <div style="background: var(--ericsson-gradient-accent); color: white; border-radius: 50%; 
+                           width: 28px; height: 28px; display: flex; align-items: center; 
+                           justify-content: center; font-size: 0.9rem; font-weight: bold; 
+                           margin-right: 1rem; flex-shrink: 0; font-family: 'Ericsson Hilda', sans-serif;">{index}</div>
+                <div style="flex: 1;">
+                    <div style="color: var(--exec-text-primary); line-height: 1.6; font-weight: 500; 
+                                font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; margin-bottom: 0.5rem;">
+                        {main_rec}
+                    </div>
+                    {timeline_html}
+                    {requirements_html}
+                    {additional_html}
+                </div>
             </div>
         </div>
         """
+        
+    recommendations_html = ""
+    for i, rec in enumerate(recommendations, 1):
+        recommendations_html += parse_recommendation(rec, i)
     
     st.markdown(f"""
-    <div style="background: white; border-radius: 16px; padding: 1.5rem; margin: 1rem 0; 
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-        <h4 style="color: #1565c0; margin: 0 0 1rem 0; display: flex; align-items: center;">
-            <span style="margin-right: 0.5rem;">💡</span> {title}
+    <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius-lg); 
+                padding: 2rem; margin: 1.5rem 0; box-shadow: var(--exec-shadow-lg);
+                border: 1px solid var(--exec-border);">
+        <h4 style="color: var(--ericsson-blue); margin: 0 0 1.5rem 0; display: flex; align-items: center;
+                   font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; font-size: 1.3rem; font-weight: 700;">
+            <span style="margin-right: 0.75rem; font-size: 1.5rem;">💡</span> {title}
         </h4>
-        {recommendations_html}
+        <div style="border-top: 2px solid var(--ericsson-orange); padding-top: 1rem;">
+            {recommendations_html}
+        </div>
+        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--exec-bg-secondary); 
+                    border-radius: var(--exec-border-radius); border-left: 4px solid var(--ericsson-blue);">
+            <div style="font-size: 0.9rem; color: var(--exec-text-secondary); font-weight: 500;">
+                <strong style="color: var(--ericsson-blue);">📋 Implementation Guide:</strong>
+                These recommendations are prioritized by impact and feasibility. Items with immediate timelines can be started today with minimal risk to network operations.
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1471,6 +1545,147 @@ def create_executive_demo_controller() -> dict:
         })
     
     return st.session_state.exec_demo_state
+
+def create_immediate_action_items(action_items: str, title: str = "💡 Immediate Action Items") -> None:
+    """
+    Create formatted immediate action items from AI recommendations
+    
+    Args:
+        action_items: AI-generated action items text with numbered list
+        title: Title for the action items section
+    """
+    if not action_items:
+        return
+    
+    # Parse the action items text to extract numbered items with details
+    lines = action_items.strip().split('\n')
+    parsed_items = []
+    current_item = {}
+    
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+            
+        # Check if this is a numbered item (starts with digit followed by period)
+        if line and line[0].isdigit() and '. ' in line[:5]:
+            # Save previous item if exists
+            if current_item:
+                parsed_items.append(current_item)
+            
+            # Start new item
+            current_item = {
+                'number': len(parsed_items) + 1,
+                'title': line.split('. ', 1)[1] if '. ' in line else line,
+                'timeline': '',
+                'requirements': '',
+                'details': []
+            }
+        elif line.lower().startswith('- timeline:'):
+            current_item['timeline'] = line.replace('- Timeline:', '').replace('- timeline:', '').strip()
+        elif line.lower().startswith('- requires:'):
+            current_item['requirements'] = line.replace('- Requires:', '').replace('- requires:', '').strip()
+        elif line.startswith('-') and current_item:
+            current_item['details'].append(line[1:].strip())
+        elif current_item and not line.startswith('These items'):
+            current_item['details'].append(line)
+    
+    # Add the last item
+    if current_item:
+        parsed_items.append(current_item)
+    
+    # Generate HTML for each item
+    items_html = ""
+    for item in parsed_items:
+        timeline_badge = ""
+        if item['timeline']:
+            if 'today' in item['timeline'].lower() or 'immediately' in item['timeline'].lower():
+                badge_color = "var(--ericsson-green)"
+                badge_text = "🚀 IMMEDIATE"
+            elif '24' in item['timeline'] or '48' in item['timeline']:
+                badge_color = "var(--ericsson-orange)"
+                badge_text = "⏱️ URGENT"
+            else:
+                badge_color = "var(--ericsson-blue)"
+                badge_text = "📅 SCHEDULED"
+                
+            timeline_badge = f"""
+            <div style="display: inline-block; background: {badge_color}; color: white; 
+                        padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; 
+                        font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase;">
+                {badge_text}
+            </div>
+            """
+        
+        timeline_section = f"""
+        <div style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(0, 150, 57, 0.05); 
+                    border-radius: 8px; border-left: 3px solid var(--ericsson-green);">
+            <div style="font-size: 0.85rem; color: var(--ericsson-green); font-weight: 600; 
+                       display: flex; align-items: center; margin-bottom: 0.25rem;">
+                <span style="margin-right: 0.5rem;">⏱️</span> Timeline
+            </div>
+            <div style="font-size: 0.9rem; color: var(--exec-text-primary);">{item['timeline']}</div>
+        </div>
+        """ if item['timeline'] else ""
+        
+        requirements_section = f"""
+        <div style="margin-top: 0.5rem; padding: 0.75rem; background: rgba(0, 37, 97, 0.05); 
+                    border-radius: 8px; border-left: 3px solid var(--ericsson-blue);">
+            <div style="font-size: 0.85rem; color: var(--ericsson-blue); font-weight: 600; 
+                       display: flex; align-items: center; margin-bottom: 0.25rem;">
+                <span style="margin-right: 0.5rem;">🔧</span> Requirements
+            </div>
+            <div style="font-size: 0.9rem; color: var(--exec-text-primary);">{item['requirements']}</div>
+        </div>
+        """ if item['requirements'] else ""
+        
+        items_html += f"""
+        <div style="background: var(--exec-bg-primary); border-left: 4px solid var(--ericsson-green); 
+                    padding: 1.5rem; margin: 0.75rem 0; border-radius: 0 12px 12px 0; 
+                    box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border);">
+            <div style="display: flex; align-items: flex-start;">
+                <div style="background: var(--ericsson-gradient-accent); color: white; border-radius: 50%; 
+                           width: 32px; height: 32px; display: flex; align-items: center; 
+                           justify-content: center; font-size: 1rem; font-weight: bold; 
+                           margin-right: 1.25rem; flex-shrink: 0; font-family: 'Ericsson Hilda', sans-serif;">
+                    {item['number']}
+                </div>
+                <div style="flex: 1;">
+                    {timeline_badge}
+                    <div style="color: var(--exec-text-primary); line-height: 1.6; font-weight: 500; 
+                                font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; 
+                                font-size: 1.05rem; margin-bottom: 0.75rem;">
+                        {item['title']}
+                    </div>
+                    {timeline_section}
+                    {requirements_section}
+                </div>
+            </div>
+        </div>
+        """
+    
+    st.markdown(f"""
+    <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius-lg); 
+                padding: 2rem; margin: 1.5rem 0; box-shadow: var(--exec-shadow-lg);
+                border: 1px solid var(--exec-border);">
+        <h4 style="color: var(--ericsson-blue); margin: 0 0 1.5rem 0; display: flex; align-items: center;
+                   font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; font-size: 1.4rem; font-weight: 700;">
+            <span style="margin-right: 0.75rem; font-size: 1.8rem;">💡</span> {title}
+        </h4>
+        <div style="border-top: 3px solid var(--ericsson-orange); padding-top: 1rem;">
+            {items_html}
+        </div>
+        <div style="margin-top: 2rem; padding: 1.25rem; background: linear-gradient(135deg, var(--exec-bg-secondary), var(--exec-bg-primary)); 
+                    border-radius: var(--exec-border-radius); border: 2px solid var(--ericsson-green);">
+            <div style="font-size: 1rem; color: var(--exec-text-primary); font-weight: 500; line-height: 1.6;">
+                <strong style="color: var(--ericsson-blue); font-size: 1.1rem;">🎯 Implementation Priority:</strong><br>
+                <span style="color: var(--ericsson-green);">🚀 IMMEDIATE</span> items can be started today with minimal risk to network operations.<br>
+                <span style="color: var(--ericsson-orange);">⏱️ URGENT</span> items should be initiated within 24-48 hours.<br>
+                <span style="color: var(--ericsson-blue);">📅 SCHEDULED</span> items can be planned for optimal timing.
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "🤖") -> None:
     """
