@@ -1,23 +1,23 @@
 -- Enable Cross-Region Inference for Snowflake Cortex AISQL
--- This allows access to models from other AWS regions
+-- This allows access to models from other regions
 
 -- 1. Enable cross-region inference at account level (requires ACCOUNTADMIN)
-ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION_INFERENCE = TRUE;
+-- Options: 'DISABLED', 'ANY_REGION', or specific regions like 'AWS_US,AWS_EU'
+ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
 
--- 2. Set cross-region policy to access AWS US regions and any region
--- This enables access to claude-3-5-sonnet (default) and other premium models
-ALTER ACCOUNT SET CORTEX_GLOBAL_INFERENCE_REGIONS = 'AWS_US, ANY_REGION';
+-- 2. Verify the setting
+SHOW PARAMETERS LIKE 'CORTEX_ENABLED_CROSS_REGION' IN ACCOUNT;
 
--- 3. Verify the settings
-SHOW PARAMETERS LIKE 'CORTEX_ENABLED_CROSS_REGION_INFERENCE' IN ACCOUNT;
-SHOW PARAMETERS LIKE 'CORTEX_GLOBAL_INFERENCE_REGIONS' IN ACCOUNT;
+-- 3. Test claude-3-5-sonnet availability (our default model)
+SELECT snowflake.cortex.complete('claude-3-5-sonnet', 'Hello, can you respond? This tests cross-region access.') as test_response;
 
--- 4. Test claude-3-5-sonnet availability (our default model)
-SELECT snowflake.cortex.complete('claude-3-5-sonnet', 'Hello, can you respond?') as test_response;
+-- 4. Test other models to verify cross-region access
+SELECT snowflake.cortex.complete('mistral-large', 'Hello from Mistral!') as mistral_test;
+SELECT snowflake.cortex.complete('llama3.1-8b', 'Hello from Llama!') as llama_test;
 
--- Alternative: Test with specific region specification
-SELECT snowflake.cortex.complete('claude-3-5-sonnet', 'Hello from cross-region inference!', {'region': 'AWS_US'}) as test_response;
+-- 5. Alternative regions (if you want to restrict to specific regions instead of ANY_REGION)
+-- ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'AWS_US,AWS_EU';
+-- ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'AWS_US';
 
--- 5. List available models in your environment
--- Note: This is a conceptual query - actual implementation may vary
--- SHOW CORTEX MODELS;
+-- 6. To disable cross-region inference (if needed)
+-- ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'DISABLED';
