@@ -14,6 +14,13 @@ except ImportError:
     st.error("h3 library is not installed. Please install it with: pip install h3")
     st.stop()
 
+# Import branca colormap for geospatial visualizations
+try:
+    import branca.colormap as cm
+except ImportError:
+    st.error("branca library is not installed. Please install it with: pip install branca")
+    st.stop()
+
 # Define color palettes for geospatial visualizations
 colors_yellow_blue = ['#fafa6e','#e1f46e','#caee70','#b3e773','#9ddf77','#89d77b','#75cf7f','#62c682',
                        '#51bd86','#40b488','#31aa89','#24a08a','#199689','#138c87','#138284','#17787f',

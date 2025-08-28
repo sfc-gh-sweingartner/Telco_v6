@@ -233,7 +233,7 @@ if len(selection_data) > 0:
     df = pd.DataFrame(selection_data)
     
     # Create AI prompt for analysis
-  prompt = f"""
+    prompt = f"""
     You are a network engineer analyzing failed cells in a cell tower grid. 
     Provide a concise summary of the failed cells using the following data:
 
