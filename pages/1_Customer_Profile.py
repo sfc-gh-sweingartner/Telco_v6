@@ -71,8 +71,32 @@ selected_customer = st.selectbox(
 )
 customer_id = selected_customer.split(' - ')[0]
 
-# Get customer data
-customer = customers_data[customers_data['CUSTOMER_ID'] == customer_id].iloc[0]
+# Get customer data with error handling
+customer_filtered = customers_data[customers_data['CUSTOMER_ID'].astype(str) == str(customer_id)]
+
+if customer_filtered.empty:
+    create_info_box(f"Customer ID {customer_id} not found in the dataset.", "error")
+    st.stop()
+
+customer = customer_filtered.iloc[0]
+
+# Helper function for safe customer data access
+def get_customer_field(field, default="N/A"):
+    """Safely get customer field with default value"""
+    try:
+        if hasattr(customer, 'get'):
+            # DataFrame or dict-like object
+            return customer.get(field, default)
+        elif hasattr(customer, field):
+            # pandas Series with attribute access
+            value = getattr(customer, field, default)
+            return value if pd.notna(value) else default
+        else:
+            # Try index access
+            value = customer[field]
+            return value if pd.notna(value) else default
+    except (KeyError, TypeError, AttributeError, IndexError):
+        return default
 
 # Load customer tickets
 customer_tickets = execute_query_with_loading(f"""
@@ -87,11 +111,17 @@ SELECT
     CONTACT_PREFERENCE
 FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
 WHERE CELL_ID = '{customer_id}'
-""", f"Loading support history for customer {customer['FIRST_NAME']}...")
+""", f"Loading support history for customer {get_customer_field('FIRST_NAME', 'Unknown')}...")
 
-# Calculate customer metrics
-ticket_count = len(customer_tickets)
-avg_sentiment = customer_tickets['SENTIMENT_SCORE'].mean() if len(customer_tickets) > 0 else 0
+# Calculate customer metrics with error handling
+ticket_count = len(customer_tickets) if not customer_tickets.empty else 0
+avg_sentiment = 0
+
+if not customer_tickets.empty and 'SENTIMENT_SCORE' in customer_tickets.columns:
+    sentiment_values = customer_tickets['SENTIMENT_SCORE'].dropna()
+    avg_sentiment = sentiment_values.mean() if not sentiment_values.empty else 0
+elif ticket_count == 0:
+    avg_sentiment = 0
 
 # Determine churn risk and satisfaction
 if avg_sentiment < -0.5 and ticket_count > 2:
@@ -116,33 +146,42 @@ create_section_header("Customer Overview", "👤")
 col1, col2 = st.columns([2, 1])
 
 with col1:
+    # Safe field access for display
+    first_name = get_customer_field('FIRST_NAME', 'Unknown')
+    last_name = get_customer_field('LAST_NAME', '')
+    customer_id_display = get_customer_field('CUSTOMER_ID', 'N/A')
+    email = get_customer_field('EMAIL', 'N/A')
+    service_type = get_customer_field('SERVICE_TYPE', 'N/A')
+    segment = get_customer_field('CUSTOMER_SEGMENT', 'N/A')
+    status = get_customer_field('ACCOUNT_STATUS', 'Unknown')
+    
     st.markdown(f"""
     <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #1f4e79;">
-        <h2 style="color: #1f4e79; margin: 0 0 1rem 0;">{customer['FIRST_NAME']} {customer['LAST_NAME'] if customer['LAST_NAME'] else ''}</h2>
+        <h2 style="color: #1f4e79; margin: 0 0 1rem 0;">{first_name} {last_name}</h2>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
             <div>
                 <strong style="color: #6c757d;">Customer ID:</strong><br>
-                <span style="font-size: 1.1rem; color: #1f4e79;">{customer['CUSTOMER_ID']}</span>
+                <span style="font-size: 1.1rem; color: #1f4e79;">{customer_id_display}</span>
             </div>
             <div>
                 <strong style="color: #6c757d;">Email:</strong><br>
-                <span style="font-size: 1.1rem; color: #495057;">{customer['EMAIL']}</span>
+                <span style="font-size: 1.1rem; color: #495057;">{email}</span>
             </div>
             <div>
                 <strong style="color: #6c757d;">Service Type:</strong><br>
-                <span style="font-size: 1.1rem; color: #495057;">{customer['SERVICE_TYPE']}</span>
+                <span style="font-size: 1.1rem; color: #495057;">{service_type}</span>
             </div>
             <div>
                 <strong style="color: #6c757d;">Segment:</strong><br>
-                <span style="font-size: 1.1rem; color: #495057;">{customer['CUSTOMER_SEGMENT']}</span>
+                <span style="font-size: 1.1rem; color: #495057;">{segment}</span>
             </div>
         </div>
         
         <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
             <strong style="color: #1f4e79;">Account Status:</strong> 
             <span style="margin-left: 0.5rem; padding: 0.25rem 0.75rem; background: #d4edda; color: #155724; border-radius: 20px; font-size: 0.875rem; font-weight: 500;">
-                ✓ {customer['ACCOUNT_STATUS']}
+                ✓ {status}
             </span>
         </div>
     </div>
@@ -327,7 +366,7 @@ elif ticket_count == 1 and avg_sentiment > -0.2:
 if avg_sentiment > 0.3:
     opportunities.append("😊 **Happy Customer**: Positive sentiment - ideal for referral program")
 
-service_type = customer['SERVICE_TYPE']
+service_type = get_customer_field('SERVICE_TYPE', 'Unknown')
 if service_type == 'Mobile':
     opportunities.append("🌐 **Bundle Opportunity**: Mobile customer - consider internet/TV bundle")
 elif service_type == 'Internet':
