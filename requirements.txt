@@ -1,23 +1,24 @@
-# Telco Network Optimization Suite - Python Dependencies
+# Telco Network Optimization Suite - Snowflake-Compatible Dependencies
+# These versions are specifically tested and supported in Snowflake's Streamlit environment
 
 # Core Streamlit and data processing
 streamlit
-pandas
-numpy
+pandas==2.3.1
+numpy==2.3.1
 
 # Geospatial and visualization
-pydeck
-plotly
-matplotlib
-h3
-branca
+pydeck==0.9.1
+plotly==6.0.1
+matplotlib==3.10.0
+h3-py==3.7.6
+branca==0.6.0
 
 # Statistical analysis  
-scipy
+scipy==1.16.0
 
-# Snowflake integration
-snowflake-snowpark-python
-snowflake-connector-python
+# Snowflake integration (handled by Snowflake environment)
+# snowflake-snowpark-python
+# snowflake-connector-python
 
 # Additional utilities
-altair
+altair==5.5.0
