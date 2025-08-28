@@ -30,7 +30,9 @@ except ImportError:
     # Define fallback AI functions
     def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
         st.markdown(f"### {icon} {title}")
-        st.info(insight)
+        # Fix newline formatting for better display
+        formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
+        st.info(formatted_insight)
         if confidence > 0:
             st.caption(f"Confidence: {confidence*100:.0f}%")
     

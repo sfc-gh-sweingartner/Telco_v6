@@ -40,8 +40,9 @@ except ImportError:
     # Define fallback AI functions
     def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
         st.markdown(f"### {icon} {title}")
-        # Simple fallback formatting - parse basic structure
-        lines = insight.split('\n')
+        # Fix newline formatting first, then parse basic structure
+        fixed_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
+        lines = fixed_insight.split('\n')
         formatted_content = []
         for line in lines:
             line = line.strip()

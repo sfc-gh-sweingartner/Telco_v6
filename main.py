@@ -32,7 +32,9 @@ except ImportError:
                 st.metric(key, value)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
-        st.write(response)
+        # Fix newline formatting for better display
+        formatted_response = response.replace('\\n', '\n') if '\\n' in response else response
+        st.write(formatted_response)
     def create_ai_loading_spinner(message="AI is analyzing..."):
         st.info(f"🤖 {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):

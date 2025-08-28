@@ -568,18 +568,22 @@ def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, i
 
 def format_ai_insight_text(text: str) -> str:
     """
-    Format AI insight text into professional, structured HTML
+    Format AI insight text into professional, structured HTML with proper newline handling
     
     Args:
-        text: Raw AI response text
+        text: Raw AI response text (may contain \n literals or actual newlines)
         
     Returns:
         Formatted HTML string
     """
     import re
     
-    # Clean up the text
+    # Clean up the text and handle both literal \n and actual newlines
     text = text.strip()
+    
+    # Convert literal \n to actual newlines if they exist
+    if '\\n' in text:
+        text = text.replace('\\n', '\n')
     
     # Split into sections based on common patterns
     lines = text.split('\n')

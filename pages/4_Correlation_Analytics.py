@@ -29,7 +29,9 @@ except ImportError:
     # Define fallback AI functions
     def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
         st.markdown(f"### {icon} {title}")
-        st.info(insight)
+        # Fix newline formatting for better display
+        formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
+        st.info(formatted_insight)
     def create_ai_loading_spinner(message="AI is analyzing..."):
         st.info(f"🤖 {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
