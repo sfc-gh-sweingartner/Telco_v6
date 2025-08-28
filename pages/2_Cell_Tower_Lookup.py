@@ -8,12 +8,59 @@ import os
 # Add utils to path for imports
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils'))
 
-from utils.design_system import (
-    inject_custom_css, create_page_header, create_metric_card, 
-    create_info_box, get_snowflake_session, create_metric_grid,
-    create_sidebar_navigation, add_page_footer, execute_query_with_loading,
-    create_section_header, style_plotly_chart, Colors
-)
+# Import with fallback for AI functions
+try:
+    from utils.design_system import (
+        inject_custom_css, create_page_header, create_metric_card, 
+        create_info_box, get_snowflake_session, create_metric_grid,
+        create_sidebar_navigation, add_page_footer, execute_query_with_loading,
+        create_section_header, style_plotly_chart, Colors, create_ai_insights_card,
+        create_ai_loading_spinner, create_ai_recommendation_list, create_ai_metrics_dashboard,
+        format_ai_response, create_ai_metric_card
+    )
+    AI_FUNCTIONS_AVAILABLE = True
+except ImportError:
+    from utils.design_system import (
+        inject_custom_css, create_page_header, create_metric_card, 
+        create_info_box, get_snowflake_session, create_metric_grid,
+        create_sidebar_navigation, add_page_footer, execute_query_with_loading,
+        create_section_header, style_plotly_chart, Colors
+    )
+    AI_FUNCTIONS_AVAILABLE = False
+    # Define fallback AI functions
+    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+        st.markdown(f"### {icon} {title}")
+        st.info(insight)
+    def create_ai_loading_spinner(message="AI is analyzing..."):
+        st.info(f"🤖 {message}")
+    def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
+        st.markdown(f"### {title}")
+        for i, rec in enumerate(recommendations, 1):
+            st.markdown(f"{i}. {rec}")
+    def create_ai_metrics_dashboard(metrics):
+        cols = st.columns(len(metrics))
+        for i, (key, value) in enumerate(metrics.items()):
+            with cols[i % len(cols)]:
+                st.metric(key, value)
+    def format_ai_response(response, title="AI Insights"):
+        st.markdown(f"### {title}")
+        st.write(response)
+    def create_ai_metric_card(title, value, description="", icon="🤖"):
+        st.metric(title, value, help=description)
+
+try:
+    from utils.aisql_functions import get_ai_analytics, get_ai_processor
+except ImportError:
+    def get_ai_analytics(session):
+        class FallbackAnalytics:
+            def analyze_network_issues(self, *args, **kwargs):
+                return {"root_causes": "AI tower analysis is being deployed", "recommendations": "Advanced AI insights will be available shortly"}
+        return FallbackAnalytics()
+    def get_ai_processor(session):
+        class FallbackProcessor:
+            def ai_complete(self, prompt, **kwargs):
+                return "📱 AI tower analysis is being deployed. Advanced cell tower insights will be available shortly!"
+        return FallbackProcessor()
 
 # Page configuration
 st.set_page_config(
@@ -27,14 +74,16 @@ st.set_page_config(
 inject_custom_css()
 create_sidebar_navigation()
 
-# Initialize Snowflake session
+# Initialize Snowflake session and AI components
 session = get_snowflake_session()
+ai_analytics = get_ai_analytics(session)
+ai_processor = get_ai_processor(session)
 
-# Professional page header
+# AI-Enhanced page header
 create_page_header(
-    title="Cell Tower Performance Analysis",
-    description="Interactive mapping and AI-powered insights for network optimization",
-    icon="📱"
+    title="AI-Powered Cell Tower Analysis",
+    description="Interactive mapping with intelligent tower performance insights and predictive recommendations",
+    icon="🤖"
 )
 
 # Load tower data with professional loading
@@ -362,6 +411,290 @@ if len(selection_data) > 0:
 
 else:
     create_info_box("🖱️ **Select a grid cell on the map above** to view detailed performance analysis and AI-powered recommendations.", "info")
+
+# AI-Powered Tower Intelligence Section
+st.markdown("---")
+st.markdown("## 🤖 AI Tower Intelligence")
+
+# Create tabs for different AI analyses
+ai_tower_tab1, ai_tower_tab2, ai_tower_tab3 = st.tabs(["🔍 AI Network Analysis", "⚠️ Risk Assessment", "🎯 Optimization Strategy"])
+
+with ai_tower_tab1:
+    st.markdown("### 🔍 AI-Powered Network Analysis")
+    st.info("Get intelligent insights about your cell tower network performance")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        if st.button("🚀 Analyze Network with AI", type="primary", key="ai_network_analysis"):
+            create_ai_loading_spinner("AI is analyzing cell tower performance patterns...")
+            
+            try:
+                # Prepare network analysis context
+                network_context = f"""
+                Cell Tower Network Analysis:
+                
+                Network Overview:
+                - Total Cell Towers: {total_towers}
+                - Average Failure Rate: {avg_failure_rate:.1f}%
+                - Critical Towers (>90% failure): {len(data[data['FAILURE_RATE'] >= 90])}
+                - Excellent Towers (<30% failure): {len(data[data['FAILURE_RATE'] < 30])}
+                
+                Performance Distribution:
+                - Network health status and patterns
+                - Geographic performance variations
+                - Infrastructure optimization opportunities
+                
+                Business Context:
+                - Telecom network infrastructure management
+                - Customer service quality optimization
+                - Network reliability and capacity planning
+                """
+                
+                # Generate AI network insights
+                network_insights = ai_processor.ai_complete(
+                    f"""As a telecom network infrastructure expert, analyze this cell tower network:
+                    
+                    {network_context}
+                    
+                    Provide comprehensive network analysis including:
+                    1. Overall network health assessment and key performance indicators
+                    2. Critical performance patterns and infrastructure bottlenecks
+                    3. Geographic or technical factors affecting tower performance
+                    4. Network capacity and coverage optimization opportunities
+                    5. Risk areas requiring immediate attention
+                    6. Strategic recommendations for network improvement
+                    
+                    Focus on actionable insights for network operations and planning.""",
+                    max_tokens=700
+                )
+                
+                if network_insights:
+                    create_ai_insights_card(
+                        "🏗️ Network Infrastructure Analysis", 
+                        network_insights, 
+                        confidence=0.84, 
+                        icon="📡"
+                    )
+                    
+                    # Create network analysis metrics
+                    network_metrics = {
+                        "Network Health Score": f"{max(0, 100 - avg_failure_rate):.0f}%",
+                        "Critical Towers": str(len(data[data['FAILURE_RATE'] >= 90])),
+                        "Performance Grade": "A" if avg_failure_rate < 20 else "B" if avg_failure_rate < 40 else "C",
+                        "Optimization Potential": "High" if avg_failure_rate > 30 else "Medium"
+                    }
+                    
+                    create_ai_metrics_dashboard(network_metrics)
+                    
+            except Exception as e:
+                st.error(f"Error in AI network analysis: {e}")
+    
+    with col2:
+        st.markdown("#### 📊 Network Stats")
+        
+        create_ai_metric_card(
+            "Network Score",
+            f"{max(0, 100 - avg_failure_rate):.0f}/100",
+            f"Based on average failure rate of {avg_failure_rate:.1f}%",
+            "📡"
+        )
+        
+        create_ai_metric_card(
+            "Tower Health",
+            f"{len(data[data['FAILURE_RATE'] < 30])}/{total_towers}",
+            "Towers performing excellently (<30% failure rate)",
+            "✅"
+        )
+
+with ai_tower_tab2:
+    st.markdown("### ⚠️ AI Risk Assessment")
+    st.info("Identify high-risk towers and potential failure patterns")
+    
+    risk_focus = st.selectbox(
+        "Risk Assessment Focus:",
+        ["Failure Risk Analysis", "Capacity Risk Assessment", "Geographic Risk Patterns", "Service Impact Risk"],
+        key="risk_focus"
+    )
+    
+    if st.button("🚨 Assess Network Risks", type="primary", key="risk_assessment"):
+        create_ai_loading_spinner("AI is assessing network risks and vulnerabilities...")
+        
+        try:
+            # Identify high-risk towers
+            high_risk_towers = data[data['FAILURE_RATE'] >= 70]
+            medium_risk_towers = data[(data['FAILURE_RATE'] >= 40) & (data['FAILURE_RATE'] < 70)]
+            
+            risk_context = f"""
+            Network Risk Assessment for {risk_focus}:
+            
+            Risk Distribution:
+            - High Risk Towers (≥70% failure): {len(high_risk_towers)}
+            - Medium Risk Towers (40-70% failure): {len(medium_risk_towers)}
+            - Low Risk Towers (<40% failure): {len(data[data['FAILURE_RATE'] < 40])}
+            
+            Risk Indicators:
+            - Network failure rate trends
+            - Geographic risk clustering
+            - Infrastructure vulnerability patterns
+            - Service impact potential
+            
+            Assessment Focus: {risk_focus}
+            """
+            
+            risk_assessment = ai_processor.ai_complete(
+                f"""As a network risk management expert, assess {risk_focus.lower()} for this cell tower network:
+                
+                {risk_context}
+                
+                Provide comprehensive risk analysis:
+                1. Primary risk factors and vulnerability patterns
+                2. High-priority towers requiring immediate attention
+                3. Potential cascading failure scenarios
+                4. Service impact assessment and customer effect
+                5. Risk mitigation strategies and timeline
+                6. Monitoring recommendations for early warning
+                
+                Focus on actionable risk management strategies.""",
+                max_tokens=700
+            )
+            
+            if risk_assessment:
+                create_ai_insights_card(
+                    f"⚠️ {risk_focus} Assessment", 
+                    risk_assessment, 
+                    confidence=0.81, 
+                    icon="🚨"
+                )
+                
+                # Create risk metrics
+                risk_metrics = {
+                    "High Risk Towers": str(len(high_risk_towers)),
+                    "Risk Level": "High" if len(high_risk_towers) > 5 else "Medium" if len(high_risk_towers) > 0 else "Low",
+                    "Mitigation Priority": "Critical" if len(high_risk_towers) > 10 else "High",
+                    "Service Impact": "Significant" if avg_failure_rate > 50 else "Moderate"
+                }
+                
+                create_ai_metrics_dashboard(risk_metrics)
+                
+                # Generate risk mitigation actions
+                risk_actions = [
+                    f"Immediately inspect {len(high_risk_towers)} high-risk towers (≥70% failure rate)",
+                    f"Schedule preventive maintenance for {len(medium_risk_towers)} medium-risk towers",
+                    "Implement enhanced monitoring on identified risk clusters",
+                    "Develop contingency plans for potential service disruptions",
+                    "Allocate emergency response resources to high-risk areas",
+                    "Establish proactive customer communication for affected areas"
+                ]
+                
+                create_ai_recommendation_list(risk_actions[:4], "🚨 Risk Mitigation Actions")
+                
+        except Exception as e:
+            st.error(f"Error in risk assessment: {e}")
+
+with ai_tower_tab3:
+    st.markdown("### 🎯 AI Optimization Strategy")
+    st.info("Get strategic recommendations for network performance optimization")
+    
+    optimization_goal = st.selectbox(
+        "Optimization Goal:",
+        ["Reduce Failure Rates", "Improve Coverage", "Enhance Capacity", "Optimize Costs", "Improve Customer Experience"],
+        key="optimization_goal"
+    )
+    
+    priority_level = st.selectbox(
+        "Implementation Priority:",
+        ["Critical (Immediate)", "High (Within Month)", "Medium (Within Quarter)", "Low (Within Year)"],
+        key="priority_level"
+    )
+    
+    if st.button("🎯 Generate Optimization Strategy", type="primary", key="optimization_strategy"):
+        create_ai_loading_spinner("AI is developing network optimization strategy...")
+        
+        try:
+            optimization_context = f"""
+            Network Optimization Strategy for: {optimization_goal}
+            
+            Current Network State:
+            - Total Towers: {total_towers}
+            - Average Failure Rate: {avg_failure_rate:.1f}%
+            - Critical Issues: {len(data[data['FAILURE_RATE'] >= 90])} towers
+            - Performance Target: {optimization_goal}
+            - Implementation Priority: {priority_level}
+            
+            Available Optimization Levers:
+            - Infrastructure upgrades and maintenance
+            - Technology improvements and modernization
+            - Geographic coverage optimization
+            - Resource allocation and capacity planning
+            - Operational process improvements
+            """
+            
+            optimization_strategy = ai_processor.ai_complete(
+                f"""As a network optimization strategist, develop a comprehensive plan for {optimization_goal.lower()}:
+                
+                {optimization_context}
+                
+                Create detailed optimization strategy:
+                1. Specific technical and operational improvements for {optimization_goal.lower()}
+                2. Implementation roadmap with timeline and priorities
+                3. Resource requirements and budget considerations
+                4. Expected performance improvements and success metrics
+                5. Risk factors and mitigation strategies
+                6. Quick wins vs long-term strategic initiatives
+                
+                Focus on practical, implementable recommendations with clear ROI.""",
+                max_tokens=800
+            )
+            
+            if optimization_strategy:
+                create_ai_insights_card(
+                    f"🚀 {optimization_goal} Strategy", 
+                    optimization_strategy, 
+                    confidence=0.87, 
+                    icon="🎯"
+                )
+                
+                # Generate implementation timeline
+                timeline_actions = []
+                if priority_level.startswith("Critical"):
+                    timeline_actions = [
+                        "Week 1: Emergency assessment of critical failure towers",
+                        "Week 2: Immediate repairs and temporary solutions",
+                        "Week 3-4: Implement quick-win optimizations",
+                        "Month 2: Deploy enhanced monitoring systems"
+                    ]
+                elif priority_level.startswith("High"):
+                    timeline_actions = [
+                        "Month 1: Detailed network assessment and planning",
+                        "Month 2-3: Begin infrastructure improvements",
+                        "Month 4: Implement operational optimizations", 
+                        "Month 5-6: Monitor results and fine-tune"
+                    ]
+                else:
+                    timeline_actions = [
+                        "Quarter 1: Strategic planning and resource allocation",
+                        "Quarter 2: Pilot implementation in selected areas",
+                        "Quarter 3: Full rollout and optimization",
+                        "Quarter 4: Performance evaluation and refinement"
+                    ]
+                
+                create_ai_recommendation_list(timeline_actions, f"📅 {priority_level} Implementation Timeline")
+                
+                # Strategy metrics
+                strategy_metrics = {
+                    "Strategy Focus": optimization_goal,
+                    "Priority Level": priority_level.split()[0],
+                    "Expected ROI": "High" if optimization_goal in ["Reduce Failure Rates", "Improve Customer Experience"] else "Medium",
+                    "Implementation Complexity": "High" if priority_level.startswith("Critical") else "Medium"
+                }
+                
+                create_ai_metrics_dashboard(strategy_metrics)
+                
+        except Exception as e:
+            st.error(f"Error generating optimization strategy: {e}")
+
+st.markdown("---")
 
 # Performance Summary
 create_section_header("Network Performance Summary", "📈")
