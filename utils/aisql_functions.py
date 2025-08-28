@@ -160,7 +160,7 @@ class TelcoAISQLProcessor:
     
     def ai_agg(self, texts: List[str], prompt: str) -> str:
         """
-        Aggregate insights from multiple text inputs
+        Aggregate insights from multiple text inputs using AI_COMPLETE instead of AI_AGG
         
         Args:
             texts: List of text inputs to aggregate
@@ -170,23 +170,19 @@ class TelcoAISQLProcessor:
             Aggregated insights
         """
         try:
-            # Create temporary table with texts
-            text_data = [{"text": text} for text in texts]
-            temp_df = self.session.create_dataframe(text_data)
-            temp_table = f"temp_agg_table_{int(time.time())}"
-            temp_df.write.save_as_table(temp_table, mode="overwrite", table_type="temporary")
+            # Instead of using temporary tables, combine texts and use AI_COMPLETE
+            combined_text = "\n\n".join([f"Data Point {i+1}: {text}" for i, text in enumerate(texts[:10])])  # Limit to 10 items
             
-            prompt_escaped = prompt.replace("'", "''")
+            full_prompt = f"""
+            {prompt}
             
-            query = f"""
-            SELECT SNOWFLAKE.CORTEX.AI_AGG(
-                text, 
-                '{prompt_escaped}'
-            ) as aggregated_insights
-            FROM {temp_table}
+            Please analyze the following data points and provide aggregated insights:
+            
+            {combined_text}
             """
-            result = self.session.sql(query).collect()
-            return result[0]['AGGREGATED_INSIGHTS'] if result else ""
+            
+            # Use AI_COMPLETE instead of AI_AGG to avoid temporary table issues
+            return self.ai_complete(full_prompt, max_tokens=600)
         except Exception as e:
             st.error(f"AI Aggregation Error: {e}")
             return ""
