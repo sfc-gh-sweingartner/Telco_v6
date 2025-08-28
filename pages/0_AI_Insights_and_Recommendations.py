@@ -180,7 +180,7 @@ if not AI_FUNCTIONS_AVAILABLE:
 
 # Optimized data loading function with caching
 @st.cache_data(ttl=120)  # Cache for 2 minutes for faster subsequent loads
-def load_executive_dashboard_data_fast(session):
+def load_executive_dashboard_data_fast(_session):
     """Load both network and customer data in a single optimized query"""
     try:
         # Combined query to reduce database round trips  
@@ -215,7 +215,7 @@ def load_executive_dashboard_data_fast(session):
         FROM network_stats ns, ticket_stats ts
         """
         
-        result = session.sql(combined_query).collect()
+        result = _session.sql(combined_query).collect()
         if not result:
             return None
             
