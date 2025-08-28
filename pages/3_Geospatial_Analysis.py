@@ -4,35 +4,37 @@ import numpy as np
 import pydeck as pdk
 import plotly.express as px
 import plotly.graph_objects as go
-from snowflake.snowpark.context import get_active_session
-import _snowflake
-import branca.colormap as cm
-import h3
+import sys
+import os
 
-# Define Branca colormap color lists globally
-colors_yellow_blue = ['#fafa6e','#e1f46e','#caee70','#b3e773','#9ddf77','#89d77b','#75cf7f','#62c682',
-                       '#51bd86','#40b488','#31aa89','#24a08a','#199689','#138c87','#138284','#17787f',
-                       '#1d6e79','#226472','#265b6b','#285162','#2a4858']
-colors_yellow_red = ['#ffff00', '#ffdd00', '#ffbb00', '#ff9900', '#ff5500', '#ff0000']
-colors_blue_green = ['#0000ff', '#0044ff', '#0088ff', '#00ccff', '#00ee99', '#00ff00']
-colors_white_blue = ['#ffffff', '#ddddff', '#bbbbff', '#9999ff', '#7777ff', '#1F00FF']
-colors_white_red  = ['#ffffff', '#ffdddd', '#ffbbbb', '#ff9999', '#ff7777', '#FF1F00']
-colors_white_green = ['#ffffff', '#ddffdd', '#bbffbb', '#99ff99', '#77ff77', '#00FF1F']
+# Add utils to path for imports
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils'))
+
+from utils.design_system import (
+    inject_custom_css, create_page_header, create_metric_card, 
+    create_info_box, get_snowflake_session, create_metric_grid,
+    create_sidebar_navigation, add_page_footer, execute_query_with_loading,
+    create_section_header
+)
 
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
     page_title="Geospatial Analysis",
-    page_icon="🔥",
+    page_icon="🗺️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Page header
-st.title("🗺️ Cell Tower and Support Geospatial Analysis")
-st.markdown("""
-This page visualizes cell tower data overlaid with support ticket information, 
-enabling you to identify areas with both technical issues and customer complaints.
-""")
+# Inject custom CSS and create navigation
+inject_custom_css()
+create_sidebar_navigation()
+
+# Professional page header
+create_page_header(
+    title="Geospatial Network Analysis",
+    description="Advanced heatmap visualization correlating network performance with customer experience",
+    icon="🗺️"
+)
 
 # Debugging section - will only appear when debug is enabled
 debug_mode = st.sidebar.checkbox("Enable Debug Mode", value=False, key="debug_mode")
@@ -50,15 +52,16 @@ def show_debug(message, data=None):
                 else:
                     st.write(data)
                     
-# Initialize Snowpark session
-@st.cache_resource
-def init_session():
-    return get_active_session()
+# Initialize Snowflake session
+session = get_snowflake_session()
 
-session = init_session()
-
-# Sidebar options
-st.sidebar.header("Visualization Options")
+# Professional Sidebar Configuration  
+st.sidebar.markdown("""
+<div style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #17a2b8;">
+    <h4 style="color: #17a2b8; margin: 0 0 0.5rem 0;">📊 Visualization Controls</h4>
+    <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">Configure your analysis parameters</p>
+</div>
+""", unsafe_allow_html=True)
 
 # Add a clear cache button
 if st.sidebar.button("🔄 Clear Data Cache", help="Refresh all data from the database"):
@@ -1139,3 +1142,6 @@ with st.expander("Cell Data Explorer", expanded=False):
             
     except Exception as e:
         st.error(f"Error in Cell Data Explorer: {str(e)}") 
+
+# Add professional footer
+add_page_footer()
