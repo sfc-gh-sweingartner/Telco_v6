@@ -4,7 +4,7 @@
 # Core Streamlit and data processing
 streamlit
 pandas==2.3.1
-numpy==2.3.1
+numpy==2.2.5
 
 # Geospatial and visualization
 pydeck==0.9.1
@@ -14,7 +14,7 @@ h3-py==3.7.6
 branca==0.6.0
 
 # Statistical analysis  
-scipy==1.16.0
+scipy==1.15.3
 
 # Snowflake integration (handled by Snowflake environment)
 # snowflake-snowpark-python
