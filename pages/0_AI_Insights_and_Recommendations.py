@@ -55,7 +55,7 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="mistral-large"):
+    def create_model_selector(models, default_model="claude-4-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
@@ -81,8 +81,34 @@ except ImportError:
     
     def get_ai_processor(session):
         class FallbackProcessor:
-            supported_models = ["mistral-large", "llama3.1-8b", "snowflake-arctic"]
-            default_model = "mistral-large"
+            supported_models = [
+                # Claude Models (Anthropic)
+                'claude-4-sonnet', 'claude-4-opus', 'claude-3-5-sonnet', 'claude-3-7-sonnet',
+                
+                # Mistral Models
+                'mistral-large', 'mistral-large2', 'mistral-7b', 'mixtral-8x7b',
+                
+                # OpenAI Models 
+                'openai-gpt-4.1', 'openai-o4-mini', 'openai-gpt-5', 'openai-gpt-5-mini', 
+                'openai-gpt-5-nano', 'openai-gpt-5-chat', 'openai-gpt-oss-120b', 'openai-gpt-oss-20b',
+                
+                # Llama Models (Meta)
+                'llama4-maverick', 'llama4-scout', 'llama2-70b-chat',
+                'llama3-8b', 'llama3-70b', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
+                'llama3.2-1b', 'llama3.2-3b', 'llama3.3-70b',
+                
+                # Snowflake-Optimized Models
+                'snowflake-arctic', 'snowflake-llama-3.3-70b', 'snowflake-llama-3.1-405b',
+                'snowflake-arctic-embed-m',
+                
+                # Specialized Models
+                'reka-core', 'reka-flash', 'jamba-instruct', 'jamba-1.5-mini', 'jamba-1.5-large',
+                'deepseek-r1', 'gemma-7b',
+                
+                # Embedding Models
+                'e5-base-v2', 'nv-embed-qa-4', 'multilingual-e5-large', 'voyage-multilingual-2'
+            ]
+            default_model = "claude-4-sonnet"
             def ai_complete(self, prompt, **kwargs):
                 return "🤖 AI completion service is being updated. Full Snowflake Cortex AISQL capabilities will be available shortly!"
             def ai_classify(self, text, categories):
@@ -125,7 +151,7 @@ if not AI_FUNCTIONS_AVAILABLE:
     - Predictive network failure analysis
     - Customer churn risk prediction
     - Intelligent recommendations engine
-    - Multi-model AI support (Mistral, Llama, Arctic)
+    - Multi-model AI support (Claude, GPT, Mistral, Llama, Arctic & 35+ more)
     
     **Expected availability:** 5-10 minutes
     
@@ -547,12 +573,14 @@ st.markdown("""
             </ul>
         </div>
         <div>
-            <h5 style="color: #1976d2; margin: 0 0 0.5rem 0;">🤖 Available Models:</h5>
+            <h5 style="color: #1976d2; margin: 0 0 0.5rem 0;">🤖 40+ Available AI Models:</h5>
             <ul style="margin: 0; padding-left: 1.5rem;">
-                <li><strong>Mistral Large:</strong> Advanced reasoning & analysis</li>
-                <li><strong>Llama 3.1:</strong> Comprehensive language understanding</li>
+                <li><strong>Claude 4 Sonnet:</strong> DEFAULT - Best balance of speed & intelligence</li>
+                <li><strong>GPT-5:</strong> Next-generation OpenAI capabilities</li>
+                <li><strong>Llama 4 Maverick:</strong> Latest Meta breakthrough model</li>
+                <li><strong>Mistral Large 2:</strong> Advanced open-source reasoning</li>
                 <li><strong>Snowflake Arctic:</strong> Enterprise-optimized performance</li>
-                <li><strong>Mixtral 8x7B:</strong> Balanced speed & capability</li>
+                <li><strong>Plus 35+ more models:</strong> Claude, GPT, Llama, Jamba, Reka, DeepSeek & embedding models</li>
             </ul>
         </div>
     </div>
