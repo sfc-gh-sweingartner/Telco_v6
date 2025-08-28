@@ -40,7 +40,23 @@ except ImportError:
     # Define fallback AI functions
     def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
         st.markdown(f"### {icon} {title}")
-        st.info(insight)
+        # Simple fallback formatting - parse basic structure
+        lines = insight.split('\n')
+        formatted_content = []
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            if line.isupper() and ':' in line:
+                st.markdown(f"**🔹 {line.replace(':', '')}**")
+            elif line.startswith('•') or line.startswith('-'):
+                st.markdown(f"• {line[1:].strip()}")
+            elif line.startswith(('1.', '2.', '3.', '4.', '5.')):
+                st.markdown(f"**▶** {line[2:].strip()}")
+            elif 'IMMEDIATE' in line.upper() or 'URGENT' in line.upper():
+                st.warning(f"⚠️ {line}")
+            else:
+                st.write(line)
     def create_ai_loading_spinner(message="AI is analyzing..."):
         st.info(f"🤖 {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):

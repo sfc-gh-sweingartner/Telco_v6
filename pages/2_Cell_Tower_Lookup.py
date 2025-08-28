@@ -88,7 +88,7 @@ create_page_header(
 
 # Load tower data with professional loading
 data = execute_query_with_loading("""
-SELECT
+    SELECT
     cell_id,
     ROUND(cell_latitude, 2) AS cell_latitude, 
     ROUND(cell_longitude, 2) AS cell_longitude, 
@@ -231,7 +231,7 @@ if len(selection_data) > 0:
     df = pd.DataFrame(selection_data)
     
     # Create AI prompt for analysis
-    prompt = f"""
+  prompt = f"""
     You are a network engineer analyzing failed cells in a cell tower grid. 
     Provide a concise summary of the failed cells using the following data:
 
@@ -247,9 +247,9 @@ if len(selection_data) > 0:
 
     Do not include phrases like "Based on the provided data".
     """
-    
-    prompt = prompt.replace("'", "''")
-    
+  
+  prompt = prompt.replace("'", "''")
+
     # Get AI analysis
     ai_analysis = execute_query_with_loading(
         f"select snowflake.cortex.complete('claude-3-5-sonnet', '{prompt}') as res",
@@ -267,7 +267,7 @@ if len(selection_data) > 0:
     # Performance Charts
     st.markdown("#### 📊 Performance Visualizations")
     
-    col1, col2, col3 = st.columns(3)
+  col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("##### Failure Rate Analysis")
@@ -291,31 +291,31 @@ if len(selection_data) > 0:
         st.markdown("##### Customer Impact Analysis")
         
         # Load customer loyalty data for selected cells
-        cell_ids_list = df["Cell ID"].to_list()
-        cell_ids_str = ','.join(map(str, cell_ids_list))
+  cell_ids_list = df["Cell ID"].to_list()
+  cell_ids_str = ','.join(map(str, cell_ids_list))
         
         loyalty_data = execute_query_with_loading(f"""
         SELECT 
-            c.cell_id,
-            COUNT(CASE WHEN cl.status = 'Bronze' THEN 1 END) AS bronze_count,
-            COUNT(CASE WHEN cl.status = 'Silver' THEN 1 END) AS silver_count,
-            COUNT(CASE WHEN cl.status = 'Gold' THEN 1 END) AS gold_count
-        FROM 
-            TELCO_NETWORK_OPTIMIZATION_PROD.raw.customer_loyalty cl
-        JOIN 
-            TELCO_NETWORK_OPTIMIZATION_PROD.RAW.CELL_TOWER c
-        ON 
-            cl.phone_number = c.msisdn
-        WHERE 
-            c.call_release_code != 0
-            AND c.cell_id IN ({cell_ids_str})
-        GROUP BY 
+        c.cell_id,
+        COUNT(CASE WHEN cl.status = 'Bronze' THEN 1 END) AS bronze_count,
+        COUNT(CASE WHEN cl.status = 'Silver' THEN 1 END) AS silver_count,
+        COUNT(CASE WHEN cl.status = 'Gold' THEN 1 END) AS gold_count
+    FROM 
+        TELCO_NETWORK_OPTIMIZATION_PROD.raw.customer_loyalty cl
+    JOIN 
+        TELCO_NETWORK_OPTIMIZATION_PROD.RAW.CELL_TOWER c
+    ON 
+        cl.phone_number = c.msisdn
+    WHERE 
+        c.call_release_code != 0
+        AND c.cell_id IN ({cell_ids_str})
+    GROUP BY 
             c.cell_id
         """, "Loading customer impact data...")
         
         if not loyalty_data.empty:
-            loyalty_data.set_index('CELL_ID', inplace=True)
-            
+  loyalty_data.set_index('CELL_ID', inplace=True)
+
             fig2, ax2 = plt.subplots(figsize=(8, 6))
             loyalty_data.plot(kind='bar', stacked=True, ax=ax2, 
                             color=['#cd7f32', '#c0c0c0', '#ffd700'], alpha=0.8)
@@ -323,7 +323,7 @@ if len(selection_data) > 0:
             ax2.set_title('Customer Loyalty Impact by Cell', fontsize=14, fontweight='bold')
             ax2.set_xlabel('Cell ID', fontweight='bold')
             ax2.set_ylabel('Affected Customers', fontweight='bold')
-            ax2.set_xticklabels(loyalty_data.index, rotation=45)
+  ax2.set_xticklabels(loyalty_data.index, rotation=45)
             ax2.legend(title="Loyalty Tier", labels=["Bronze", "Silver", "Gold"], 
                       title_fontweight='bold')
             ax2.grid(True, alpha=0.3)
@@ -339,15 +339,15 @@ if len(selection_data) > 0:
         # Load sentiment data
         sentiment_data = execute_query_with_loading(f"""
         SELECT 
-            cell_id,
+      cell_id,
             AVG(sentiment_score) AS avg_sentiment_score,
             COUNT(*) as ticket_count
-        FROM 
-            TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
-        WHERE cell_id IN ({cell_ids_str})
-        GROUP BY 
-            cell_id
-        ORDER BY 
+  FROM 
+      TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
+  WHERE cell_id IN ({cell_ids_str})
+  GROUP BY 
+      cell_id
+  ORDER BY 
             avg_sentiment_score DESC
         """, "Loading sentiment data...")
         

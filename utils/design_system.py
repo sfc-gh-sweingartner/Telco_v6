@@ -535,7 +535,7 @@ def create_ai_chat_interface():
 
 def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, icon: str = "🧠") -> None:
     """
-    Create AI insights card with confidence indicator
+    Create AI insights card with confidence indicator and professional formatting
     
     Args:
         title: Card title
@@ -545,6 +545,9 @@ def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, i
     """
     confidence_color = "#4caf50" if confidence > 0.8 else "#ff9800" if confidence > 0.6 else "#f44336"
     confidence_text = "High" if confidence > 0.8 else "Medium" if confidence > 0.6 else "Low"
+    
+    # Format the insight text professionally
+    formatted_insight = format_ai_insight_text(insight)
     
     st.markdown(f"""
     <div style="background: white; border-radius: 16px; padding: 1.5rem; margin: 1rem 0; 
@@ -559,9 +562,77 @@ def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, i
                 {confidence_text} Confidence
             </div>
         </div>
-        <div style="color: #333; line-height: 1.6; font-size: 1rem;">{insight}</div>
+        <div style="color: #333; line-height: 1.7; font-size: 1rem;">{formatted_insight}</div>
     </div>
     """, unsafe_allow_html=True)
+
+def format_ai_insight_text(text: str) -> str:
+    """
+    Format AI insight text into professional, structured HTML
+    
+    Args:
+        text: Raw AI response text
+        
+    Returns:
+        Formatted HTML string
+    """
+    import re
+    
+    # Clean up the text
+    text = text.strip()
+    
+    # Split into sections based on common patterns
+    lines = text.split('\n')
+    formatted_lines = []
+    current_section = ""
+    
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+            
+        # Handle main headers (ALL CAPS sections)
+        if line.isupper() and len(line) > 10 and ':' in line:
+            if current_section:
+                formatted_lines.append("</div>")
+            section_name = line.replace(':', '')
+            formatted_lines.append(f'<div style="margin: 1.5rem 0 0.75rem 0;"><h5 style="color: #1565c0; margin: 0; font-weight: 600; font-size: 1.1rem;">🔹 {section_name}</h5>')
+            current_section = section_name
+        
+        # Handle numbered items (1., 2., etc.)
+        elif re.match(r'^\d+\.', line):
+            item_text = re.sub(r'^\d+\.\s*', '', line)
+            formatted_lines.append(f'<div style="margin: 0.5rem 0; padding-left: 1rem;"><strong style="color: #2196f3;">▶</strong> {item_text}</div>')
+        
+        # Handle bullet points (• or -)
+        elif line.startswith('•') or line.startswith('-'):
+            item_text = line[1:].strip()
+            formatted_lines.append(f'<div style="margin: 0.4rem 0; padding-left: 1rem;"><span style="color: #4caf50;">●</span> {item_text}</div>')
+        
+        # Handle sub-sections (headers with :)
+        elif ':' in line and len(line) < 60 and not line.startswith(' '):
+            parts = line.split(':', 1)
+            if len(parts) == 2:
+                header, content = parts[0].strip(), parts[1].strip()
+                if content:
+                    formatted_lines.append(f'<div style="margin: 0.75rem 0 0.25rem 0;"><strong style="color: #1976d2;">{header}:</strong> {content}</div>')
+                else:
+                    formatted_lines.append(f'<div style="margin: 0.75rem 0 0.25rem 0;"><strong style="color: #1976d2;">{header}:</strong></div>')
+        
+        # Handle priority/urgent items
+        elif 'IMMEDIATE' in line.upper() or 'URGENT' in line.upper() or 'CRITICAL' in line.upper():
+            formatted_lines.append(f'<div style="margin: 0.5rem 0; padding: 0.5rem; background: #ffebee; border-left: 3px solid #f44336; border-radius: 4px;"><strong style="color: #c62828;">⚠️ {line}</strong></div>')
+        
+        # Handle regular paragraphs
+        else:
+            if len(line) > 20:  # Only format substantial text
+                formatted_lines.append(f'<div style="margin: 0.4rem 0;">{line}</div>')
+    
+    # Close any open sections
+    if current_section:
+        formatted_lines.append("</div>")
+    
+    return ''.join(formatted_lines)
 
 def create_ai_loading_spinner(message: str = "AI is analyzing...") -> None:
     """
