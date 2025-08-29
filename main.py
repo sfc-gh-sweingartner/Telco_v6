@@ -168,7 +168,7 @@ def load_executive_dashboard_data():
             AVG(NVL(PM_RRC_CONN_ESTAB_SUCC, 0) / NULLIF(PM_RRC_CONN_ESTAB_ATT, 0)) as avg_success_rate,
             COUNT(CASE WHEN PM_ERAB_REL_ABNORMAL_ENB > 50 THEN 1 END) as critical_issues,
             AVG(NVL(PM_PRB_UTIL_DL, 0)) as avg_dl_utilization,
-            SUM(NVL(PM_PDCP_UL_THPT, 0) + NVL(PM_PDCP_DL_THPT, 0)) as total_throughput,
+            SUM(NVL(PM_ACTIVE_UE_UL_SUM, 0) + NVL(PM_ACTIVE_UE_DL_SUM, 0)) as total_throughput,
             COUNT(CASE WHEN PM_RRC_CONN_ESTAB_SUCC / NULLIF(PM_RRC_CONN_ESTAB_ATT, 0) > 0.95 THEN 1 END) as premium_towers
         FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.CELL_TOWER 
         WHERE EVENT_DATE >= DATEADD(day, -7, CURRENT_DATE())
