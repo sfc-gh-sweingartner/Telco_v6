@@ -184,7 +184,6 @@ def load_executive_dashboard_data():
             COUNT(DISTINCT CUSTOMER_NAME) as unique_customers,
             COUNT(CASE WHEN SENTIMENT_SCORE > 0.5 THEN 1 END) as satisfied_customers
         FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
-        WHERE OPEN_DATE >= DATEADD(day, -7, CURRENT_DATE())
         """
         customer_data = session.sql(customer_query).collect()
         
