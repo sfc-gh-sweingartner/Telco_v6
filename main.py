@@ -373,14 +373,14 @@ else:
     create_executive_dashboard(preview_kpis)
     
     capabilities_content = """
-    **Your executive suite provides comprehensive network intelligence:**
-    
-    • **Real-time Performance Monitoring** with predictive failure detection
-    • **AI-Powered Customer Analytics** including churn prediction and sentiment analysis  
-    • **Strategic Business Intelligence** with ROI tracking and revenue impact assessment
-    • **Automated Executive Reporting** with natural language insights and recommendations
-    • **Risk Assessment & Mitigation** with proactive maintenance scheduling
-    • **Market Intelligence Integration** for competitive advantage analysis
+    <strong>Your executive suite provides comprehensive network intelligence:</strong>
+    <br><br>
+    • <strong>Real-time Performance Monitoring</strong> with predictive failure detection<br>
+    • <strong>AI-Powered Customer Analytics</strong> including churn prediction and sentiment analysis<br>  
+    • <strong>Strategic Business Intelligence</strong> with ROI tracking and revenue impact assessment<br>
+    • <strong>Automated Executive Reporting</strong> with natural language insights and recommendations<br>
+    • <strong>Risk Assessment & Mitigation</strong> with proactive maintenance scheduling<br>
+    • <strong>Market Intelligence Integration</strong> for competitive advantage analysis
     """
     
     exec_metrics = {

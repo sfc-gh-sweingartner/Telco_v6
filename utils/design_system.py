@@ -1453,19 +1453,8 @@ def create_executive_summary_card(title: str, content: str, metrics: dict = None
         metrics: Optional key metrics to display
         icon: Card icon
     """
-    metrics_html = ""
-    if metrics:
-        metrics_html = "<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--exec-border);'>"
-        for metric_name, metric_value in metrics.items():
-            metrics_html += f"""
-            <div style="text-align: center;">
-                <div style="font-size: 1.5rem; font-weight: 700; color: var(--exec-primary); margin-bottom: 0.25rem;">{metric_value}</div>
-                <div style="font-size: 0.8rem; color: var(--exec-text-secondary); text-transform: uppercase; font-weight: 600;">{metric_name}</div>
-            </div>
-            """
-        metrics_html += "</div>"
-    
-    st.markdown(f"""
+    # Create the card with proper HTML structure
+    card_html = f"""
     <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius-lg); 
                 padding: 2.5rem; box-shadow: var(--exec-shadow-lg); border: 1px solid var(--exec-border);
                 margin: 2rem 0; position: relative; overflow: hidden;">
@@ -1475,11 +1464,34 @@ def create_executive_summary_card(title: str, content: str, metrics: dict = None
             <h2 style="margin: 0; color: var(--exec-primary); font-weight: 700; font-size: 1.5rem;">{title}</h2>
         </div>
         <div style="color: var(--exec-text-primary); line-height: 1.7; font-size: 1.1rem; margin-bottom: 1rem;">
-            {content}
+    """
+    
+    # Add content
+    card_html += content
+    
+    # Add metrics if provided
+    if metrics:
+        card_html += """
         </div>
-        {metrics_html}
-    </div>
-    """, unsafe_allow_html=True)
+        <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--exec-border);'>
+        """
+        
+        for metric_name, metric_value in metrics.items():
+            card_html += f"""
+            <div style="text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--exec-primary); margin-bottom: 0.25rem;">{metric_value}</div>
+                <div style="font-size: 0.8rem; color: var(--exec-text-secondary); text-transform: uppercase; font-weight: 600;">{metric_name}</div>
+            </div>
+            """
+        
+        card_html += "</div>"
+    else:
+        card_html += "</div>"
+    
+    # Close the main card div
+    card_html += "</div>"
+    
+    st.markdown(card_html, unsafe_allow_html=True)
 
 def create_executive_alert_banner(message: str, alert_type: str = "info", dismissible: bool = True) -> None:
     """
