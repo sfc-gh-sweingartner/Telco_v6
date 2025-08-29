@@ -865,27 +865,34 @@ def create_sidebar_navigation():
     
     # Professional navigation menu
     st.sidebar.markdown("### 📋 Navigation")
-    st.sidebar.markdown("""
-    <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius); 
-                padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--exec-border);">
-        <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem;">
-            <strong>Core Analytics:</strong>
+    
+    # Use native Streamlit components for better rendering
+    with st.sidebar.container():
+        st.markdown("""
+        <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius); 
+                    padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--exec-border);">
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem; font-weight: 600;">
+                    CORE ANALYTICS
+                </div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Main Dashboard</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• AI Insights & Recommendations</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Customer Analysis</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Cell Tower Lookup</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Geospatial Analysis</div>
+            </div>
+            
+            <div>
+                <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem; font-weight: 600;">
+                    EXECUTIVE & AI
+                </div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Executive AI Summary</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Predictive Analytics</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• AI Network Assistant</div>
+                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Snowflake Intelligence</div>
+            </div>
         </div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Main Dashboard</div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• AI Insights & Recommendations</div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Customer Analysis</div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Cell Tower Lookup</div>
-        <div style="margin-bottom: 1rem; font-size: 0.85rem;">• Geospatial Analysis</div>
-        
-        <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem;">
-            <strong>Executive & AI:</strong>
-        </div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Executive AI Summary</div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Predictive Analytics</div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• AI Network Assistant</div>
-        <div style="margin-bottom: 0.5rem; font-size: 0.85rem;">• Snowflake Intelligence</div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
     
     # Executive quick stats in sidebar
     st.sidebar.markdown("### 📊 System Status")

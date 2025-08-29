@@ -456,48 +456,48 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
-    <div style="background: var(--exec-bg-primary); padding: 2rem; border-radius: var(--exec-border-radius-lg); 
-                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); height: 280px;">
-        <div style="text-align: center; margin-bottom: 1.5rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">❄️</div>
-            <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700;">Snowflake Cortex AISQL</h3>
+    <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius-lg); 
+                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); min-height: 320px; height: auto;">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">❄️</div>
+            <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700; font-size: 1.1rem;">Snowflake Cortex AISQL</h3>
         </div>
-        <div style="color: var(--exec-text-secondary); line-height: 1.6;">
-            <div style="margin-bottom: 1rem;"><strong>✨ Advanced AI Models:</strong> Claude 4, GPT-4.1, Mistral Large, Llama 3.3</div>
-            <div style="margin-bottom: 1rem;"><strong>🎯 Specialized Functions:</strong> AI_COMPLETE, AI_CLASSIFY, AI_SENTIMENT</div>
-            <div><strong>🚀 Performance:</strong> Sub-second response times with enterprise scalability</div>
+        <div style="color: var(--exec-text-secondary); line-height: 1.5; font-size: 0.9rem;">
+            <div style="margin-bottom: 0.75rem;"><strong>✨ Models:</strong> Claude 4, GPT-4.1, Mistral, Llama 3.3</div>
+            <div style="margin-bottom: 0.75rem;"><strong>🎯 Functions:</strong> AI_COMPLETE, AI_CLASSIFY, AI_SENTIMENT</div>
+            <div><strong>🚀 Performance:</strong> Sub-second response times with scalability</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
     st.markdown("""
-    <div style="background: var(--exec-bg-primary); padding: 2rem; border-radius: var(--exec-border-radius-lg); 
-                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); height: 280px;">
-        <div style="text-align: center; margin-bottom: 1.5rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
-            <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700;">AI Analytics Engine</h3>
+    <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius-lg); 
+                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); min-height: 320px; height: auto;">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🧠</div>
+            <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700; font-size: 1.1rem;">AI Analytics Engine</h3>
         </div>
-        <div style="color: var(--exec-text-secondary); line-height: 1.6;">
-            <div style="margin-bottom: 1rem;"><strong>🔍 Pattern Recognition:</strong> Hidden network anomalies and failure patterns</div>
-            <div style="margin-bottom: 1rem;"><strong>📊 Predictive Models:</strong> 92% accuracy in failure prediction</div>
-            <div><strong>💡 Real-time Insights:</strong> Instant analysis of streaming telemetry data</div>
+        <div style="color: var(--exec-text-secondary); line-height: 1.5; font-size: 0.9rem;">
+            <div style="margin-bottom: 0.75rem;"><strong>🔍 Recognition:</strong> Network anomalies and failure patterns</div>
+            <div style="margin-bottom: 0.75rem;"><strong>📊 Prediction:</strong> 92% accuracy in failure prediction</div>
+            <div><strong>💡 Insights:</strong> Real-time streaming telemetry analysis</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 with col3:
     st.markdown("""
-    <div style="background: var(--exec-bg-primary); padding: 2rem; border-radius: var(--exec-border-radius-lg); 
-                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); height: 280px;">
-        <div style="text-align: center; margin-bottom: 1.5rem;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">💼</div>
-            <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700;">Executive Intelligence</h3>
+    <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius-lg); 
+                box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); min-height: 320px; height: auto;">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">💼</div>
+            <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700; font-size: 1.1rem;">Executive Intelligence</h3>
         </div>
-        <div style="color: var(--exec-text-secondary); line-height: 1.6;">
-            <div style="margin-bottom: 1rem;"><strong>📈 Business Impact:</strong> Revenue protection and ROI optimization</div>
-            <div style="margin-bottom: 1rem;"><strong>🎯 Strategic Planning:</strong> AI-powered market and operational insights</div>
-            <div><strong>⚡ Decision Support:</strong> Real-time executive dashboards and alerts</div>
+        <div style="color: var(--exec-text-secondary); line-height: 1.5; font-size: 0.9rem;">
+            <div style="margin-bottom: 0.75rem;"><strong>📈 Impact:</strong> Revenue protection and ROI optimization</div>
+            <div style="margin-bottom: 0.75rem;"><strong>🎯 Planning:</strong> AI-powered market insights</div>
+            <div><strong>⚡ Support:</strong> Real-time executive dashboards</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
