@@ -248,18 +248,18 @@ if exec_kpis and network_metrics and customer_metrics:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        # Generate AI Executive Summary
+        # Generate AI Executive Summary (HTML formatted)
         executive_summary_content = f"""
-        **Network Operations Status:** Your telecommunications infrastructure is operating at {(network_metrics['AVG_SUCCESS_RATE'] or 0) * 100:.1f}% success rate across {network_metrics['TOTAL_TOWERS'] or 0:,} active cell towers.
-        
-        **Business Impact:** Current performance levels are protecting approximately **$2.8M in monthly revenue** through sustained service quality and customer retention.
-        
-        **Key Insights:**
-        • Premium service delivery maintained across {(exec_kpis['Premium Performance']['value'])} of network infrastructure
-        • Customer satisfaction trending at {exec_kpis['Customer Satisfaction']['value']} with AI-driven service improvements
+        <strong>Network Operations Status:</strong> Your telecommunications infrastructure is operating at {(network_metrics['AVG_SUCCESS_RATE'] or 0) * 100:.1f}% success rate across {network_metrics['TOTAL_TOWERS'] or 0:,} active cell towers.
+        <br><br>
+        <strong>Business Impact:</strong> Current performance levels are protecting approximately <strong>$2.8M in monthly revenue</strong> through sustained service quality and customer retention.
+        <br><br>
+        <strong>Key Insights:</strong><br>
+        • Premium service delivery maintained across {exec_kpis['Premium Performance']['value']} of network infrastructure<br>
+        • Customer satisfaction trending at {exec_kpis['Customer Satisfaction']['value']} with AI-driven service improvements<br>
         • Risk incidents reduced by 8.3% through predictive analytics and proactive maintenance
-        
-        **Strategic Outlook:** Network optimization initiatives are delivering measurable ROI with continued upward trajectory in operational efficiency.
+        <br><br>
+        <strong>Strategic Outlook:</strong> Network optimization initiatives are delivering measurable ROI with continued upward trajectory in operational efficiency.
         """
         
         summary_metrics = {
