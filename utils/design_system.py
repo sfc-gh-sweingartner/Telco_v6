@@ -16,15 +16,15 @@ import time
 
 class Colors:
     """Professional executive color palette - solid colors only"""
-    # Ericsson Brand Colors (Primary)
-    ERICSSON_BLUE = "#002561"         # Primary Ericsson Blue
+    # Telco Brand Colors (Primary)
+    ERICSSON_BLUE = "#002561"         # Primary Telco Blue
     ERICSSON_BLUE_LIGHT = "#0066CC"   # Light blue for accents
     ERICSSON_BLUE_DARK = "#001B47"    # Dark blue for depth
-    ERICSSON_ORANGE = "#FF6600"       # Ericsson Orange accent
+    ERICSSON_ORANGE = "#FF6600"       # Telco Orange accent
     
     # Professional UI Colors
-    PRIMARY = "#002561"               # Ericsson Blue as primary
-    SECONDARY = "#FF6600"             # Ericsson Orange as secondary
+    PRIMARY = "#002561"               # Telco Blue as primary
+    SECONDARY = "#FF6600"             # Telco Orange as secondary
     
     # Semantic Colors
     SUCCESS = "#0F7B0F"              # Professional green
@@ -46,9 +46,9 @@ class Colors:
     
     # Chart Colors (Professional Corporate Palette)
     CHART_COLORS = [
-        "#002561",  # Ericsson Blue
+        "#002561",  # Telco Blue
         "#0F7B0F",  # Success Green  
-        "#FF6600",  # Ericsson Orange
+        "#FF6600",  # Telco Orange
         "#1976D2",  # Info Blue
         "#FF9800",  # Warning Orange
         "#7B1FA2",  # Professional Purple
@@ -91,7 +91,7 @@ def inject_custom_css():
     """Inject professional executive-grade CSS into the Streamlit app"""
     st.markdown("""
     <style>
-    /* Import Ericsson Brand Fonts - Ericsson Hilda and fallbacks */
+    /* Import Telco Brand Fonts - Ericsson Hilda and fallbacks */
     @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;500;600;700;800&family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
     
     /* Ericsson Hilda Font Face Declaration */
@@ -122,9 +122,9 @@ def inject_custom_css():
         font-display: swap;
     }
     
-    /* Ericsson Brand Guidelines - Root variables for theming */
+    /* Telco Brand Guidelines - Root variables for theming */
     :root {
-        /* Ericsson Primary Brand Colors */
+        /* Telco Primary Brand Colors */
         --ericsson-blue: #002561;
         --ericsson-blue-light: #0066CC;
         --ericsson-blue-dark: #001B42;
@@ -132,21 +132,21 @@ def inject_custom_css():
         --ericsson-orange: #FF6600;
         --ericsson-orange-light: #FF8533;
         
-        /* Ericsson Secondary Colors */
+        /* Telco Secondary Colors */
         --ericsson-green: #009639;
         --ericsson-purple: #663399;
         --ericsson-cyan: #00B7C3;
         --ericsson-magenta: #E6007E;
         --ericsson-yellow: #FFB900;
         
-        /* Ericsson Neutral Colors */
+        /* Telco Neutral Colors */
         --ericsson-white: #FFFFFF;
         --ericsson-light-grey: #F5F5F5;
         --ericsson-medium-grey: #CCCCCC;
         --ericsson-dark-grey: #666666;
         --ericsson-black: #000000;
         
-        /* Ericsson Application Variables */
+        /* Telco Application Variables */
         --exec-primary: var(--ericsson-blue);
         --exec-primary-light: var(--ericsson-blue-light);
         --exec-primary-accent: var(--ericsson-orange);
@@ -166,7 +166,7 @@ def inject_custom_css():
         --exec-border-radius-lg: 16px;
     }
     
-    /* Main Ericsson-branded app styling */
+    /* Main Telco-branded app styling */
     .main > div {
         padding-top: 1rem;
         font-family: 'Ericsson Hilda', 'Source Sans Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -847,7 +847,7 @@ def create_metric_grid(metrics: list, columns: int = 3):
             create_metric_card(**metric)
 
 def create_sidebar_navigation():
-    """Create Ericsson-branded executive sidebar navigation"""
+    """Create Telco-branded executive sidebar navigation"""
     st.sidebar.markdown("""
     <div style="text-align: center; padding: 2rem 1.5rem; background: var(--exec-solid-primary); 
                 border-radius: var(--exec-border-radius-lg); margin-bottom: 2rem; position: relative; overflow: hidden;">
@@ -856,7 +856,7 @@ def create_sidebar_navigation():
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📡</div>
             <h3 style="color: white; margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; 
-                       font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">ERICSSON</h3>
+                       font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">TELCO</h3>
             <p style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 0.8rem; text-transform: uppercase;
                       font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">Network Intelligence Suite</p>
         </div>
@@ -925,14 +925,14 @@ def create_sidebar_navigation():
     """, unsafe_allow_html=True)
 
 def add_page_footer():
-    """Add Ericsson-branded professional page footer"""
+    """Add Telco-branded professional page footer"""
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("---")
     st.markdown("""
     <div style="text-align: center; color: var(--exec-text-secondary); font-size: 0.875rem; padding: 2rem 0 1rem 0;
                 font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">
         <p style="margin: 0;">🤖 Powered by <strong>Snowflake Cortex AISQL</strong> | Built with <strong>Streamlit</strong></p>
-        <p style="margin: 0.5rem 0 0 0;">© 2025 <strong style="color: var(--exec-primary);">Ericsson</strong> Network Intelligence Suite</p>
+        <p style="margin: 0.5rem 0 0 0;">© 2025 <strong style="color: var(--exec-primary);">Telco</strong> Network Intelligence Suite</p>
         <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; opacity: 0.8;">
             Compliant with <a href="https://mediabank.ericsson.net/admin/mb/?h=dbeb87a1bcb16fa379c0020bdf713872#View%20document" 
             style="color: var(--exec-primary-accent); text-decoration: none;">Ericsson Brand Guidelines 2025</a>
