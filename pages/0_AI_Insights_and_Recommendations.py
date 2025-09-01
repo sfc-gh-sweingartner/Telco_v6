@@ -203,7 +203,6 @@ def load_executive_dashboard_data_fast(_session):
                 COUNT(DISTINCT CUSTOMER_NAME) as unique_customers,
                 COUNT(CASE WHEN SERVICE_TYPE = 'Cellular' THEN 1 END) as cellular_tickets
             FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
-            WHERE CREATED_DATE >= DATEADD(day, -7, CURRENT_DATE())  -- Recent tickets only
         )
         SELECT 
             -- Network data

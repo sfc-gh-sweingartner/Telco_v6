@@ -863,37 +863,7 @@ def create_sidebar_navigation():
     </div>
     """, unsafe_allow_html=True)
     
-    # Professional navigation menu
-    st.sidebar.markdown("### 📋 Navigation")
-    
-    # Use native Streamlit components for better rendering
-    with st.sidebar.container():
-        st.markdown("""
-        <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius); 
-                    padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--exec-border);">
-            <div style="margin-bottom: 1rem;">
-                <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem; font-weight: 600;">
-                    CORE ANALYTICS
-                </div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Main Dashboard</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• AI Insights & Recommendations</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Customer Analysis</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Cell Tower Lookup</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Geospatial Analysis</div>
-            </div>
-            
-            <div>
-                <div style="font-size: 0.85rem; color: var(--exec-text-secondary); margin-bottom: 0.75rem; font-weight: 600;">
-                    EXECUTIVE & AI
-                </div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Executive AI Summary</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Predictive Analytics</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• AI Network Assistant</div>
-                <div style="margin-bottom: 0.5rem; font-size: 0.85rem; margin-left: 0.5rem;">• Snowflake Intelligence</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+
     # Executive quick stats in sidebar
     st.sidebar.markdown("### 📊 System Status")
     st.sidebar.markdown("""
@@ -1558,53 +1528,7 @@ def create_executive_demo_controller() -> dict:
             'demo_active': False
         }
     
-    with st.sidebar:
-        st.markdown("---")
-        st.markdown("### 🎬 Executive Demo Controls")
-        
-        demo_scenarios = [
-            "baseline", "network_issue", "ai_response", "resolution"
-        ]
-        
-        current_scenario = st.selectbox(
-            "Demo Scenario:",
-            demo_scenarios,
-            index=demo_scenarios.index(st.session_state.exec_demo_state['current_scenario']),
-            format_func=lambda x: x.replace('_', ' ').title()
-        )
-        
-        demo_speed = st.selectbox(
-            "Demo Speed:",
-            ["slow", "normal", "fast"],
-            index=["slow", "normal", "fast"].index(st.session_state.exec_demo_state['demo_speed'])
-        )
-        
-        auto_advance = st.checkbox(
-            "Auto Advance Scenarios", 
-            value=st.session_state.exec_demo_state['auto_advance']
-        )
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("▶️ Start Demo", type="primary"):
-                st.session_state.exec_demo_state['demo_active'] = True
-        
-        with col2:
-            if st.button("⏹️ Reset Demo"):
-                st.session_state.exec_demo_state = {
-                    'current_scenario': 'baseline',
-                    'demo_speed': 'normal', 
-                    'auto_advance': False,
-                    'demo_active': False
-                }
-                st.rerun()
-        
-        # Update state
-        st.session_state.exec_demo_state.update({
-            'current_scenario': current_scenario,
-            'demo_speed': demo_speed,
-            'auto_advance': auto_advance
-        })
+    # Demo controls removed for cleaner sidebar interface
     
     return st.session_state.exec_demo_state
 
