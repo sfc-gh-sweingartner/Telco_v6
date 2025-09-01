@@ -91,10 +91,13 @@ class TelcoAISQLProcessor:
             model = self.default_model
             
         try:
+            # Properly escape single quotes in prompt for SQL
+            escaped_prompt = prompt.replace("'", "''")
+            
             query = f"""
             SELECT SNOWFLAKE.CORTEX.AI_COMPLETE(
                 '{model}', 
-                '{prompt}',
+                '{escaped_prompt}',
                 {{'max_tokens': {max_tokens}}}
             ) as completion
             """

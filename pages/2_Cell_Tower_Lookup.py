@@ -233,7 +233,7 @@ if len(selection_data) > 0:
     df = pd.DataFrame(selection_data)
     
     # Create AI prompt for analysis
-    prompt = f"""
+  prompt = f"""
     You are a network engineer analyzing failed cells in a cell tower grid. 
     Provide a concise summary of the failed cells using the following data:
 
@@ -249,9 +249,9 @@ if len(selection_data) > 0:
 
     Do not include phrases like "Based on the provided data".
     """
-  
-  prompt = prompt.replace("'", "''")
-
+    
+    prompt = prompt.replace("'", "''")
+    
     # Get AI analysis
     ai_analysis = execute_query_with_loading(
         f"select snowflake.cortex.complete('claude-3-5-sonnet', '{prompt}') as res",

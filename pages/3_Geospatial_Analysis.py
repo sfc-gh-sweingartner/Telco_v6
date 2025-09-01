@@ -867,8 +867,8 @@ height: 600px !important;
 # Create and display the map with PyDeck - full width
 st.subheader("🗺️ Multi-Metric Geospatial Analysis")
 
-# Always render the main visualization using H3HexagonLayers with selection capability
-map_selection = st.pydeck_chart(
+# Always render the main visualization using H3HexagonLayers
+st.pydeck_chart(
     pdk.Deck(
         map_style="mapbox://styles/mapbox/light-v9", 
         initial_view_state=pdk.ViewState(
@@ -890,11 +890,8 @@ map_selection = st.pydeck_chart(
     key=f"map_main_h3_{'_'.join(selected_metrics)}_{hash(str(layer_configs))}"
 )
 
-# Store map selection in session state for use in tabs below
-if map_selection and 'selection' in map_selection and map_selection['selection']:
-    st.session_state.map_selection = map_selection['selection']
-    st.session_state.selected_hexagon = map_selection['selection']
-elif 'map_selection' not in st.session_state:
+# Initialize session state for future map interaction features
+if 'map_selection' not in st.session_state:
     st.session_state.map_selection = None
     st.session_state.selected_hexagon = None
 

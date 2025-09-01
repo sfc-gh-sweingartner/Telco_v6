@@ -1460,7 +1460,7 @@ def create_executive_demo_controller() -> dict:
 
 def create_immediate_action_items(action_items: str, title: str = "💡 Immediate Action Items") -> None:
     """
-    Create formatted immediate action items from AI recommendations
+    Create formatted immediate action items using native Streamlit components
     
     Args:
         action_items: AI-generated action items text with numbered list
@@ -1469,10 +1469,16 @@ def create_immediate_action_items(action_items: str, title: str = "💡 Immediat
     if not action_items:
         return
     
-    # Parse the action items text to extract numbered items with details
-    lines = action_items.strip().split('\n')
-    parsed_items = []
-    current_item = {}
+    # Use native Streamlit components for clean rendering
+    st.markdown(f"### {title}")
+    
+    # Parse and display action items
+    cleaned_text = action_items.replace('"', '').strip()
+    
+    # Split into individual numbered items
+    lines = cleaned_text.split('\n')
+    current_item = ""
+    item_number = 1
     
     for line in lines:
         line = line.strip()
@@ -1481,30 +1487,51 @@ def create_immediate_action_items(action_items: str, title: str = "💡 Immediat
             
         # Check if this is a numbered item (starts with digit followed by period)
         if line and line[0].isdigit() and '. ' in line[:5]:
-            # Save previous item if exists
+            # Display previous item if exists
             if current_item:
-                parsed_items.append(current_item)
+                with st.container():
+                    col1, col2 = st.columns([0.1, 0.9])
+                    with col1:
+                        st.markdown(f"**{item_number-1}.**")
+                    with col2:
+                        st.markdown(f"**{current_item}**")
+                        st.markdown("---")
             
             # Start new item
-            current_item = {
-                'number': len(parsed_items) + 1,
-                'title': line.split('. ', 1)[1] if '. ' in line else line,
-                'timeline': '',
-                'requirements': '',
-                'details': []
-            }
+            current_item = line.split('. ', 1)[1] if '. ' in line else line
+            item_number += 1
         elif line.lower().startswith('- timeline:'):
-            current_item['timeline'] = line.replace('- Timeline:', '').replace('- timeline:', '').strip()
+            timeline = line.replace('- Timeline:', '').replace('- timeline:', '').strip()
+            if current_item:
+                with st.container():
+                    col1, col2 = st.columns([0.1, 0.9])
+                    with col1:
+                        st.markdown(f"**{item_number-1}.**")
+                    with col2:
+                        st.markdown(f"**{current_item}**")
+                        if timeline:
+                            st.success(f"⏱️ **Timeline**: {timeline}")
         elif line.lower().startswith('- requires:'):
-            current_item['requirements'] = line.replace('- Requires:', '').replace('- requires:', '').strip()
-        elif line.startswith('-') and current_item:
-            current_item['details'].append(line[1:].strip())
-        elif current_item and not line.startswith('These items'):
-            current_item['details'].append(line)
+            requirements = line.replace('- Requires:', '').replace('- requires:', '').strip()
+            if requirements:
+                st.info(f"🔧 **Requirements**: {requirements}")
+                st.markdown("---")
+                current_item = ""  # Reset after displaying
+        elif not line.startswith('These items') and line:
+            # Additional details
+            st.caption(f"ℹ️ {line}")
     
-    # Add the last item
+    # Display final item if exists
     if current_item:
-        parsed_items.append(current_item)
+        with st.container():
+            col1, col2 = st.columns([0.1, 0.9])
+            with col1:
+                st.markdown(f"**{item_number-1}.**")
+            with col2:
+                st.markdown(f"**{current_item}**")
+    
+    # Add implementation guide
+    st.info("📋 **Implementation Guide**: These action items are prioritized by urgency. Items marked IMMEDIATE can be started today with minimal risk to network operations.")
     
     # Generate HTML for each item
     items_html = ""
