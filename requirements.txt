@@ -6,17 +6,12 @@ streamlit
 pandas==2.3.1
 numpy==2.2.5
 
-# Essential visualization libraries
-plotly==5.22.0
+# Geospatial and visualization
 pydeck==0.9.1
-altair==5.5.0
-
-# Geospatial analysis
+plotly==6.0.1
+matplotlib==3.10.0
 h3-py==3.7.6
 branca==0.6.0
-
-# Advanced visualization (optional)
-matplotlib==3.10.0
 
 # Statistical analysis  
 scipy==1.15.3
@@ -24,3 +19,6 @@ scipy==1.15.3
 # Snowflake integration (handled by Snowflake environment)
 # snowflake-snowpark-python
 # snowflake-connector-python
+
+# Additional utilities
+altair==5.5.0
