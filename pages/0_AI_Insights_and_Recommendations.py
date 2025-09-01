@@ -9,8 +9,24 @@ and executive summaries.
 
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+
+# Import plotly with fallback for environments where it's not available
+try:
+    import plotly.express as px
+    import plotly.graph_objects as go
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    # Create dummy plotly objects for fallback
+    class DummyPlotly:
+        def scatter(self, *args, **kwargs): return None
+        def bar(self, *args, **kwargs): return None
+        def line(self, *args, **kwargs): return None
+    class DummyGO:
+        class Figure:
+            def __init__(self, *args, **kwargs): pass
+    px = DummyPlotly()
+    go = DummyGO()
+    PLOTLY_AVAILABLE = False
 from datetime import datetime, timedelta
 import sys
 import os

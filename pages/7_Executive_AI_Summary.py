@@ -8,9 +8,27 @@ Provides high-level business intelligence and AI-driven strategic insights for C
 
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+
+# Import plotly with fallback for environments where it's not available
+try:
+    import plotly.express as px
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    PLOTLY_AVAILABLE = True
+except ImportError:
+    # Create dummy plotly objects for fallback
+    class DummyPlotly:
+        def scatter(self, *args, **kwargs): return None
+        def bar(self, *args, **kwargs): return None
+        def line(self, *args, **kwargs): return None
+    class DummyGO:
+        class Figure:
+            def __init__(self, *args, **kwargs): pass
+    def make_subplots(*args, **kwargs):
+        return DummyGO.Figure()
+    px = DummyPlotly()
+    go = DummyGO()
+    PLOTLY_AVAILABLE = False
 import sys
 import os
 from datetime import datetime, timedelta
