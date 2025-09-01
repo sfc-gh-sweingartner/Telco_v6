@@ -1093,113 +1093,39 @@ def create_ai_loading_spinner(message: str = "AI is analyzing...") -> None:
 
 def create_ai_recommendation_list(recommendations: list, title: str = "AI Recommendations") -> None:
     """
-    Create formatted list of AI recommendations with enhanced actionable formatting
+    Create formatted list of AI recommendations using native Streamlit components
     
     Args:
-        recommendations: List of recommendation strings
+        recommendations: List of recommendation strings  
         title: Title for the recommendations section
     """
     if not recommendations:
         return
     
-    def parse_recommendation(rec_text: str, index: int) -> str:
-        """Parse and format individual recommendation with timeline and requirements"""
-        lines = rec_text.strip().split('\n')
-        main_rec = lines[0].strip()
-        
-        # Look for timeline and requirements in the text
-        timeline = ""
-        requirements = ""
-        additional_info = []
-        
-        for line in lines[1:]:
-            line = line.strip()
-            if line.lower().startswith('timeline:') or line.lower().startswith('- timeline:'):
-                timeline = line.replace('Timeline:', '').replace('- Timeline:', '').strip()
-            elif line.lower().startswith('requires:') or line.lower().startswith('- requires:'):
-                requirements = line.replace('Requires:', '').replace('- Requires:', '').strip()
-            elif line and not line.startswith('-'):
-                additional_info.append(line)
-        
-        # Create enhanced recommendation HTML
-        timeline_html = f"""
-        <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(76, 175, 80, 0.1); 
-                    border-radius: 6px; border-left: 3px solid var(--ericsson-green);">
-            <div style="font-size: 0.85rem; color: var(--ericsson-green); font-weight: 600; margin-bottom: 0.25rem;">
-                ⏱️ Timeline
-            </div>
-            <div style="font-size: 0.9rem; color: #333;">{timeline}</div>
-        </div>
-        """ if timeline else ""
-        
-        requirements_html = f"""
-        <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(0, 37, 97, 0.05); 
-                    border-radius: 6px; border-left: 3px solid var(--ericsson-blue);">
-            <div style="font-size: 0.85rem; color: var(--ericsson-blue); font-weight: 600; margin-bottom: 0.25rem;">
-                🔧 Requirements
-            </div>
-            <div style="font-size: 0.9rem; color: #333;">{requirements}</div>
-        </div>
-        """ if requirements else ""
-        
-        additional_html = ""
-        if additional_info:
-            additional_html = f"""
-            <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(255, 102, 0, 0.05); 
-                        border-radius: 6px; border-left: 3px solid var(--ericsson-orange);">
-                <div style="font-size: 0.85rem; color: var(--ericsson-orange); font-weight: 600; margin-bottom: 0.25rem;">
-                    ℹ️ Additional Details
-                </div>
-                <div style="font-size: 0.9rem; color: #333;">{'<br>'.join(additional_info)}</div>
-            </div>
-            """
-        
-        return f"""
-        <div style="background: var(--exec-bg-primary); border-left: 4px solid var(--ericsson-green); 
-                    padding: 1.25rem; margin: 0.75rem 0; border-radius: 0 12px 12px 0; 
-                    box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border);">
-            <div style="display: flex; align-items: flex-start;">
-                <div style="background: var(--ericsson-orange); color: white; border-radius: 50%; 
-                           width: 28px; height: 28px; display: flex; align-items: center; 
-                           justify-content: center; font-size: 0.9rem; font-weight: bold; 
-                           margin-right: 1rem; flex-shrink: 0; font-family: 'Ericsson Hilda', sans-serif;">{index}</div>
-                <div style="flex: 1;">
-                    <div style="color: var(--exec-text-primary); line-height: 1.6; font-weight: 500; 
-                                font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; margin-bottom: 0.5rem;">
-                        {main_rec}
-                    </div>
-                    {timeline_html}
-                    {requirements_html}
-                    {additional_html}
-                </div>
-            </div>
-        </div>
-        """
-        
-    recommendations_html = ""
-    for i, rec in enumerate(recommendations, 1):
-        recommendations_html += parse_recommendation(rec, i)
+    # Use native Streamlit components for better rendering
+    st.markdown(f"### 💡 {title}")
     
-    st.markdown(f"""
-    <div style="background: var(--exec-bg-primary); border-radius: var(--exec-border-radius-lg); 
-                padding: 2rem; margin: 1.5rem 0; box-shadow: var(--exec-shadow-lg);
-                border: 1px solid var(--exec-border);">
-        <h4 style="color: var(--ericsson-blue); margin: 0 0 1.5rem 0; display: flex; align-items: center;
-                   font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif; font-size: 1.3rem; font-weight: 700;">
-            <span style="margin-right: 0.75rem; font-size: 1.5rem;">💡</span> {title}
-        </h4>
-        <div style="border-top: 2px solid var(--ericsson-orange); padding-top: 1rem;">
-            {recommendations_html}
-        </div>
-        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--exec-bg-secondary); 
-                    border-radius: var(--exec-border-radius); border-left: 4px solid var(--ericsson-blue);">
-            <div style="font-size: 0.9rem; color: var(--exec-text-secondary); font-weight: 500;">
-                <strong style="color: var(--ericsson-blue);">📋 Implementation Guide:</strong>
-                These recommendations are prioritized by impact and feasibility. Items with immediate timelines can be started today with minimal risk to network operations.
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    for i, rec in enumerate(recommendations, 1):
+        with st.expander(f"**Recommendation {i}**", expanded=True):
+            # Clean the recommendation text and display it
+            cleaned_rec = rec.replace('"', '').strip()
+            if cleaned_rec:
+                st.markdown(f"**Action:** {cleaned_rec}")
+                
+                # Look for timeline and requirements in the text  
+                lines = rec.split('\n')
+                for line in lines[1:]:
+                    line = line.strip()
+                    if line.lower().startswith('timeline:'):
+                        st.success(f"⏱️ **Timeline**: {line.replace('Timeline:', '').strip()}")
+                    elif line.lower().startswith('requires:'):
+                        st.info(f"🔧 **Requirements**: {line.replace('Requires:', '').strip()}")
+                    elif line and not line.startswith('-') and line != cleaned_rec:
+                        st.caption(f"ℹ️ {line}")
+    
+    # Add implementation guide
+    st.info("📋 **Implementation Guide**: These recommendations are prioritized by impact and feasibility. Items with immediate timelines can be started today with minimal risk to network operations.")
+
 
 def create_ai_metrics_dashboard(metrics: dict) -> None:
     """
