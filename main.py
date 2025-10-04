@@ -163,34 +163,48 @@ def load_executive_dashboard_data():
     try:
         # Enhanced network metrics query using actual schema columns
         network_query = """
-        WITH network_stats AS (
+        WITH cell_aggregates AS (
+            -- First aggregate by cell to get per-cell metrics
             SELECT 
-                COUNT(DISTINCT CELL_ID) as total_towers,
-                -- Calculate success rates based on actual schema columns
-                AVG(CASE 
-                    WHEN PM_RRC_CONN_ESTAB_ATT > 0 
-                    THEN (PM_RRC_CONN_ESTAB_SUCC::FLOAT / PM_RRC_CONN_ESTAB_ATT) * 100
-                    ELSE 0 
-                END) as connection_success_rate,
-                -- Count towers with high abnormal releases (schema shows values like 98, 71, 27)
-                COUNT(CASE WHEN PM_ERAB_REL_ABNORMAL_ENB > 80 THEN 1 END) as high_risk_towers,
-                COUNT(CASE WHEN PM_ERAB_REL_ABNORMAL_ENB > 50 THEN 1 END) as critical_issues,
-                -- Network utilization metrics (schema shows values 76-86%)
+                CELL_ID,
+                VENDOR_NAME,
+                SUM(PM_RRC_CONN_ESTAB_ATT) as total_attempts,
+                SUM(PM_RRC_CONN_ESTAB_SUCC) as total_successes,
+                SUM(PM_ERAB_REL_ABNORMAL_ENB) as total_abnormal_releases,
                 AVG(PM_PRB_UTIL_DL) as avg_downlink_util,
                 AVG(PM_PRB_UTIL_UL) as avg_uplink_util,
-                -- Calculate total network throughput (schema shows large values)
                 SUM(NVL(PM_ACTIVE_UE_UL_SUM, 0)) as total_uplink_activity,
                 SUM(NVL(PM_ACTIVE_UE_DL_SUM, 0)) as total_downlink_activity,
-                -- Premium towers (>95% success rate)
-                COUNT(CASE 
-                    WHEN PM_RRC_CONN_ESTAB_ATT > 0 AND 
-                         (PM_RRC_CONN_ESTAB_SUCC::FLOAT / PM_RRC_CONN_ESTAB_ATT) >= 0.95 
-                    THEN 1 END) as premium_towers,
-                -- Calculate network efficiency metrics
-                AVG(PM_RRC_CONN_MAX) as avg_concurrent_connections,
-                COUNT(CASE WHEN VENDOR_NAME = 'ERICSSON' THEN 1 END) as ericsson_towers
+                MAX(PM_RRC_CONN_MAX) as max_concurrent_connections
             FROM TELCO_NETWORK_OPTIMIZATION_PROD.RAW.CELL_TOWER 
             WHERE CELL_ID IS NOT NULL
+            GROUP BY CELL_ID, VENDOR_NAME
+        ),
+        network_stats AS (
+            SELECT 
+                COUNT(DISTINCT CELL_ID) as total_towers,
+                -- Calculate success rate properly at cell level then average
+                AVG(CASE 
+                    WHEN total_attempts > 0 
+                    THEN (total_successes::FLOAT / total_attempts) * 100
+                    ELSE NULL 
+                END) as connection_success_rate,
+                -- Count unique cells with high abnormal releases
+                COUNT(DISTINCT CASE WHEN total_abnormal_releases > 150 THEN CELL_ID END) as high_risk_towers,
+                COUNT(DISTINCT CASE WHEN total_abnormal_releases > 200 THEN CELL_ID END) as critical_issues,
+                -- Network utilization metrics
+                AVG(avg_downlink_util) as avg_downlink_util,
+                AVG(avg_uplink_util) as avg_uplink_util,
+                SUM(total_uplink_activity) as total_uplink_activity,
+                SUM(total_downlink_activity) as total_downlink_activity,
+                -- Premium cells (>98% success rate)
+                COUNT(DISTINCT CASE 
+                    WHEN total_attempts > 0 AND 
+                         (total_successes::FLOAT / total_attempts) >= 0.98 
+                    THEN CELL_ID END) as premium_towers,
+                AVG(max_concurrent_connections) as avg_concurrent_connections,
+                COUNT(DISTINCT CASE WHEN VENDOR_NAME = 'ERICSSON' THEN CELL_ID END) as ericsson_towers
+            FROM cell_aggregates
         )
         SELECT 
             total_towers,
@@ -262,21 +276,27 @@ def load_executive_dashboard_data():
             unique_customers = int(cust_metrics['UNIQUE_CUSTOMERS']) if cust_metrics['UNIQUE_CUSTOMERS'] else 0
             avg_sentiment = float(cust_metrics['AVG_SENTIMENT']) if cust_metrics['AVG_SENTIMENT'] else 0.0
             
-            # Calculate advanced KPIs from actual data
+            # Calculate advanced KPIs from actual data with production-realistic thresholds
             network_health_score = min(100, max(0, success_rate)) if success_rate > 0 else 0
             customer_satisfaction = ((avg_sentiment + 1) / 2) * 100  # Convert -1,1 scale to 0,100%
-            risk_level = "HIGH" if critical_issues > total_towers * 0.1 else "MEDIUM" if critical_issues > 0 else "LOW"
+            
+            # Risk level based on percentage of critical towers (more realistic thresholds)
+            critical_percentage = (critical_issues / max(total_towers, 1)) * 100 if total_towers > 0 else 0
+            risk_level = "HIGH" if critical_percentage > 5 else "MEDIUM" if critical_percentage > 2 else "LOW"
             
             # Calculate revenue impact based on actual performance
             estimated_monthly_revenue = unique_customers * 65 if unique_customers > 0 else 0  # $65 ARPU
             revenue_at_risk = (critical_issues / max(total_towers, 1)) * estimated_monthly_revenue * 0.15 if total_towers > 0 else 0
             
+            # Calculate premium performance percentage
+            premium_percentage = (premium_towers / max(total_towers, 1) * 100) if total_towers > 0 else 0
+            
             # Build KPIs with actual data
             exec_kpis = {
                 "Network Health": {
                     "value": f"{network_health_score:.1f}%" if network_health_score > 0 else "Calculating...",
-                    "trend": 2.3 if network_health_score > 85 else -1.8,
-                    "icon": "🟢" if network_health_score > 85 else "🟡" if network_health_score > 70 else "🔴"
+                    "trend": 1.8 if network_health_score >= 95 else -1.8 if network_health_score < 90 else 0.2,
+                    "icon": "🟢" if network_health_score >= 95 else "🟡" if network_health_score >= 85 else "🔴"
                 },
                 "Active Infrastructure": {
                     "value": f"{total_towers:,}" if total_towers > 0 else "Loading...",
@@ -294,13 +314,13 @@ def load_executive_dashboard_data():
                     "icon": "💰"
                 },
                 "Critical Issues": {
-                    "value": f"{critical_issues}" if total_towers > 0 else "0",
-                    "trend": -5.4 if critical_issues < 10 else 3.2,
+                    "value": f"{critical_issues:,}" if total_towers > 0 else "0",
+                    "trend": -5.4 if critical_issues < 50 else 3.2 if critical_issues > 200 else 0.0,
                     "icon": "⚠️" if critical_issues > 0 else "✅"
                 },
                 "Premium Performance": {
-                    "value": f"{(premium_towers/max(total_towers,1)*100):.0f}%" if total_towers > 0 else "0%",
-                    "trend": 2.8 if premium_towers > total_towers * 0.7 else -0.9,
+                    "value": f"{premium_percentage:.1f}%" if total_towers > 0 else "0%",
+                    "trend": 2.8 if premium_percentage > 50 else -0.9 if premium_percentage < 30 else 0.5,
                     "icon": "⭐"
                 }
             }
@@ -342,27 +362,29 @@ if exec_kpis and network_metrics and customer_metrics:
         with col1:
             st.markdown("### 📡 **Network Data Summary**")
             st.metric("Total Cell Towers", f"{network_metrics['TOTAL_TOWERS']:,}")
-            st.metric("Connection Success Rate", f"{network_metrics.get('AVG_SUCCESS_RATE', 0) * 100:.2f}%")
-            st.metric("Critical Issues", f"{network_metrics['CRITICAL_ISSUES']}")
-            st.metric("Premium Towers", f"{network_metrics['PREMIUM_TOWERS']} ({(network_metrics['PREMIUM_TOWERS']/max(network_metrics['TOTAL_TOWERS'],1)*100):.0f}%)")
+            # Success rate is stored as decimal (0-1) in enhanced_net_metrics, convert to percentage
+            success_rate_decimal = network_metrics.get('AVG_SUCCESS_RATE', 0)
+            st.metric("Connection Success Rate", f"{success_rate_decimal * 100:.2f}%" if success_rate_decimal else "No data")
+            st.metric("Critical Issues", f"{network_metrics['CRITICAL_ISSUES']:,}")
+            st.metric("Premium Towers", f"{network_metrics['PREMIUM_TOWERS']:,} ({(network_metrics['PREMIUM_TOWERS']/max(network_metrics['TOTAL_TOWERS'],1)*100):.1f}%)")
         
         with col2:
             st.markdown("### 🎫 **Customer Data Summary**")
             st.metric("Total Support Tickets", f"{customer_metrics['TOTAL_TICKETS']:,}")
             st.metric("Unique Customers", f"{customer_metrics['UNIQUE_CUSTOMERS']:,}")
             st.metric("Average Sentiment", f"{customer_metrics['AVG_SENTIMENT']:.3f}")
-            st.metric("Negative Sentiment Tickets", f"{customer_metrics.get('VERY_NEGATIVE_TICKETS', 0):,}")
+            st.metric("Negative Sentiment Tickets", f"{getattr(customer_metrics, 'VERY_NEGATIVE_TICKETS', 0):,}")
             
         # Service type breakdown
         st.markdown("### 📱 **Service Type Distribution**")
         service_col1, service_col2, service_col3 = st.columns(3)
         
         with service_col1:
-            st.metric("Cellular Services", f"{customer_metrics.get('CELLULAR_TICKETS', 0):,}")
+            st.metric("Cellular Services", f"{getattr(customer_metrics, 'CELLULAR_TICKETS', 0):,}")
         with service_col2:
-            st.metric("Business Internet", f"{customer_metrics.get('BUSINESS_TICKETS', 0):,}")
+            st.metric("Business Internet", f"{getattr(customer_metrics, 'BUSINESS_TICKETS', 0):,}")
         with service_col3:
-            st.metric("Home Internet", f"{customer_metrics.get('HOME_TICKETS', 0):,}")
+            st.metric("Home Internet", f"{getattr(customer_metrics, 'HOME_TICKETS', 0):,}")
     
     # Executive Action Center
     st.markdown("---")

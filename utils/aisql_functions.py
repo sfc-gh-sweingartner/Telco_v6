@@ -131,7 +131,18 @@ class TelcoAISQLProcessor:
             ) as classification
             """
             result = self.session.sql(query).collect()
-            return result[0]['CLASSIFICATION'] if result else "Unknown"
+            
+            if result:
+                classification = result[0]['CLASSIFICATION']
+                # Parse JSON response if it's in JSON format
+                if isinstance(classification, str) and classification.strip().startswith('{'):
+                    import json
+                    parsed = json.loads(classification)
+                    # Extract the first label from the labels array
+                    if 'labels' in parsed and isinstance(parsed['labels'], list) and len(parsed['labels']) > 0:
+                        return parsed['labels'][0]
+                return classification if classification else "Unknown"
+            return "Unknown"
         except Exception as e:
             st.error(f"AI Classify Error: {e}")
             return "Unknown"
