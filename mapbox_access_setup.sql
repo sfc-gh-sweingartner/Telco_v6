@@ -6,6 +6,11 @@ SET SCHEMA_NAME = 'RAW';
 SET APP_NAME = 'Network Optimisation';   
 SET MAPBOX_API_KEY = '[paste your mapbox api key here]';      -- Your Mapbox API key
 
+
+Use DATABASE  IDENTIFIER($DB_NAME);
+Use SCHEMA  IDENTIFIER($SCHEMA_NAME);
+
+
 -- Create network rule for map tile servers
 CREATE OR REPLACE NETWORK RULE map_tile_rule
   MODE = EGRESS
