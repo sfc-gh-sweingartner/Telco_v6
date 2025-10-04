@@ -806,7 +806,6 @@ def create_professional_metric_charts(data: pd.DataFrame, x_col: str, y_col: str
 # SESSION MANAGEMENT
 # =============================================================================
 
-@st.cache_resource
 def get_snowflake_session():
     """Get Snowflake session with proper error handling"""
     try:

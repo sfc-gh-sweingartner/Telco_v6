@@ -16,11 +16,7 @@ st.set_page_config(
 st.markdown("## Cell Tower Performance: Failure and Success Rate Analysis")
 
 # Initialize a Snowpark session for executing queries
-@st.cache_resource
-def init_session():
-    return get_active_session()
-
-session = init_session()
+session = get_active_session()
 
 # Original networkoptimisation.py logic
 query = """
@@ -107,7 +103,7 @@ for obj in cell_tower_objects:
 df = pd.DataFrame(selection_data)
 
 if len(selection_data) > 0:
-    prompt = f"""
+  prompt = f"""
     You are a network engineer analyzing multiple failed cells in a cell tower. 
     Provide a concise summary of the failed cells using the following data:
 
@@ -123,13 +119,13 @@ if len(selection_data) > 0:
     """
     
     prompt = prompt.replace("'", "''")
-
+    
     selection_text = session.sql(f"select snowflake.cortex.complete('mistral-large', '{prompt}') as res").to_pandas()
     st.write("#### Selected Grid Cells")
     st.markdown(selection_text["RES"][0])
 
     st.write("")
-    col1, col2, col3 = st.columns(3)
+  col1, col2, col3 = st.columns(3)
     # Plot 1: Bar Chart of Failure Rates
 
     fig1, ax1 = plt.subplots()
@@ -139,8 +135,8 @@ if len(selection_data) > 0:
     col1.pyplot(fig1)
 
 
-    cell_ids_list = df["Cell ID"].to_list()
-    cell_ids_str = ','.join(map(str, cell_ids_list))
+  cell_ids_list = df["Cell ID"].to_list()
+  cell_ids_str = ','.join(map(str, cell_ids_list))
     loyalty_data = session.sql(f"""SELECT 
         c.cell_id,
         COUNT(CASE WHEN cl.status = 'Bronze' THEN 1 END) AS bronze_count,
@@ -159,7 +155,7 @@ if len(selection_data) > 0:
         c.cell_id;
     """).to_pandas()
     # Set 'cell_id' as the index for better visualization
-    loyalty_data.set_index('CELL_ID', inplace=True)
+  loyalty_data.set_index('CELL_ID', inplace=True)
 
     # Plotting the loyalty status counts
     fig2, ax2 = plt.subplots()
@@ -169,21 +165,21 @@ if len(selection_data) > 0:
     ax2.set_title('Loyalty Status Count by Cell', fontsize=16)
     ax2.set_xlabel('Cell ID', fontsize=12)
     ax2.set_ylabel('Customer Count', fontsize=12)
-    ax2.set_xticklabels(loyalty_data.index, rotation=45)
+  ax2.set_xticklabels(loyalty_data.index, rotation=45)
     ax2.legend(title="Loyalty Status", labels=["Bronze", "Silver", "Gold"])
 
     # Show the plot in Streamlit
     col2.pyplot(fig2)
 
     sentiment_score = session.sql(f"""SELECT 
-        cell_id,
+      cell_id,
         AVG(sentiment_score) + 20 AS avg_sentiment_score
-    FROM 
-        TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
-    WHERE cell_id IN ({cell_ids_str})
-    GROUP BY 
-        cell_id
-    ORDER BY 
+  FROM 
+      TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
+  WHERE cell_id IN ({cell_ids_str})
+  GROUP BY 
+      cell_id
+  ORDER BY 
         avg_sentiment_score DESC;
     """).to_pandas()
 
