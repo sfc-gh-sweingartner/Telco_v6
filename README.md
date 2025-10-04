@@ -1,109 +1,394 @@
-# Telco Network Optimization Suite
+# 📡 Telco Network Intelligence Suite
 
-A multi-page Streamlit application for visualizing and analyzing cell tower performance and customer support data.
+> **AI-Powered Network Operations Command Center for Telecommunications**
 
-## Features
+[![Snowflake](https://img.shields.io/badge/Snowflake-Cortex_AI-29B5E8?style=flat&logo=snowflake)](https://www.snowflake.com/)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.30+-FF4B4B?style=flat&logo=streamlit)](https://streamlit.io/)
 
-* **Home Dashboard**: Overview of network statistics and navigation
-* **Cell Tower Lookup**: Interactive map for examining individual cell tower performance metrics
-* **Heatmap Overlay**: Visualize support ticket density and sentiment data
-* **Additional Analysis Pages**: For in-depth network performance analysis
+A comprehensive multi-page Streamlit application built on Snowflake for real-time visualization, analysis, and AI-powered insights into cell tower performance and customer support data.
 
-## Recent Updates
+---
 
-The application has been updated to work without requiring a personal Mapbox API key. This leverages Snowflake's built-in support for Mapbox tiles in Streamlit applications.
+## 🚀 Features
 
-### Key Changes:
+### **Executive Dashboard**
+- Real-time network health metrics
+- Production-realistic KPIs (Network Health, Critical Issues, Premium Performance)
+- AI-powered strategic insights
+- Revenue protection analytics
 
-1. Removed Mapbox API key requirement from Cell Tower Lookup page
-2. Added `connectMapBoxNoKey.sql` script to set up the necessary network access without API key dependency
-3. Simplified map configuration to use default Mapbox access
+### **Interactive Cell Tower Analysis**
+- 3D visualization with PyDeck
+- Color-coded failure rate mapping (Red/Yellow/Green)
+- Click-to-select grid cells for detailed analysis
+- AI-powered recommendations using Mistral-Large
+- Customer loyalty correlation analysis
+- Sentiment scoring from support tickets
 
-## Setup Instructions
+### **Customer Intelligence**
+- AI customer profiling with churn prediction
+- Sentiment analysis on support tickets
+- Customer journey analytics
+- Retention strategy recommendations
 
-### 1. Configure Snowflake Network Access
+### **Geospatial Analytics**
+- Heatmap overlays for support ticket density
+- Coverage gap identification
+- Performance correlation by region
+- Investment prioritization mapping
 
-Run the `connectMapBoxNoKey.sql` script to set up the necessary network access integration:
+### **AI-Powered Features**
+- Natural language querying with Snowflake Intelligence
+- Cortex Search integration
+- Automated root cause analysis
+- Predictive maintenance recommendations
+- Executive summary generation
 
+---
+
+## 📋 Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Detailed Setup](#detailed-setup)
+- [Project Structure](#project-structure)
+- [Usage Guide](#usage-guide)
+- [Demo Mode](#demo-mode)
+- [Troubleshooting](#troubleshooting)
+- [Architecture](#architecture)
+- [Contributing](#contributing)
+
+---
+
+## 🔧 Prerequisites
+
+### Required
+- **Snowflake Account** with Cortex AI enabled
+- **ACCOUNTADMIN** privileges for initial setup
+- **Warehouse** (Small or larger recommended)
+- **Python 3.11+** (for local development)
+
+### Recommended
+- Snowflake Intelligence enabled
+- Cross-region inference configured
+- Git integration setup
+
+---
+
+## ⚡ Quick Start
+
+### Option 1: Deploy from GitHub (Recommended)
+
+1. **Create Git API Integration** in Snowflake:
 ```sql
--- Execute the script in Snowflake
--- Be sure to update the app name in the ALTER STREAMLIT command with your actual Streamlit app name
+CREATE OR REPLACE API INTEGRATION git_telco_v4
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/Deepjyoti-ricky/')
+  ENABLED = TRUE;
 ```
 
-### 2. App Structure
+2. **Deploy Streamlit App**:
+   - Navigate to **Projects > Streamlit** in Snowsight
+   - Click **+ Streamlit App** → **Create from repository**
+   - Repository URL: `https://github.com/Deepjyoti-ricky/Telco_v4`
+   - Select API Integration: `git_telco_v4`
+   - Deploy to: `TELCO_NETWORK_OPTIMIZATION_PROD.RAW`
+   - Main file: `main.py`
 
-The application follows Snowflake's multi-page Streamlit app structure:
+3. **Install Required Packages**:
+   - In Streamlit editor, add packages: `altair, branca, h3-py, matplotlib, numpy, pandas, plotly, pydeck, scipy`
 
-```
-/
-├── main.py                       # Main landing page
-├── pages/                        # Subdirectory for individual pages
-│   ├── 2_Cell_Tower_Lookup.py    # Cell tower lookup page (updated to work without API key)
-│   ├── 3_Geospatial_Analysis.py  # Geospatial analysis page
-│   └── [Additional pages]        # Other analysis pages
-└── README.md                     # Documentation
-```
-
-## Troubleshooting
-
-If you encounter issues with maps not displaying:
-
-1. Verify the external access integration is properly configured with `SHOW EXTERNAL ACCESS INTEGRATIONS`
-2. Check your Streamlit app configuration with `SHOW STREAMLITS` and ensure it references only the integration, not any secrets
-3. If needed, update your app configuration with:
+4. **Run Setup Scripts** (in order):
    ```sql
-   ALTER STREAMLIT YOURAPP.YOURSCHEMA.YOUR_APP_ID
-     SET EXTERNAL_ACCESS_INTEGRATIONS = (map_access_int);
+   -- Execute in Snowflake worksheet
+   USE DATABASE TELCO_NETWORK_OPTIMIZATION_PROD;
+   USE SCHEMA RAW;
+   
+   -- 1. Create tables and load data
+   @Setup/create_tables.sql
+   
+   -- 2. Setup Cortex Search services
+   @CortexSearch/create_cortex_searches.sql
+   
+   -- 3. Configure Mapbox access
+   @Setup/connectMapBoxNoKey.sql
+   
+   -- 4. Setup data generators (optional for live demo)
+   @Setup/setup_data_generators.sql
    ```
 
-## Multi-Page Navigation
+---
 
-The application uses Streamlit's built-in multi-page support, which automatically adds navigation in the sidebar. According to Snowflake's documentation:
+## 📦 Detailed Setup
 
-* The main.py file serves as the landing page
-* Files in the pages/ directory are displayed as navigation options
-* File naming with numbers (e.g., 1_Cell_Tower_Lookup.py) controls the order
-* Each page can be accessed directly via URL paths
+### Step 1: Database Setup
 
-## Key Features of the Heatmap Overlay
+```sql
+-- Create database and schema
+CREATE DATABASE IF NOT EXISTS TELCO_NETWORK_OPTIMIZATION_PROD;
+CREATE SCHEMA IF NOT EXISTS TELCO_NETWORK_OPTIMIZATION_PROD.RAW;
 
-The Heatmap Overlay page provides several powerful visualizations:
+-- Create warehouse
+CREATE WAREHOUSE IF NOT EXISTS TELCO_WH
+  WITH WAREHOUSE_SIZE = 'SMALL'
+  AUTO_SUSPEND = 300
+  AUTO_RESUME = TRUE;
 
-1. **Interactive Heatmap** with options to view:
-   - Cell Tower Failure Rate
-   - Support Ticket Density
-   - Customer Sentiment Distribution
-   - Combined Issue Severity
+USE DATABASE TELCO_NETWORK_OPTIMIZATION_PROD;
+USE SCHEMA RAW;
+USE WAREHOUSE TELCO_WH;
+```
 
-2. **Correlation Analysis** showing the relationship between:
-   - Failure Rate vs. Support Ticket Count
-   - Failure Rate vs. Sentiment Score
+### Step 2: Load Data
 
-3. **Key Statistics** tables displaying:
-   - Top 5 worst performing cell towers
-   - Areas with the most support tickets
+Execute `Setup/create_tables.sql` to create:
+- `CELL_TOWER` table (~2.6M records)
+- `SUPPORT_TICKETS` table (~180K records)
+- `CUSTOMER_LOYALTY` table
 
-4. **Priority Areas** highlighting the most problematic locations based on a combination of technical and customer impact metrics
+### Step 3: Cortex Search Setup
 
+```sql
+-- Create Cortex Search services for semantic search
+@CortexSearch/create_cortex_searches.sql
 
-## Installation
-1. First run the Quickstart so that you have all of the desired data in the correct database
-2. In Snowsight, open a SQL worksheet and run this with ACCOUNTADMIN to allow your env to see this GIT project: CREATE OR REPLACE API INTEGRATION git_sweingartner API_PROVIDER = git_https_api API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-sweingartner') ENABLED = TRUE;
-3. click Projects > Streamlit
-4. Tick the drop downbox next to the blue "+ Streamlit App" and select "create from repository"
-5. Click "Create Git Repository"
-6. In the Repository URL field, enter: https://github.com/sfc-gh-sweingartner/network_optmise
-7. You can leave the repository name as the default
-8. In the API Integration drop down box, choose GIT_SWEINGARTNER
-10. Deploy it into the TELCO_NETWORK_OPTIMIZATION_PROD database and RAW schema, and use any WH
-11. Click Home.py then "Select File"
-12. Choose the db TELCO_NETWORK_OPTIMIZATION_PROD and schema RAW
-13. Name the app whatever you like
-14. Choose any warehouse you want (maybe small or above) and click create
-15. Open the code editor panel and add the following packages via the drop down box above the code: altair, branca, h3-py, matplotlib, numpy, pandas, plotly, pydeck, scipy 
-16. Run the script connectMapBoxNoKey.sql (note that the script shows you will need to find the app name and add it to the SQL)
-17. Reopen your app (or Run should work)
+-- Verify services are ready
+SHOW CORTEX SEARCH SERVICES;
+```
 
+### Step 4: Configure Network Access
 
-## Troubleshooting
-contact stephen.weingartner@snowflake.com 
+```sql
+-- Setup Mapbox integration (no API key required)
+@Setup/connectMapBoxNoKey.sql
+
+-- Update with your Streamlit app name
+ALTER STREAMLIT TELCO_NETWORK_OPTIMIZATION_PROD.RAW.YOUR_APP_NAME
+  SET EXTERNAL_ACCESS_INTEGRATIONS = (map_access_int);
+```
+
+### Step 5: Semantic Model (for Snowflake Intelligence)
+
+Upload `telco_network_opt.yaml` to Snowflake as a semantic model to enable natural language querying.
+
+---
+
+## 📁 Project Structure
+
+```
+Telco_v4/
+├── main.py                          # Main dashboard and landing page
+├── requirements.txt                 # Python dependencies
+├── telco_network_opt.yaml          # Semantic model for Snowflake Intelligence
+├── .gitignore                      # Git ignore rules
+│
+├── pages/                          # Multi-page Streamlit app
+│   ├── 0_AI_Insights_and_Recommendations.py
+│   ├── 1_Customer_Profile.py
+│   ├── 2_Cell_Tower_Lookup.py     # Interactive 3D map
+│   ├── 3_Geospatial_Analysis.py
+│   ├── 7_Executive_AI_Summary.py
+│   ├── 8_Predictive_Analytics.py
+│   ├── 9_AI_Network_Assistant.py
+│   └── 12_Snowflake_Intelligence.py
+│
+├── utils/                          # Utility modules
+│   ├── design_system.py            # UI components and styling
+│   └── aisql_functions.py          # AI/SQL helper functions
+│
+├── Setup/                          # SQL setup scripts
+│   ├── create_tables.sql           # Main data setup
+│   ├── connectMapBoxNoKey.sql      # Mapbox configuration
+│   ├── mapbox_access_setup.sql     # Alternative Mapbox setup
+│   ├── setup_data_generators.sql   # Streaming data generators
+│   ├── manage_data_generators.sql  # Generator management
+│   ├── START_DEMO.sql              # Quick demo start
+│   ├── STOP_DEMO.sql               # Quick demo stop
+│   └── regenerate_demo_data.sql    # Data refresh
+│
+├── CortexSearch/                   # Cortex Search configuration
+│   ├── create_cortex_searches.sql  # Create search services
+│   ├── resume_cortex_searches.sql  # Resume services
+│   └── suspend_cortex_searches.sql # Suspend services
+│
+└── Documentation/                  # Additional documentation
+    ├── ExampleQuestions.md         # 30 demo questions for Snowflake Intelligence
+    └── enhancements.md             # Enhancement roadmap
+```
+
+---
+
+## 🎯 Usage Guide
+
+### Executive Dashboard
+Access the main dashboard to see:
+- Network health score (production-realistic metrics)
+- Critical issues count
+- Premium performance percentage
+- Revenue protection metrics
+- AI strategic recommendations
+
+### Cell Tower Analysis
+1. Navigate to **Cell Tower Lookup** page
+2. View 3D grid visualization of California cell towers
+3. Click on grid cells to analyze specific areas
+4. Review AI-generated recommendations for prioritization
+
+### Customer Intelligence
+1. Go to **Customer Profile** page
+2. Enter customer ID or browse profiles
+3. View churn prediction and sentiment analysis
+4. Access AI-powered retention strategies
+
+### Snowflake Intelligence
+1. Open **Snowflake Intelligence** page
+2. Use natural language queries (see `Documentation/ExampleQuestions.md`)
+3. Example: *"Which cell towers have the highest failure rates?"*
+
+---
+
+## 🎬 Demo Mode
+
+### Starting Live Demo
+
+```sql
+-- Start streaming data generators
+@Setup/START_DEMO.sql
+
+-- Or manually
+CALL MANAGE_DATA_GENERATORS('START');
+```
+
+### Stopping Demo
+
+```sql
+-- Stop streaming data generators
+@Setup/STOP_DEMO.sql
+
+-- Or manually
+CALL MANAGE_DATA_GENERATORS('STOP');
+```
+
+### Regenerating Demo Data
+
+```sql
+-- Refresh data to reset demo state
+@Setup/regenerate_demo_data.sql
+```
+
+---
+
+## 🔍 Troubleshooting
+
+### Maps Not Displaying
+
+1. **Verify External Access Integration**:
+```sql
+SHOW EXTERNAL ACCESS INTEGRATIONS;
+```
+
+2. **Check Streamlit Configuration**:
+```sql
+SHOW STREAMLITS;
+DESC STREAMLIT YOUR_APP_NAME;
+```
+
+3. **Update Integration**:
+```sql
+ALTER STREAMLIT TELCO_NETWORK_OPTIMIZATION_PROD.RAW.YOUR_APP_NAME
+  SET EXTERNAL_ACCESS_INTEGRATIONS = (map_access_int);
+```
+
+### Import Errors
+
+If you encounter `cannot import name 'DAY_IN_SECONDS'`:
+- This has been fixed in the latest version
+- Ensure you're pulling the latest code from GitHub
+- The issue was caused by improper session caching
+
+### Performance Issues
+
+- Use **SMALL** warehouse minimum
+- Enable query result caching
+- Consider **MEDIUM** warehouse for large datasets
+
+### Data Not Loading
+
+```sql
+-- Verify tables exist
+SHOW TABLES IN TELCO_NETWORK_OPTIMIZATION_PROD.RAW;
+
+-- Check row counts
+SELECT 'CELL_TOWER' AS TABLE_NAME, COUNT(*) AS ROW_COUNT FROM CELL_TOWER
+UNION ALL
+SELECT 'SUPPORT_TICKETS', COUNT(*) FROM SUPPORT_TICKETS;
+```
+
+---
+
+## 🏗️ Architecture
+
+### Technology Stack
+- **Platform**: Snowflake (Data Cloud)
+- **AI/ML**: Snowflake Cortex (Claude, GPT-4, Mistral, Llama)
+- **Frontend**: Streamlit in Snowflake
+- **Visualization**: PyDeck, Plotly, Matplotlib
+- **Geospatial**: H3, Branca
+
+### Data Flow
+1. **Source Data** → Cell Tower metrics (2.6M records) + Support Tickets (180K records)
+2. **Cortex AI** → Sentiment analysis, classification, embeddings
+3. **Semantic Layer** → Natural language querying
+4. **Streamlit** → Interactive visualization and dashboards
+5. **Real-time Updates** → Optional streaming data generators
+
+### Key Design Decisions
+- **No API Keys Required**: Leverages Snowflake's built-in Mapbox integration
+- **Session Management**: Direct `get_active_session()` without caching
+- **Production Metrics**: Realistic thresholds (95%+ health, <5% critical issues)
+- **AI Integration**: Multiple Cortex models for different use cases
+
+---
+
+## 🤝 Contributing
+
+This is a demonstration project for Snowflake Cortex AI capabilities in telecommunications. For questions or collaboration:
+
+**Contact**: deepjyoti.dev@snowflake.com
+
+---
+
+## 📄 License
+
+This project is provided as-is for demonstration purposes.
+
+---
+
+## 🙏 Acknowledgments
+
+- Built on [Snowflake's network optimization quickstart](https://github.com/sfc-gh-sweingartner/network_optmise)
+- Powered by Snowflake Cortex AI
+- Uses Ericsson-inspired telco branding guidelines
+
+---
+
+## 📊 Dataset Information
+
+- **Cell Towers**: ~2.6M performance records
+  - Ericsson LTE towers in California
+  - Metrics: RRC connections, E-RAB releases, PRB utilization
+  - Location data with lat/long coordinates
+
+- **Support Tickets**: ~180K customer records
+  - Sentiment scores (-1 to +1)
+  - Service types: Cellular, Business Internet, Home Internet
+  - Correlated with cell tower performance
+
+- **Customer Loyalty**: Tiered status tracking
+  - Bronze, Silver, Gold tiers
+  - Linked to cell tower usage patterns
+
+---
+
+**Built with ❄️ Snowflake Cortex AI • Demonstrating the Future of Network Operations**
