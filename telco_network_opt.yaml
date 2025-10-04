@@ -1,7 +1,7 @@
 name: telecom
 tables:
   - name: CELL_TOWER
-    description: 'CELL_TOWER: This table stores information about cell towers, including their ID, location, and performance metrics, such as signal strength, data throughput, and connection establishment rates.__'
+    description: 'This table stores comprehensive information about cell towers, including their unique identifiers, geographic locations (latitude/longitude), performance metrics such as signal strength, data throughput, connection establishment rates, and various operational statistics. It tracks call events, network quality indicators, and vendor information.'
     base_table:
       database: TELCO_NETWORK_OPTIMIZATION_PROD
       schema: RAW
@@ -668,6 +668,9 @@ tables:
           - None
           - '0.00'
           - '93.00'
+    primary_key:
+      columns:
+        - CELL_ID
     synonyms:
       - CELL_TOWER
       - CELL_SITE
@@ -814,7 +817,15 @@ tables:
           - tone_indicator
     primary_key:
       columns:
-        - CELL_ID
+        - TICKET_ID
+    foreign_keys:
+      - name: fk_support_tickets_cell_tower
+        columns:
+          - CELL_ID
+        references:
+          table: CELL_TOWER
+          columns:
+            - CELL_ID
     description: This table stores information about customer support tickets, including the unique ticket ID, customer details, service type, request description, preferred contact method, cell ID, and sentiment score of the customer's request.
     synonyms:
       - support_tickets
@@ -830,9 +841,9 @@ relationships:
   - name: Support2Cell
     join_type: left_outer
     relationship_type: many_to_one
-    left_table: CELL_TOWER
+    left_table: SUPPORT_TICKETS
     relationship_columns:
       - left_column: CELL_ID
         right_column: CELL_ID
-    right_table: SUPPORT_TICKETS
+    right_table: CELL_TOWER
 custom_instructions: 'Unless specifically asked to bring back multiple date fields, only bring back one date or date time field rather than multiple columns.    for facts, nvl all columns to zero.  Unless asked to bring back any  time or date field avoid bringing them back.  '
