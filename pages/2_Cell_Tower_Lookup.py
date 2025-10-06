@@ -3,7 +3,6 @@ import pandas as pd
 import pydeck as pdk
 import matplotlib.pyplot as plt
 from snowflake.snowpark.context import get_active_session
-import _snowflake
 
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
