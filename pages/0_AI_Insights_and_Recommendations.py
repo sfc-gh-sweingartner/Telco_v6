@@ -38,7 +38,7 @@ except ImportError:
     AI_FUNCTIONS_AVAILABLE = False
     
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting first, then parse basic structure
         fixed_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
@@ -49,17 +49,17 @@ except ImportError:
             if not line:
                 continue
             if line.isupper() and ':' in line:
-                st.markdown(f"**🔹 {line.replace(':', '')}**")
+                st.markdown(f"** {line.replace(':', '')}**")
             elif line.startswith('•') or line.startswith('-'):
                 st.markdown(f"• {line[1:].strip()}")
             elif line.startswith(('1.', '2.', '3.', '4.', '5.')):
                 st.markdown(f"**▶** {line[2:].strip()}")
             elif 'IMMEDIATE' in line.upper() or 'URGENT' in line.upper():
-                st.warning(f"⚠️ {line}")
+                st.warning(f"️ {line}")
             else:
                 st.write(line)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
         for i, rec in enumerate(recommendations, 1):
@@ -72,12 +72,12 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="claude-3-5-sonnet"):
+    def create_model_selector(models, default_model="claude-4-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
         st.write(response)
-    def create_ai_metric_card(title, value, description="", icon="🤖"):
+    def create_ai_metric_card(title, value, description="", icon=""):
         st.metric(title, value, help=description)
 
 try:
@@ -87,7 +87,7 @@ except ImportError:
     def get_ai_analytics(session):
         class FallbackAnalytics:
             def generate_executive_summary(self, *args, **kwargs):
-                return "🚀 AI analysis functionality is being deployed. Please refresh the page in a few minutes to access the complete AI-powered insights and recommendations!"
+                return " AI analysis functionality is being deployed. Please refresh the page in a few minutes to access the complete AI-powered insights and recommendations!"
             def analyze_network_issues(self, *args, **kwargs):
                 return {"root_causes": "AI pattern analysis is being updated", "recommendations": "Advanced AI recommendations will be available shortly"}
             def predict_network_failures(self, *args, **kwargs):
@@ -125,9 +125,9 @@ except ImportError:
                 # Embedding Models
                 'e5-base-v2', 'nv-embed-qa-4', 'multilingual-e5-large', 'voyage-multilingual-2'
             ]
-            default_model = "claude-3-5-sonnet"  # Fast, highly capable Claude model
+            default_model = "claude-4-sonnet"  # Best balance of speed and intelligence
             def ai_complete(self, prompt, **kwargs):
-                return "🤖 AI completion service is being updated. Full Snowflake Cortex AISQL capabilities will be available shortly!"
+                return " AI completion service is being updated. Full Snowflake Cortex AISQL capabilities will be available shortly!"
             def ai_classify(self, text, categories):
                 return categories[0] if categories else "Unknown"
         return FallbackProcessor()
@@ -135,7 +135,7 @@ except ImportError:
 # Page configuration
 st.set_page_config(
     page_title="AI Insights & Recommendations",
-    page_icon="🧠",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -153,13 +153,13 @@ ai_processor = get_ai_processor(session)
 create_page_header(
     title="AI Insights & Recommendations",
     description="Advanced AI-powered network analysis with predictive insights and automated recommendations",
-    icon="🧠"
+    icon=""
 )
 
 # Show deployment status if AI functions are not fully available
 if not AI_FUNCTIONS_AVAILABLE:
     st.warning("""
-    🚀 **AI Features Deployment in Progress**
+     **AI Features Deployment in Progress**
     
     The advanced AI capabilities powered by Snowflake Cortex AISQL are currently being deployed to your environment. 
     
@@ -175,7 +175,7 @@ if not AI_FUNCTIONS_AVAILABLE:
     In the meantime, you can still access basic functionality and the interface will automatically upgrade once deployment is complete.
     """)
     
-    if st.button("🔄 Check AI Status", type="primary"):
+    if st.button(" Check AI Status", type="primary"):
         st.rerun()
 
 # Optimized data loading function with caching
@@ -252,26 +252,26 @@ with st.sidebar:
     ai_processor.default_model = selected_model
 
 # Main AI Dashboard
-st.markdown("## 🤖 AI-Powered Network Intelligence")
+st.markdown("##  AI-Powered Network Intelligence")
 
 # Create tabs for different AI analyses
 tab1, tab2, tab3, tab4 = st.tabs([
-    "🎯 Executive Summary", 
-    "🔍 Pattern Analysis", 
-    "📈 Predictive Analytics", 
-    "💡 Recommendations Engine"
+    " Executive Summary", 
+    " Pattern Analysis", 
+    " Predictive Analytics", 
+    " Recommendations Engine"
 ])
 
 with tab1:
-    st.markdown("### 📊 AI Executive Summary")
+    st.markdown("###  AI Executive Summary")
     st.info("Generate comprehensive executive summaries powered by advanced AI models")
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button("🚀 Generate AI Executive Report", type="primary", key="exec_report"):
+        if st.button(" Generate AI Executive Report", type="primary", key="exec_report"):
             # Streamlined progress - only 2 steps for speed
-            create_ai_progress_tracker(1, 2, "⚡ Loading data & analyzing patterns...")
+            create_ai_progress_tracker(1, 2, " Loading data & analyzing patterns...")
             
             # Load both network and customer data in single optimized query
             try:
@@ -281,7 +281,7 @@ with tab1:
                 if combined_data:
                     network_summary, ticket_summary = combined_data
                     
-                    create_ai_progress_tracker(2, 2, "🧠 Generating AI insights...")
+                    create_ai_progress_tracker(2, 2, " Generating AI insights...")
                     
                     executive_summary = ai_analytics.generate_executive_summary(
                         network_summary, ticket_summary
@@ -289,10 +289,10 @@ with tab1:
                     
                     if executive_summary:
                         create_ai_insights_card(
-                            "🎯 Executive Network Analysis", 
+                            " Executive Network Analysis", 
                             executive_summary, 
                             confidence=0.89, 
-                            icon="📈"
+                            icon=""
                         )
                         
                         # Create executive metrics
@@ -308,16 +308,16 @@ with tab1:
                     else:
                         st.error("Unable to generate executive summary at this time.")
                 else:
-                    st.error("⚠️ Unable to load network data. Please try again in a moment.")
+                    st.error("️ Unable to load network data. Please try again in a moment.")
                     
             except Exception as e:
                 st.error(f"Error generating executive summary: {e}")
     
     with col2:
-        st.markdown("#### 📋 Quick AI Insights")
+        st.markdown("####  Quick AI Insights")
         
         # Quick AI fact generation
-        if st.button("💡 Generate Quick Insight", key="quick_insight"):
+        if st.button(" Generate Quick Insight", key="quick_insight"):
             quick_insight = ai_processor.ai_complete(
                 "Provide ONE key telecom network optimization insight in EXACTLY 100 words. Be specific and actionable.",
                 max_tokens=150
@@ -327,11 +327,11 @@ with tab1:
                     "AI Quick Insight",
                     quick_insight,
                     description="Generated using " + selected_model,
-                    icon="💡"
+                    icon=""
                 )
 
 with tab2:
-    st.markdown("### 🔍 AI Pattern Analysis")
+    st.markdown("###  AI Pattern Analysis")
     st.info("Discover hidden patterns in network performance using advanced AI pattern recognition")
     
     analysis_type = st.selectbox(
@@ -340,7 +340,7 @@ with tab2:
         key="pattern_analysis_type"
     )
     
-    if st.button("🧠 Analyze Patterns", type="primary", key="pattern_analysis"):
+    if st.button(" Analyze Patterns", type="primary", key="pattern_analysis"):
         create_ai_loading_spinner("AI is analyzing complex patterns in your network data...")
         
         try:
@@ -363,17 +363,17 @@ with tab2:
                     
                     if network_insights.get('root_causes'):
                         create_ai_insights_card(
-                            "🔧 Network Failure Root Causes", 
+                            " Network Failure Root Causes", 
                             network_insights['root_causes'], 
                             confidence=0.82, 
-                            icon="🔧"
+                            icon=""
                         )
                     
                     if network_insights.get('recommendations'):
                         recommendations = [r.strip() for r in network_insights['recommendations'].split('\n') if r.strip()]
                         create_ai_recommendation_list(recommendations[:6], "AI Priority Recommendations")
                 else:
-                    st.success("✅ Great news! No significant failure patterns detected in your network.")
+                    st.success(" Great news! No significant failure patterns detected in your network.")
             
             elif analysis_type == "Customer Behavior Patterns":
                 # Customer behavior analysis
@@ -399,10 +399,10 @@ with tab2:
                     
                     if customer_insights:
                         create_ai_insights_card(
-                            "👥 Customer Behavior Insights", 
+                            " Customer Behavior Insights", 
                             customer_insights, 
                             confidence=0.75, 
-                            icon="👥"
+                            icon=""
                         )
                         
                         # Show data visualization
@@ -415,7 +415,7 @@ with tab2:
             st.error(f"Error in pattern analysis: {e}")
 
 with tab3:
-    st.markdown("### 📈 AI Predictive Analytics")
+    st.markdown("###  AI Predictive Analytics")
     st.info("Predict future network issues and customer behavior using machine learning models")
     
     prediction_type = st.selectbox(
@@ -430,7 +430,7 @@ with tab3:
         key="time_horizon"
     )
     
-    if st.button("🔮 Generate AI Predictions", type="primary", key="predictions"):
+    if st.button(" Generate AI Predictions", type="primary", key="predictions"):
         create_ai_loading_spinner("AI is building predictive models and analyzing trends...")
         
         try:
@@ -454,10 +454,10 @@ with tab3:
                     
                     if predictions.get('predictions'):
                         create_ai_insights_card(
-                            "🔮 Network Failure Predictions", 
+                            " Network Failure Predictions", 
                             predictions['predictions'], 
                             confidence=0.73, 
-                            icon="⚠️"
+                            icon="️"
                         )
                     
                     if predictions.get('mitigation_strategies'):
@@ -486,10 +486,10 @@ with tab3:
                     
                     if churn_analysis.get('churn_risk_analysis'):
                         create_ai_insights_card(
-                            "🚨 Customer Churn Risk Analysis", 
+                            " Customer Churn Risk Analysis", 
                             churn_analysis['churn_risk_analysis'], 
                             confidence=0.78, 
-                            icon="🚨"
+                            icon=""
                         )
                     
                     if churn_analysis.get('retention_strategies'):
@@ -509,7 +509,7 @@ with tab3:
             st.error(f"Error in predictive analysis: {e}")
 
 with tab4:
-    st.markdown("### 💡 AI Recommendations Engine")
+    st.markdown("###  AI Recommendations Engine")
     st.info("Get personalized, actionable recommendations powered by AI analysis")
     
     recommendation_category = st.selectbox(
@@ -524,7 +524,7 @@ with tab4:
         key="urgency"
     )
     
-    if st.button("🎯 Generate AI Recommendations", type="primary", key="recommendations"):
+    if st.button(" Generate AI Recommendations", type="primary", key="recommendations"):
         create_ai_loading_spinner("AI is analyzing your network data and generating personalized recommendations...")
         
         try:
@@ -546,10 +546,10 @@ with tab4:
             
             if recommendations_text:
                 create_ai_insights_card(
-                    f"🎯 {recommendation_category} Recommendations", 
+                    f" {recommendation_category} Recommendations", 
                     recommendations_text, 
                     confidence=0.85, 
-                    icon="💡"
+                    icon=""
                 )
                 
                 # Generate specific action items
@@ -574,7 +574,7 @@ with tab4:
 
 # AI Performance Metrics Section
 st.markdown("---")
-st.markdown("### 📊 AI Performance & Usage")
+st.markdown("###  AI Performance & Usage")
 
 col1, col2, col3 = st.columns(3)
 
@@ -583,7 +583,7 @@ with col1:
         "AI Model Performance",
         "94.2% Accuracy",
         "Based on recent predictions vs actual outcomes",
-        "🎯"
+        ""
     )
 
 with col2:
@@ -591,7 +591,7 @@ with col2:
         "Predictions Generated",
         "2,847 This Month",
         "Across all network optimization categories",
-        "🔮"
+        ""
     )
 
 with col3:
@@ -599,19 +599,19 @@ with col3:
         "Recommendation Success",
         "87% Implemented",
         "AI recommendations adopted by operations team",
-        "✅"
+        ""
     )
 
 # AI Technology Information
 st.markdown("---")
-st.markdown("### ⚙️ AI Technology Stack")
+st.markdown("### ️ AI Technology Stack")
 
 st.markdown("""
 <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%); padding: 2rem; border-radius: 16px; border-left: 4px solid #2196f3;">
-    <h4 style="color: #1565c0; margin: 0 0 1rem 0;">🧠 Powered by Snowflake Cortex AISQL</h4>
+    <h4 style="color: #1565c0; margin: 0 0 1rem 0;"> Powered by Snowflake Cortex AISQL</h4>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; color: #4a5568;">
         <div>
-            <h5 style="color: #1976d2; margin: 0 0 0.5rem 0;">🔧 AI Functions Used:</h5>
+            <h5 style="color: #1976d2; margin: 0 0 0.5rem 0;"> AI Functions Used:</h5>
             <ul style="margin: 0; padding-left: 1.5rem;">
                 <li><strong>AI_COMPLETE:</strong> Executive summaries & insights</li>
                 <li><strong>AI_CLASSIFY:</strong> Pattern categorization</li>
@@ -620,7 +620,7 @@ st.markdown("""
             </ul>
         </div>
         <div>
-            <h5 style="color: #1976d2; margin: 0 0 0.5rem 0;">🤖 40+ Available AI Models:</h5>
+            <h5 style="color: #1976d2; margin: 0 0 0.5rem 0;"> 40+ Available AI Models:</h5>
             <ul style="margin: 0; padding-left: 1.5rem;">
                 <li><strong>Claude 4 Sonnet:</strong> DEFAULT - Best balance of speed & intelligence</li>
                 <li><strong>GPT-5:</strong> Next-generation OpenAI capabilities</li>

@@ -37,13 +37,13 @@ except ImportError:
     AI_FUNCTIONS_AVAILABLE = False
     
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting for better display
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
         st.info(formatted_insight)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
         for i, rec in enumerate(recommendations, 1):
@@ -56,12 +56,12 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="claude-3-5-sonnet"):
+    def create_model_selector(models, default_model="claude-4-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
         st.write(response)
-    def create_ai_metric_card(title, value, description="", icon="🤖"):
+    def create_ai_metric_card(title, value, description="", icon=""):
         st.metric(title, value, help=description)
 
 try:
@@ -70,7 +70,7 @@ except ImportError:
     def get_ai_analytics(session):
         class FallbackAnalytics:
             def predict_network_failures(self, *args, **kwargs):
-                return {"predictions": "🔮 AI predictive models are being deployed. Advanced forecasting capabilities will be available shortly!"}
+                return {"predictions": " AI predictive models are being deployed. Advanced forecasting capabilities will be available shortly!"}
             def analyze_network_issues(self, *args, **kwargs):
                 return {"root_causes": "AI anomaly detection is being updated", "recommendations": "Advanced AI insights will be available shortly"}
         return FallbackAnalytics()
@@ -83,15 +83,15 @@ except ImportError:
                 'llama4-maverick', 'llama4-scout', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
                 'snowflake-arctic', 'snowflake-llama-3.3-70b', 'reka-core', 'reka-flash', 'deepseek-r1'
             ]
-            default_model = "claude-3-5-sonnet"
+            default_model = "claude-4-sonnet"
             def ai_complete(self, prompt, **kwargs):
-                return "🔮 AI predictive analytics are being deployed. Advanced forecasting and anomaly detection will be available shortly!"
+                return " AI predictive analytics are being deployed. Advanced forecasting and anomaly detection will be available shortly!"
         return FallbackProcessor()
 
 # Page configuration
 st.set_page_config(
     page_title="Predictive Analytics",
-    page_icon="🔮",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -109,13 +109,13 @@ ai_processor = get_ai_processor(session)
 create_page_header(
     title="AI Predictive Analytics",
     description="Advanced forecasting, anomaly detection, and predictive maintenance powered by Snowflake Cortex AISQL",
-    icon="🔮"
+    icon=""
 )
 
 # Show deployment status if AI functions are not fully available
 if not AI_FUNCTIONS_AVAILABLE:
     st.warning("""
-    🚀 **AI Predictive Analytics Deployment in Progress**
+     **AI Predictive Analytics Deployment in Progress**
     
     Advanced predictive capabilities are being deployed including:
     - AI-powered network failure forecasting
@@ -127,30 +127,30 @@ if not AI_FUNCTIONS_AVAILABLE:
     **Expected availability:** 5-10 minutes
     """)
     
-    if st.button("🔄 Check Predictive AI Status", type="primary"):
+    if st.button(" Check Predictive AI Status", type="primary"):
         st.rerun()
 
 # AI Model Selection in Sidebar
 with st.sidebar:
     st.markdown("---")
-    st.markdown("### 🤖 AI Model Configuration")
+    st.markdown("###  AI Model Configuration")
     models = ai_processor.supported_models
     selected_model = create_model_selector(models, ai_processor.default_model)
     ai_processor.default_model = selected_model
 
 # Main Predictive Analytics Dashboard
-st.markdown("## 🔮 Predictive Intelligence Dashboard")
+st.markdown("##  Predictive Intelligence Dashboard")
 
 # Create tabs for different predictive analyses
 pred_tab1, pred_tab2, pred_tab3, pred_tab4 = st.tabs([
-    "📈 Network Forecasting", 
-    "🚨 Anomaly Detection", 
-    "🔧 Predictive Maintenance", 
-    "👥 Customer Behavior"
+    " Network Forecasting", 
+    " Anomaly Detection", 
+    " Predictive Maintenance", 
+    " Customer Behavior"
 ])
 
 with pred_tab1:
-    st.markdown("### 📈 AI Network Performance Forecasting")
+    st.markdown("###  AI Network Performance Forecasting")
     st.info("Predict future network performance trends and capacity requirements")
     
     forecast_metric = st.selectbox(
@@ -168,7 +168,7 @@ with pred_tab1:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button("🚀 Generate AI Forecast", type="primary", key="generate_forecast"):
+        if st.button(" Generate AI Forecast", type="primary", key="generate_forecast"):
             create_ai_progress_tracker(1, 4, "Loading historical data...")
             
             # Load historical data
@@ -243,10 +243,10 @@ with pred_tab1:
                 
                 if forecast_analysis:
                     create_ai_insights_card(
-                        f"🔮 {forecast_metric} Forecast - {forecast_horizon}", 
+                        f" {forecast_metric} Forecast - {forecast_horizon}", 
                         forecast_analysis, 
                         confidence=0.76, 
-                        icon="📈"
+                        icon=""
                     )
                     
                     # Create forecast metrics
@@ -269,24 +269,24 @@ with pred_tab1:
                 st.info("Using simulated data for demonstration purposes")
     
     with col2:
-        st.markdown("#### 🎯 Forecast Accuracy")
+        st.markdown("####  Forecast Accuracy")
         
         create_ai_metric_card(
             "Model Accuracy",
             "87.3%",
             "Based on historical predictions vs actual outcomes",
-            "🎯"
+            ""
         )
         
         create_ai_metric_card(
             "Prediction Confidence",
             "High",
             f"For {forecast_horizon.lower()} forecasts using {selected_model}",
-            "📊"
+            ""
         )
 
 with pred_tab2:
-    st.markdown("### 🚨 AI Anomaly Detection")
+    st.markdown("###  AI Anomaly Detection")
     st.info("Automatically detect unusual patterns and potential issues in network performance")
     
     anomaly_focus = st.selectbox(
@@ -301,7 +301,7 @@ with pred_tab2:
         help="Higher values detect more anomalies (may include false positives)"
     )
     
-    if st.button("🔍 Run Anomaly Detection", type="primary", key="run_anomaly_detection"):
+    if st.button(" Run Anomaly Detection", type="primary", key="run_anomaly_detection"):
         create_ai_loading_spinner("AI is scanning for anomalies in network data...")
         
         try:
@@ -356,10 +356,10 @@ with pred_tab2:
             
             if anomaly_analysis:
                 create_ai_insights_card(
-                    f"🚨 {anomaly_focus} - Anomaly Analysis", 
+                    f" {anomaly_focus} - Anomaly Analysis", 
                     anomaly_analysis, 
                     confidence=0.82, 
-                    icon="🔍"
+                    icon=""
                 )
                 
                 # Generate simulated anomaly alerts
@@ -371,7 +371,7 @@ with pred_tab2:
                     "Network latency spike detected - 40ms above baseline in 5 towers"
                 ]
                 
-                create_ai_recommendation_list(anomaly_alerts[:4], "🚨 Detected Anomalies")
+                create_ai_recommendation_list(anomaly_alerts[:4], " Detected Anomalies")
                 
                 # Anomaly metrics
                 anomaly_metrics = {
@@ -387,7 +387,7 @@ with pred_tab2:
             st.error(f"Error in anomaly detection: {e}")
 
 with pred_tab3:
-    st.markdown("### 🔧 AI Predictive Maintenance")
+    st.markdown("###  AI Predictive Maintenance")
     st.info("Predict equipment failures and optimize maintenance schedules")
     
     maintenance_focus = st.selectbox(
@@ -402,7 +402,7 @@ with pred_tab3:
         key="maintenance_window"
     )
     
-    if st.button("🔧 Generate Maintenance Predictions", type="primary", key="predictive_maintenance"):
+    if st.button(" Generate Maintenance Predictions", type="primary", key="predictive_maintenance"):
         create_ai_loading_spinner("AI is analyzing equipment health and predicting maintenance needs...")
         
         try:
@@ -445,10 +445,10 @@ with pred_tab3:
             
             if maintenance_analysis:
                 create_ai_insights_card(
-                    f"🔧 {maintenance_focus} - Predictive Maintenance Plan", 
+                    f" {maintenance_focus} - Predictive Maintenance Plan", 
                     maintenance_analysis, 
                     confidence=0.79, 
-                    icon="🛠️"
+                    icon="️"
                 )
                 
                 # Generate maintenance schedule
@@ -461,7 +461,7 @@ with pred_tab3:
                     f"Quarter end: Strategic equipment upgrades based on performance trends"
                 ]
                 
-                create_ai_recommendation_list(maintenance_schedule[:4], f"📅 {maintenance_window} Maintenance Schedule")
+                create_ai_recommendation_list(maintenance_schedule[:4], f" {maintenance_window} Maintenance Schedule")
                 
                 # Maintenance metrics
                 maintenance_metrics = {
@@ -477,7 +477,7 @@ with pred_tab3:
             st.error(f"Error in predictive maintenance analysis: {e}")
 
 with pred_tab4:
-    st.markdown("### 👥 AI Customer Behavior Forecasting")
+    st.markdown("###  AI Customer Behavior Forecasting")
     st.info("Predict customer behavior patterns and optimize service delivery")
     
     behavior_metric = st.selectbox(
@@ -492,7 +492,7 @@ with pred_tab4:
         key="customer_segment"
     )
     
-    if st.button("👥 Analyze Customer Behavior", type="primary", key="customer_behavior_analysis"):
+    if st.button(" Analyze Customer Behavior", type="primary", key="customer_behavior_analysis"):
         create_ai_loading_spinner("AI is analyzing customer behavior patterns and trends...")
         
         try:
@@ -548,10 +548,10 @@ with pred_tab4:
             
             if behavior_analysis:
                 create_ai_insights_card(
-                    f"👥 {customer_segment} - {behavior_metric} Analysis", 
+                    f" {customer_segment} - {behavior_metric} Analysis", 
                     behavior_analysis, 
                     confidence=0.81, 
-                    icon="📊"
+                    icon=""
                 )
                 
                 # Customer behavior metrics
@@ -578,7 +578,7 @@ with pred_tab4:
                     "Develop segment-specific satisfaction improvement initiatives"
                 ]
                 
-                create_ai_recommendation_list(behavior_recommendations[:4], "🎯 Behavior-Based Action Plan")
+                create_ai_recommendation_list(behavior_recommendations[:4], " Behavior-Based Action Plan")
                 
         except Exception as e:
             st.error(f"Error in customer behavior analysis: {e}")
@@ -649,7 +649,7 @@ def create_forecast_chart(historical_data, metric, horizon):
 
 # Predictive Analytics Summary
 st.markdown("---")
-st.markdown("### 📊 Predictive Analytics Summary")
+st.markdown("###  Predictive Analytics Summary")
 
 summary_col1, summary_col2, summary_col3 = st.columns(3)
 
@@ -658,7 +658,7 @@ with summary_col1:
         "Active Predictions",
         "23",
         "Forecasts and anomaly detections currently running",
-        "🔮"
+        ""
     )
 
 with summary_col2:
@@ -666,7 +666,7 @@ with summary_col2:
         "Model Accuracy",
         "86.4%",
         "Average accuracy across all predictive models",
-        "🎯"
+        ""
     )
 
 with summary_col3:
@@ -674,18 +674,18 @@ with summary_col3:
         "Cost Savings",
         "$127K",
         "Estimated monthly savings from predictive insights",
-        "💰"
+        ""
     )
 
 # Technology Information
-st.markdown("### ⚙️ Predictive Technology Stack")
+st.markdown("### ️ Predictive Technology Stack")
 
 tech_col1, tech_col2 = st.columns(2)
 
 with tech_col1:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #e8f4fd 0%, #ffffff 100%); padding: 2rem; border-radius: 16px; border-left: 4px solid #2196f3;">
-        <h4 style="color: #1565c0; margin: 0 0 1rem 0;">🔮 AI Forecasting Models</h4>
+        <h4 style="color: #1565c0; margin: 0 0 1rem 0;"> AI Forecasting Models</h4>
         <ul style="margin: 0; padding-left: 1.5rem; color: #4a5568;">
             <li><strong>Time Series Analysis:</strong> ARIMA, Prophet, and neural networks</li>
             <li><strong>Anomaly Detection:</strong> Isolation Forest and statistical methods</li>
@@ -698,7 +698,7 @@ with tech_col1:
 with tech_col2:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%); padding: 2rem; border-radius: 16px; border-left: 4px solid #9c27b0;">
-        <h4 style="color: #6a1b9a; margin: 0 0 1rem 0;">🧠 AI Integration</h4>
+        <h4 style="color: #6a1b9a; margin: 0 0 1rem 0;"> AI Integration</h4>
         <ul style="margin: 0; padding-left: 1.5rem; color: #4a5568;">
             <li><strong>Real-time Processing:</strong> Streaming analytics for live predictions</li>
             <li><strong>Model Updates:</strong> Continuous learning from new data</li>

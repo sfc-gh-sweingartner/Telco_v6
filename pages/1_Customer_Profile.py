@@ -28,7 +28,7 @@ except ImportError:
         create_section_header, create_status_indicator, create_professional_metric_charts
     )
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting for better display
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
@@ -37,7 +37,7 @@ except ImportError:
             st.caption(f"Confidence: {confidence*100:.0f}%")
     
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
@@ -54,7 +54,7 @@ except ImportError:
         st.markdown(f"### {title}")
         st.write(response)
     
-    def create_ai_metric_card(title, value, description="", icon="🤖"):
+    def create_ai_metric_card(title, value, description="", icon=""):
         st.metric(title, value, help=description)
 
 try:
@@ -84,7 +84,7 @@ except ImportError:
 # Page configuration
 st.set_page_config(
     page_title="Customer Profile",
-    page_icon="👤",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -102,7 +102,7 @@ ai_processor = get_ai_processor(session)
 create_page_header(
     title="AI-Powered Customer Intelligence",
     description="Advanced customer insights with AI-driven churn prediction, sentiment analysis, and personalized retention strategies",
-    icon="🤖"
+    icon=""
 )
 
 # Load customer data with professional loading
@@ -125,7 +125,7 @@ if customers_data.empty:
     st.stop()
 
 # Customer selection with professional styling
-st.markdown("### 🔍 Select Customer")
+st.markdown("###  Select Customer")
 customer_options = customers_data.apply(
     lambda x: f"{x['CUSTOMER_ID']} - {x['FIRST_NAME']} ({x['EMAIL']})", 
     axis=1
@@ -194,7 +194,7 @@ elif ticket_count == 0:
 if avg_sentiment < -0.5 and ticket_count > 2:
     risk_score = 85
     risk_color = "error"
-    risk_icon = "🔴"
+    risk_icon = ""
 elif avg_sentiment < 0 or ticket_count > 1:
     risk_score = 45
     risk_color = "warning" 
@@ -208,18 +208,18 @@ satisfaction = min(5, max(1, (avg_sentiment + 1) * 2.5)) if pd.notna(avg_sentime
 
 # AI-Enhanced Customer Intelligence Section
 st.markdown("---")
-st.markdown("## 🤖 AI Customer Intelligence")
+st.markdown("##  AI Customer Intelligence")
 
 # Create tabs for AI analysis
-ai_tab1, ai_tab2, ai_tab3 = st.tabs(["🧠 AI Insights", "🎯 Churn Prediction", "💡 AI Recommendations"])
+ai_tab1, ai_tab2, ai_tab3 = st.tabs([" AI Insights", " Churn Prediction", " AI Recommendations"])
 
 with ai_tab1:
-    st.markdown("### 🔍 AI-Powered Customer Analysis")
+    st.markdown("###  AI-Powered Customer Analysis")
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button("🚀 Generate AI Customer Insights", type="primary", key="ai_insights"):
+        if st.button(" Generate AI Customer Insights", type="primary", key="ai_insights"):
             create_ai_loading_spinner("AI is analyzing customer behavior patterns...")
             
             try:
@@ -265,12 +265,12 @@ with ai_tab1:
                         f"Customer Analysis: {get_customer_field('FIRST_NAME', 'Unknown')}", 
                         ai_insights, 
                         confidence=0.82, 
-                        icon="👤"
+                        icon=""
                     )
                 
                 # Classify customer tickets if available
                 if not customer_tickets.empty and len(customer_tickets) > 0:
-                    st.markdown("#### 🏷️ AI Ticket Classification")
+                    st.markdown("#### ️ AI Ticket Classification")
                     
                     # Classify the most recent ticket
                     recent_ticket = customer_tickets.iloc[0]
@@ -297,7 +297,7 @@ with ai_tab1:
     
     with col2:
         # Quick AI facts
-        st.markdown("#### 🎯 Quick AI Analysis")
+        st.markdown("####  Quick AI Analysis")
         
         if ticket_count > 0:
             # Generate a quick customer summary
@@ -311,7 +311,7 @@ with ai_tab1:
                     "AI Summary",
                     quick_summary,
                     description=f"Risk Level: {risk_icon} {risk_score}%",
-                    icon="🤖"
+                    icon=""
                 )
         else:
             create_ai_metric_card(
@@ -322,10 +322,10 @@ with ai_tab1:
             )
 
 with ai_tab2:
-    st.markdown("### 🎯 AI Churn Prediction Model")
+    st.markdown("###  AI Churn Prediction Model")
     st.info("Advanced machine learning model to predict customer churn risk")
     
-    if st.button("🔮 Run Churn Analysis", type="primary", key="churn_analysis"):
+    if st.button(" Run Churn Analysis", type="primary", key="churn_analysis"):
         create_ai_loading_spinner("AI is calculating churn probability using advanced algorithms...")
         
         try:
@@ -367,10 +367,10 @@ with ai_tab2:
                 confidence_level = 0.75 if ticket_count > 2 else 0.60 if ticket_count > 0 else 0.45
                 
                 create_ai_insights_card(
-                    "🎯 Churn Risk Prediction", 
+                    " Churn Risk Prediction", 
                     churn_prediction, 
                     confidence=confidence_level, 
-                    icon="📈"
+                    icon=""
                 )
                 
                 # Create churn risk metrics
@@ -388,7 +388,7 @@ with ai_tab2:
     
     # Churn risk factors visualization  
     if not customer_tickets.empty:
-        st.markdown("#### 📊 Risk Factor Analysis")
+        st.markdown("####  Risk Factor Analysis")
         
         # Calculate risk factors
         risk_factors = {
@@ -412,7 +412,7 @@ with ai_tab2:
         st.plotly_chart(fig, use_container_width=True)
 
 with ai_tab3:
-    st.markdown("### 💡 AI-Powered Recommendations")
+    st.markdown("###  AI-Powered Recommendations")
     st.info("Personalized retention strategies and action items generated by AI")
     
     recommendation_type = st.selectbox(
@@ -421,7 +421,7 @@ with ai_tab3:
         key="rec_type_customer"
     )
     
-    if st.button("🎯 Generate AI Recommendations", type="primary", key="customer_recommendations"):
+    if st.button(" Generate AI Recommendations", type="primary", key="customer_recommendations"):
         create_ai_loading_spinner("AI is generating personalized recommendations...")
         
         try:
@@ -454,10 +454,10 @@ with ai_tab3:
             
             if recommendations:
                 create_ai_insights_card(
-                    f"🎯 {recommendation_type} for {get_customer_field('FIRST_NAME', 'Unknown')}", 
+                    f" {recommendation_type} for {get_customer_field('FIRST_NAME', 'Unknown')}", 
                     recommendations, 
                     confidence=0.88, 
-                    icon="💡"
+                    icon=""
                 )
                 
                 # Extract action items
@@ -477,7 +477,7 @@ with ai_tab3:
 
 # Customer Header Section
 st.markdown("---")
-create_section_header("Customer Overview", "👤")
+create_section_header("Customer Overview", "")
 
 col1, col2 = st.columns([2, 1])
 
@@ -537,7 +537,7 @@ with col1:
     st.markdown(f"""
     <div style="background: #d4edda; padding: 1rem; border-radius: 8px; border-left: 4px solid #28a745; margin-top: 1rem;">
         <strong style="color: #155724;">Account Status:</strong> 
-        <span style="margin-left: 0.5rem; font-weight: 600; color: #155724;">✓ {status}</span>
+        <span style="margin-left: 0.5rem; font-weight: 600; color: #155724;"> {status}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -566,7 +566,7 @@ with col2:
         create_metric_card(**metric)
 
 # Support Tickets Analysis
-create_section_header("Support History & Analysis", "🎫")
+create_section_header("Support History & Analysis", "")
 
 if len(customer_tickets) > 0:
     col1, col2 = st.columns([2, 1])
@@ -581,11 +581,11 @@ if len(customer_tickets) > 0:
         # Format sentiment scores without HTML (st.dataframe doesn't render HTML)
         def format_sentiment_simple(score):
             if score > 0:
-                return f"✅ +{score:.2f}"
+                return f" +{score:.2f}"
             elif score < -0.3:
-                return f"❌ {score:.2f}"
+                return f" {score:.2f}"
             else:
-                return f"⚠️ {score:.2f}"
+                return f"️ {score:.2f}"
         
         tickets_display['Sentiment Score'] = tickets_display['Sentiment Score'].apply(format_sentiment_simple)
         
@@ -602,7 +602,7 @@ if len(customer_tickets) > 0:
                 column_config={
                     "Sentiment Score": st.column_config.TextColumn(
                         "Sentiment Score",
-                        help="Customer sentiment: ✅ Positive, ⚠️ Neutral, ❌ Negative"
+                        help="Customer sentiment:  Positive, ️ Neutral,  Negative"
                     )
                 }
             )
@@ -642,7 +642,7 @@ if len(customer_tickets) > 0:
             st.markdown(f"""
             <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center;">
                 <div style="font-size: 3rem; margin-bottom: 1rem; color: {sentiment_color};">
-                    {"😊" if avg_sentiment > 0 else "😔" if avg_sentiment < -0.3 else "😐"}
+                    {"" if avg_sentiment > 0 else "" if avg_sentiment < -0.3 else ""}
                 </div>
                 <h3 style="margin: 0; color: #1f4e79;">Current Sentiment</h3>
                 <p style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 600; color: {sentiment_color};">
@@ -654,7 +654,7 @@ if len(customer_tickets) > 0:
     # Recent ticket details
     st.markdown("#### Recent Ticket Details")
     for idx, ticket in customer_tickets.head(3).iterrows():
-        with st.expander(f"🎫 Ticket {ticket['TICKET_ID']} - {ticket['SERVICE_TYPE']}"):
+        with st.expander(f" Ticket {ticket['TICKET_ID']} - {ticket['SERVICE_TYPE']}"):
             col1, col2 = st.columns([1, 1])
             with col1:
                 st.write(f"**Sentiment Score:** {ticket['SENTIMENT_SCORE']:.2f}")
@@ -673,7 +673,7 @@ else:
     create_info_box("No support tickets found for this customer.", "info")
 
 # Network Performance Section
-create_section_header("Network Performance", "📡")
+create_section_header("Network Performance", "")
 
 # Load cell tower performance data
 tower_data = execute_query_with_loading(f"""
@@ -722,24 +722,24 @@ else:
     create_info_box("No cell tower data found for this customer ID.", "warning")
 
 # Sales Opportunities Section
-create_section_header("Sales Opportunities", "🎯")
+create_section_header("Sales Opportunities", "")
 
 opportunities = []
 
 # Generate opportunities based on customer data
 if ticket_count == 0:
-    opportunities.append("✨ **Excellent Customer**: No support issues - potential for upselling premium services")
+    opportunities.append(" **Excellent Customer**: No support issues - potential for upselling premium services")
 elif ticket_count == 1 and avg_sentiment > -0.2:
-    opportunities.append("📈 **Satisfied Customer**: Single resolved issue - good candidate for service expansion")
+    opportunities.append(" **Satisfied Customer**: Single resolved issue - good candidate for service expansion")
 
 if avg_sentiment > 0.3:
-    opportunities.append("😊 **Happy Customer**: Positive sentiment - ideal for referral program")
+    opportunities.append(" **Happy Customer**: Positive sentiment - ideal for referral program")
 
 service_type = get_customer_field('SERVICE_TYPE', 'Unknown')
 if service_type == 'Mobile':
-    opportunities.append("🌐 **Bundle Opportunity**: Mobile customer - consider internet/TV bundle")
+    opportunities.append(" **Bundle Opportunity**: Mobile customer - consider internet/TV bundle")
 elif service_type == 'Internet':
-    opportunities.append("📱 **Mobile Addition**: Internet customer - mobile service opportunity")
+    opportunities.append(" **Mobile Addition**: Internet customer - mobile service opportunity")
 
 if opportunities:
     for i, opp in enumerate(opportunities):
@@ -752,29 +752,29 @@ else:
     create_info_box("No immediate sales opportunities identified based on available data.", "info")
 
 # Action Items Section
-create_section_header("Recommended Actions", "⚡")
+create_section_header("Recommended Actions", "")
 
 actions = []
 
 if risk_score > 70:
-    actions.append(("🚨 **HIGH PRIORITY**: Customer at high risk of churn - schedule retention call", "error"))
+    actions.append((" **HIGH PRIORITY**: Customer at high risk of churn - schedule retention call", "error"))
 elif risk_score > 40:
-    actions.append(("⚠️ **MEDIUM PRIORITY**: Customer showing churn signals - proactive outreach recommended", "warning"))
+    actions.append(("️ **MEDIUM PRIORITY**: Customer showing churn signals - proactive outreach recommended", "warning"))
 
 if ticket_count > 2:
-    actions.append(("📞 **Follow-up**: Customer has multiple support tickets - check satisfaction", "warning"))
+    actions.append((" **Follow-up**: Customer has multiple support tickets - check satisfaction", "warning"))
 
 if avg_sentiment < -0.5:
-    actions.append(("😔 **Satisfaction**: Poor sentiment scores - investigate and address concerns", "error"))
+    actions.append((" **Satisfaction**: Poor sentiment scores - investigate and address concerns", "error"))
 
 if avg_sentiment > 0.3 and ticket_count <= 1:
-    actions.append(("💡 **Upsell Opportunity**: Satisfied customer - schedule consultation for additional services", "success"))
+    actions.append((" **Upsell Opportunity**: Satisfied customer - schedule consultation for additional services", "success"))
 
 if actions:
     for action, action_type in actions:
         create_info_box(action, action_type)
 else:
-    create_info_box("✅ No immediate actions required - customer appears stable", "success")
+    create_info_box(" No immediate actions required - customer appears stable", "success")
 
 # Data Enhancement Notice
 st.markdown("---")

@@ -38,13 +38,13 @@ except ImportError:
     AI_FUNCTIONS_AVAILABLE = False
     
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting for better display
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
         st.info(formatted_insight)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
         for i, rec in enumerate(recommendations, 1):
@@ -57,12 +57,12 @@ except ImportError:
     def create_ai_progress_tracker(current_step, total_steps, step_name):
         st.progress(current_step / total_steps)
         st.info(f"Step {current_step}/{total_steps}: {step_name}")
-    def create_model_selector(models, default_model="claude-3-5-sonnet"):
+    def create_model_selector(models, default_model="claude-4-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
         st.write(response)
-    def create_ai_metric_card(title, value, description="", icon="🤖"):
+    def create_ai_metric_card(title, value, description="", icon=""):
         st.metric(title, value, help=description)
 
 try:
@@ -71,7 +71,7 @@ except ImportError:
     def get_ai_analytics(session):
         class FallbackAnalytics:
             def generate_executive_summary(self, *args, **kwargs):
-                return "🏢 Executive AI reporting is being deployed. Strategic insights and automated reports will be available shortly!"
+                return " Executive AI reporting is being deployed. Strategic insights and automated reports will be available shortly!"
         return FallbackAnalytics()
     def get_ai_processor(session):
         class FallbackProcessor:
@@ -82,15 +82,15 @@ except ImportError:
                 'llama4-maverick', 'llama4-scout', 'llama3.1-8b', 'llama3.1-70b', 'llama3.1-405b',
                 'snowflake-arctic', 'snowflake-llama-3.3-70b', 'reka-core', 'reka-flash', 'deepseek-r1'
             ]
-            default_model = "claude-3-5-sonnet"
+            default_model = "claude-4-sonnet"
             def ai_complete(self, prompt, **kwargs):
-                return "📊 Executive AI analytics are being deployed. Strategic business intelligence will be available shortly!"
+                return " Executive AI analytics are being deployed. Strategic business intelligence will be available shortly!"
         return FallbackProcessor()
 
 # Page configuration
 st.set_page_config(
     page_title="Executive AI Summary",
-    page_icon="🏢",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -108,13 +108,13 @@ ai_processor = get_ai_processor(session)
 create_page_header(
     title="Executive AI Summary",
     description="Strategic business intelligence and automated executive reports powered by advanced AI analytics",
-    icon="🏢"
+    icon=""
 )
 
 # Show deployment status if AI functions are not fully available
 if not AI_FUNCTIONS_AVAILABLE:
     st.warning("""
-    🚀 **Executive AI Suite Deployment in Progress**
+     **Executive AI Suite Deployment in Progress**
     
     Advanced executive reporting capabilities are being deployed including:
     - Automated strategic business intelligence
@@ -126,7 +126,7 @@ if not AI_FUNCTIONS_AVAILABLE:
     **Expected availability:** 5-10 minutes
     """)
     
-    if st.button("🔄 Check Executive AI Status", type="primary"):
+    if st.button(" Check Executive AI Status", type="primary"):
         st.rerun()
 
 # Load core business metrics
@@ -165,12 +165,12 @@ network_data, customer_data = load_executive_metrics()
 # AI Model Selection in Sidebar
 with st.sidebar:
     st.markdown("---")
-    st.markdown("### 🤖 Executive AI Configuration")
-    models = ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["claude-3-5-sonnet", "mistral-large", "llama3.1-8b", "snowflake-arctic"]
-    selected_model = create_model_selector(models, "claude-3-5-sonnet")
+    st.markdown("###  Executive AI Configuration")
+    models = ai_processor.supported_models if hasattr(ai_processor, 'supported_models') else ["claude-4-sonnet", "claude-3-5-sonnet", "mistral-large", "llama3.1-8b", "snowflake-arctic"]
+    selected_model = create_model_selector(models, "claude-4-sonnet")
     
     st.markdown("---")
-    st.markdown("### 📊 Report Settings")
+    st.markdown("###  Report Settings")
     
     report_frequency = st.selectbox(
         "Report Frequency:",
@@ -184,11 +184,11 @@ with st.sidebar:
         default=["Network Performance", "Customer Experience", "Financial Impact"]
     )
     
-    if st.button("📧 Schedule Executive Reports", type="secondary"):
-        st.success(f"✅ {report_frequency} executive reports scheduled with focus on: {', '.join(executive_focus)}")
+    if st.button(" Schedule Executive Reports", type="secondary"):
+        st.success(f" {report_frequency} executive reports scheduled with focus on: {', '.join(executive_focus)}")
 
 # Executive KPI Dashboard
-st.markdown("## 📊 Executive KPI Dashboard")
+st.markdown("##  Executive KPI Dashboard")
 
 # Initialize default values for financial calculations
 failure_rate = 0
@@ -252,22 +252,22 @@ if not network_data.empty and not customer_data.empty:
     st.markdown("---")
 else:
     # Show message when data is not available
-    st.warning("⚠️ Executive dashboard data is currently being loaded. Please check back in a moment.")
-    st.info("💡 Ensure network and customer data is available in the system.")
+    st.warning("️ Executive dashboard data is currently being loaded. Please check back in a moment.")
+    st.info(" Ensure network and customer data is available in the system.")
 
 # AI-Powered Executive Analysis
-st.markdown("## 🤖 AI Executive Intelligence")
+st.markdown("##  AI Executive Intelligence")
 
 # Create tabs for different executive analyses
 exec_tab1, exec_tab2, exec_tab3, exec_tab4 = st.tabs([
-    "📈 Business Performance", 
-    "💰 Financial Impact", 
-    "🎯 Strategic Opportunities", 
-    "🚨 Risk Assessment"
+    " Business Performance", 
+    " Financial Impact", 
+    " Strategic Opportunities", 
+    " Risk Assessment"
 ])
 
 with exec_tab1:
-    st.markdown("### 📈 AI Business Performance Analysis")
+    st.markdown("###  AI Business Performance Analysis")
     st.info("Get comprehensive AI-driven insights into your business performance and operational metrics")
     
     performance_period = st.selectbox(
@@ -276,7 +276,7 @@ with exec_tab1:
         key="performance_period"
     )
     
-    if st.button("🚀 Generate Business Performance Report", type="primary", key="business_performance"):
+    if st.button(" Generate Business Performance Report", type="primary", key="business_performance"):
         create_ai_progress_tracker(1, 4, "Analyzing business metrics...")
         
         try:
@@ -325,10 +325,10 @@ with exec_tab1:
             
             if performance_analysis:
                 create_ai_insights_card(
-                    f"📈 Business Performance Executive Brief - {performance_period}", 
+                    f" Business Performance Executive Brief - {performance_period}", 
                     performance_analysis, 
                     confidence=0.89, 
-                    icon="🏢"
+                    icon=""
                 )
                 
                 create_ai_progress_tracker(4, 4, "Finalizing executive metrics...")
@@ -353,13 +353,13 @@ with exec_tab1:
                     "Stakeholder communication: Quarterly business performance briefing"
                 ]
                 
-                create_ai_recommendation_list(exec_actions[:4], "🎯 Executive Action Items")
+                create_ai_recommendation_list(exec_actions[:4], " Executive Action Items")
             
         except Exception as e:
             st.error(f"Error generating business performance analysis: {e}")
 
 with exec_tab2:
-    st.markdown("### 💰 AI Financial Impact Analysis")
+    st.markdown("###  AI Financial Impact Analysis")
     st.info("Quantify business impact and ROI opportunities with AI-driven financial analysis")
     
     financial_focus = st.selectbox(
@@ -368,7 +368,7 @@ with exec_tab2:
         key="financial_focus"
     )
     
-    if st.button("💰 Generate Financial Impact Report", type="primary", key="financial_analysis"):
+    if st.button(" Generate Financial Impact Report", type="primary", key="financial_analysis"):
         create_ai_loading_spinner("AI is analyzing financial impact and ROI opportunities...")
         
         try:
@@ -410,10 +410,10 @@ with exec_tab2:
             
             if financial_analysis:
                 create_ai_insights_card(
-                    f"💰 {financial_focus} Executive Analysis", 
+                    f" {financial_focus} Executive Analysis", 
                     financial_analysis, 
                     confidence=0.86, 
-                    icon="📊"
+                    icon=""
                 )
                 
                 # Financial impact metrics
@@ -430,7 +430,7 @@ with exec_tab2:
             st.error(f"Error in financial impact analysis: {e}")
 
 with exec_tab3:
-    st.markdown("### 🎯 AI Strategic Opportunities")
+    st.markdown("###  AI Strategic Opportunities")
     st.info("Identify strategic growth opportunities and competitive advantages using AI analysis")
     
     opportunity_scope = st.selectbox(
@@ -445,7 +445,7 @@ with exec_tab3:
         key="time_horizon"
     )
     
-    if st.button("🎯 Identify Strategic Opportunities", type="primary", key="strategic_opportunities"):
+    if st.button(" Identify Strategic Opportunities", type="primary", key="strategic_opportunities"):
         create_ai_loading_spinner("AI is identifying strategic opportunities and growth initiatives...")
         
         try:
@@ -489,10 +489,10 @@ with exec_tab3:
             
             if strategic_analysis:
                 create_ai_insights_card(
-                    f"🎯 {opportunity_scope} Strategic Analysis - {time_horizon}", 
+                    f" {opportunity_scope} Strategic Analysis - {time_horizon}", 
                     strategic_analysis, 
                     confidence=0.84, 
-                    icon="🚀"
+                    icon=""
                 )
                 
                 # Strategic opportunity metrics
@@ -515,13 +515,13 @@ with exec_tab3:
                     f"Innovation lab focused on {opportunity_scope.lower()} breakthroughs"
                 ]
                 
-                create_ai_recommendation_list(strategic_initiatives[:4], f"🚀 Strategic Initiatives - {time_horizon}")
+                create_ai_recommendation_list(strategic_initiatives[:4], f" Strategic Initiatives - {time_horizon}")
                 
         except Exception as e:
             st.error(f"Error in strategic opportunity analysis: {e}")
 
 with exec_tab4:
-    st.markdown("### 🚨 AI Executive Risk Assessment")
+    st.markdown("###  AI Executive Risk Assessment")
     st.info("Comprehensive risk analysis and mitigation strategies for executive decision making")
     
     risk_category = st.selectbox(
@@ -530,7 +530,7 @@ with exec_tab4:
         key="risk_category"
     )
     
-    if st.button("🚨 Generate Executive Risk Assessment", type="primary", key="executive_risk"):
+    if st.button(" Generate Executive Risk Assessment", type="primary", key="executive_risk"):
         create_ai_loading_spinner("AI is conducting comprehensive risk analysis...")
         
         try:
@@ -574,10 +574,10 @@ with exec_tab4:
             
             if risk_analysis:
                 create_ai_insights_card(
-                    f"🚨 {risk_category} Executive Assessment", 
+                    f" {risk_category} Executive Assessment", 
                     risk_analysis, 
                     confidence=0.87, 
-                    icon="⚠️"
+                    icon="️"
                 )
                 
                 # Risk assessment metrics
@@ -601,24 +601,24 @@ with exec_tab4:
                     "Stakeholder communication plan for risk transparency"
                 ]
                 
-                create_ai_recommendation_list(risk_actions[:4], "⚠️ Executive Risk Actions")
+                create_ai_recommendation_list(risk_actions[:4], "️ Executive Risk Actions")
                 
         except Exception as e:
             st.error(f"Error in executive risk assessment: {e}")
 
 # Executive Summary Export
 st.markdown("---")
-st.markdown("### 📊 Executive Report Export")
+st.markdown("###  Executive Report Export")
 
 export_col1, export_col2, export_col3 = st.columns(3)
 
 with export_col1:
-    if st.button("📧 Email Executive Summary", type="secondary"):
-        st.success("✅ Executive summary scheduled for delivery to C-suite distribution list")
+    if st.button(" Email Executive Summary", type="secondary"):
+        st.success(" Executive summary scheduled for delivery to C-suite distribution list")
 
 with export_col2:
-    if st.button("📱 Mobile Executive Alert", type="secondary"):
-        st.success("✅ Critical insights sent to executive mobile dashboard")
+    if st.button(" Mobile Executive Alert", type="secondary"):
+        st.success(" Critical insights sent to executive mobile dashboard")
 
 with export_col3:
     # Generate executive summary for download
@@ -638,7 +638,7 @@ with export_col3:
     }
     
     st.download_button(
-        label="📄 Download Executive Report",
+        label=" Download Executive Report",
         data=json.dumps(executive_summary, indent=2),
         file_name=f"executive_summary_{datetime.now().strftime('%Y%m%d_%H%M')}.json",
         mime="application/json"
@@ -646,14 +646,14 @@ with export_col3:
 
 # Executive Technology Showcase
 st.markdown("---")
-st.markdown("### 🤖 Executive AI Technology")
+st.markdown("###  Executive AI Technology")
 
 tech_col1, tech_col2 = st.columns(2)
 
 with tech_col1:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%); padding: 2rem; border-radius: 16px; border-left: 4px solid #1976d2;">
-        <h4 style="color: #1565c0; margin: 0 0 1rem 0;">🏢 Strategic AI Capabilities</h4>
+        <h4 style="color: #1565c0; margin: 0 0 1rem 0;"> Strategic AI Capabilities</h4>
         <ul style="margin: 0; padding-left: 1.5rem; color: #4a5568;">
             <li><strong>Automated Reporting:</strong> Real-time executive dashboards and KPIs</li>
             <li><strong>Strategic Analysis:</strong> AI-driven business intelligence and insights</li>
@@ -666,7 +666,7 @@ with tech_col1:
 with tech_col2:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%); padding: 2rem; border-radius: 16px; border-left: 4px solid #7b1fa2;">
-        <h4 style="color: #6a1b9a; margin: 0 0 1rem 0;">📈 Business Value Delivery</h4>
+        <h4 style="color: #6a1b9a; margin: 0 0 1rem 0;"> Business Value Delivery</h4>
         <ul style="margin: 0; padding-left: 1.5rem; color: #4a5568;">
             <li><strong>Decision Support:</strong> AI-powered strategic recommendations</li>
             <li><strong>Performance Optimization:</strong> Continuous business improvement</li>

@@ -12,7 +12,7 @@ import time
 # Page configuration
 st.set_page_config(
     page_title="Snowflake Intelligence",
-    page_icon="🧠",
+    page_icon="",
     layout="wide"
 )
 
@@ -35,13 +35,13 @@ except ImportError:
     AI_FUNCTIONS_AVAILABLE = False
     
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting for better display
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
         st.info(formatted_insight)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
         for i, rec in enumerate(recommendations, 1):
@@ -52,17 +52,17 @@ except ImportError:
             with cols[i % len(cols)]:
                 st.metric(key, value)
     def create_ai_progress_tracker(current_step, total_steps, step_name):
-        st.progress(current_step / total_steps, text=f"🤖 {step_name} (Step {current_step}/{total_steps})")
-    def create_model_selector(models, default_model="claude-3-5-sonnet"):
+        st.progress(current_step / total_steps, text=f" {step_name} (Step {current_step}/{total_steps})")
+    def create_model_selector(models, default_model="claude-4-sonnet"):
         return st.selectbox("AI Model", models, index=models.index(default_model) if default_model in models else 0)
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
         # Fix newline formatting for better display
         formatted_response = response.replace('\\n', '\n') if '\\n' in response else response
         st.write(formatted_response)
-    def create_ai_metric_card(metric, value, icon="📊"):
+    def create_ai_metric_card(metric, value, icon=""):
         st.metric(metric, value)
-    def create_metric_card(metric, value, icon="📊"):
+    def create_metric_card(metric, value, icon=""):
         st.metric(metric, value)
 
 # Initialize AI processor
@@ -75,7 +75,7 @@ inject_custom_css()
 
 # Create page header
 create_page_header(
-    "🧠 Snowflake Intelligence",
+    " Snowflake Intelligence",
     "Natural Language Analytics & AI Agents",
     "Transform your data into insights using natural language queries and intelligent agents"
 )
@@ -95,7 +95,7 @@ if AI_FUNCTIONS_AVAILABLE:
         ai_processor.default_model = selected_model
 
 # Main content
-st.markdown("## 🌟 Welcome to Snowflake Intelligence")
+st.markdown("##  Welcome to Snowflake Intelligence")
 
 # Intelligence overview cards
 col1, col2, col3, col4 = st.columns(4)
@@ -104,7 +104,7 @@ with col1:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 color: white; padding: 1.5rem; border-radius: 12px; text-align: center;">
-        <h3 style="color: white; margin: 0;">🗣️ Natural Language</h3>
+        <h3 style="color: white; margin: 0;">️ Natural Language</h3>
         <p style="margin: 0.5rem 0;">Ask questions in plain English</p>
     </div>
     """, unsafe_allow_html=True)
@@ -113,7 +113,7 @@ with col2:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
                 color: white; padding: 1.5rem; border-radius: 12px; text-align: center;">
-        <h3 style="color: white; margin: 0;">🤖 AI Agents</h3>
+        <h3 style="color: white; margin: 0;"> AI Agents</h3>
         <p style="margin: 0.5rem 0;">Intelligent data assistants</p>
     </div>
     """, unsafe_allow_html=True)
@@ -122,7 +122,7 @@ with col3:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
                 color: white; padding: 1.5rem; border-radius: 12px; text-align: center;">
-        <h3 style="color: white; margin: 0;">📊 Auto Visualizations</h3>
+        <h3 style="color: white; margin: 0;"> Auto Visualizations</h3>
         <p style="margin: 0.5rem 0;">Charts created automatically</p>
     </div>
     """, unsafe_allow_html=True)
@@ -131,7 +131,7 @@ with col4:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
                 color: white; padding: 1.5rem; border-radius: 12px; text-align: center;">
-        <h3 style="color: white; margin: 0;">🔗 Multi-Source</h3>
+        <h3 style="color: white; margin: 0;"> Multi-Source</h3>
         <p style="margin: 0.5rem 0;">Structured & unstructured data</p>
     </div>
     """, unsafe_allow_html=True)
@@ -140,22 +140,22 @@ st.markdown("---")
 
 # Create tabs for different Intelligence features
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🗣️ Natural Language Query", 
-    "🤖 AI Agents", 
-    "📊 Intelligent Analytics", 
-    "🔍 Cortex Search", 
-    "⚙️ Setup & Configuration"
+    "️ Natural Language Query", 
+    " AI Agents", 
+    " Intelligent Analytics", 
+    " Cortex Search", 
+    "️ Setup & Configuration"
 ])
 
 with tab1:
-    st.markdown("### 🗣️ Natural Language Querying")
+    st.markdown("### ️ Natural Language Querying")
     st.info("Ask questions about your telecom network data in plain English and get instant insights with visualizations.")
     
     # Natural language interface
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.markdown("#### 💬 Ask Your Data")
+        st.markdown("####  Ask Your Data")
         
         # Sample questions
         sample_questions = [
@@ -182,14 +182,14 @@ with tab1:
             height=100
         )
         
-        if st.button("🚀 Get Insights", type="primary", key="nl_query"):
+        if st.button(" Get Insights", type="primary", key="nl_query"):
             if user_question:
-                create_ai_progress_tracker(1, 2, "🧠 Understanding your question...")
+                create_ai_progress_tracker(1, 2, " Understanding your question...")
                 
                 # Simulate natural language processing
                 time.sleep(1)
                 
-                create_ai_progress_tracker(2, 2, "📊 Generating insights and visualizations...")
+                create_ai_progress_tracker(2, 2, " Generating insights and visualizations...")
                 
                 if AI_FUNCTIONS_AVAILABLE:
                     try:
@@ -217,14 +217,14 @@ with tab1:
                         
                         if nl_response:
                             create_ai_insights_card(
-                                "🧠 Natural Language Response", 
+                                " Natural Language Response", 
                                 nl_response, 
                                 confidence=0.88, 
-                                icon="🗣️"
+                                icon="️"
                             )
                             
                             # Generate sample visualization
-                            st.markdown("#### 📊 Suggested Visualization")
+                            st.markdown("####  Suggested Visualization")
                             
                             # Create sample data based on question type
                             if "failure rate" in user_question.lower():
@@ -243,7 +243,7 @@ with tab1:
                                 st.line_chart(chart_data.set_index('Date'))
                             
                             elif "geographic" in user_question.lower() or "area" in user_question.lower():
-                                st.info("🗺️ Geographic visualization would be displayed here using network location data")
+                                st.info("️ Geographic visualization would be displayed here using network location data")
                             
                             else:
                                 # Default chart
@@ -256,12 +256,12 @@ with tab1:
                     except Exception as e:
                         st.error(f"Error processing natural language query: {e}")
                 else:
-                    st.info("🔧 AI functions not available in this environment. This would normally provide intelligent responses to your natural language queries.")
+                    st.info(" AI functions not available in this environment. This would normally provide intelligent responses to your natural language queries.")
             else:
                 st.warning("Please enter a question about your data.")
     
     with col2:
-        st.markdown("#### 💡 Query Tips")
+        st.markdown("####  Query Tips")
         st.markdown("""
         **Great questions to ask:**
         - "Show me..." for visualizations
@@ -271,42 +271,42 @@ with tab1:
         - "Why is..." for explanations
         
         **Supported visualizations:**
-        - 📊 Bar charts
-        - 📈 Line charts  
-        - 🥧 Pie charts
-        - 🗺️ Geographic maps
-        - 📋 Tables
+        -  Bar charts
+        -  Line charts  
+        -  Pie charts
+        - ️ Geographic maps
+        -  Tables
         """)
 
 with tab2:
-    st.markdown("### 🤖 AI Agents")
+    st.markdown("###  AI Agents")
     st.info("Intelligent agents that can answer questions, provide insights, and create visualizations using your telecom data.")
     
     # Agent selector
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.markdown("#### 🎯 Choose Your AI Agent")
+        st.markdown("####  Choose Your AI Agent")
         
         agent_types = {
             "Network Operations Agent": {
                 "description": "Specializes in cell tower performance, network health, and operational metrics",
-                "icon": "🏗️",
+                "icon": "️",
                 "capabilities": ["Performance analysis", "Failure prediction", "Capacity planning"]
             },
             "Customer Experience Agent": {
                 "description": "Focuses on customer satisfaction, support tickets, and service quality",
-                "icon": "👥", 
+                "icon": "", 
                 "capabilities": ["Satisfaction analysis", "Complaint patterns", "Service improvements"]
             },
             "Business Intelligence Agent": {
                 "description": "Provides executive insights, financial impact, and strategic recommendations",
-                "icon": "📈",
+                "icon": "",
                 "capabilities": ["Revenue analysis", "ROI calculations", "Strategic planning"]
             },
             "Technical Analyst Agent": {
                 "description": "Deep-dive technical analysis, correlations, and root cause investigation",
-                "icon": "🔬",
+                "icon": "",
                 "capabilities": ["Root cause analysis", "Technical correlations", "Predictive modeling"]
             }
         }
@@ -337,7 +337,7 @@ with tab2:
             """, unsafe_allow_html=True)
         
         # Agent conversation interface
-        st.markdown("#### 💬 Chat with Your Agent")
+        st.markdown("####  Chat with Your Agent")
         
         # Initialize chat history
         if f"agent_chat_{selected_agent}" not in st.session_state:
@@ -422,7 +422,7 @@ with tab2:
                     st.rerun()
     
     with col2:
-        st.markdown("#### 🎯 Agent Features")
+        st.markdown("####  Agent Features")
         st.markdown("""
         **Intelligence Models:**
         - Claude 4.0 & 3.7
@@ -431,11 +431,11 @@ with tab2:
         - Cross-region inference
         
         **Agent Capabilities:**
-        - 🔍 Data analysis
-        - 📊 Auto visualizations  
-        - 💡 Recommendations
-        - 🎯 Specialized expertise
-        - 📈 Trend analysis
+        -  Data analysis
+        -  Auto visualizations  
+        -  Recommendations
+        -  Specialized expertise
+        -  Trend analysis
         
         **Supported Data Sources:**
         - Cell tower metrics
@@ -445,7 +445,7 @@ with tab2:
         """)
 
 with tab3:
-    st.markdown("### 📊 Intelligent Analytics")
+    st.markdown("###  Intelligent Analytics")
     st.info("AI-powered analytics that automatically discover patterns, correlations, and insights in your telecom data.")
     
     # Analytics options
@@ -455,24 +455,24 @@ with tab3:
         analytics_type = st.selectbox(
             "Choose Analytics Type:",
             [
-                "🔍 Pattern Discovery",
-                "📊 Automated Correlations", 
-                "🎯 Anomaly Detection",
-                "📈 Predictive Insights",
-                "🏆 Performance Benchmarking",
-                "💰 Business Impact Analysis"
+                " Pattern Discovery",
+                " Automated Correlations", 
+                " Anomaly Detection",
+                " Predictive Insights",
+                " Performance Benchmarking",
+                " Business Impact Analysis"
             ],
             key="intelligence_analytics"
         )
         
-        if st.button("🚀 Generate Intelligent Analytics", type="primary", key="intelligent_analytics"):
-            create_ai_progress_tracker(1, 3, "🔍 Analyzing data patterns...")
+        if st.button(" Generate Intelligent Analytics", type="primary", key="intelligent_analytics"):
+            create_ai_progress_tracker(1, 3, " Analyzing data patterns...")
             time.sleep(1)
             
-            create_ai_progress_tracker(2, 3, "🧠 Applying AI algorithms...")  
+            create_ai_progress_tracker(2, 3, " Applying AI algorithms...")  
             time.sleep(1)
             
-            create_ai_progress_tracker(3, 3, "📊 Creating insights and visualizations...")
+            create_ai_progress_tracker(3, 3, " Creating insights and visualizations...")
             
             if AI_FUNCTIONS_AVAILABLE:
                 try:
@@ -505,10 +505,10 @@ with tab3:
                     
                     if analytics_insights:
                         create_ai_insights_card(
-                            f"🧠 {analytics_type} - AI Analysis", 
+                            f" {analytics_type} - AI Analysis", 
                             analytics_insights, 
                             confidence=0.91, 
-                            icon="🎯"
+                            icon=""
                         )
                         
                         # Create metrics based on analytics type
@@ -558,7 +558,7 @@ with tab3:
                         create_ai_metrics_dashboard(metrics)
                         
                         # Generate sample visualization
-                        st.markdown("#### 📊 Auto-Generated Visualization")
+                        st.markdown("####  Auto-Generated Visualization")
                         
                         if "Pattern" in analytics_type:
                             # Pattern discovery chart
@@ -589,10 +589,10 @@ with tab3:
                 except Exception as e:
                     st.error(f"Error generating intelligent analytics: {e}")
             else:
-                st.info(f"🔧 AI Intelligence not available. This would normally provide advanced {analytics_type} using Snowflake's AI algorithms.")
+                st.info(f" AI Intelligence not available. This would normally provide advanced {analytics_type} using Snowflake's AI algorithms.")
     
     with col2:
-        st.markdown("#### 🎯 Intelligence Features")
+        st.markdown("####  Intelligence Features")
         st.markdown("""
         **AI Algorithms:**
         - Pattern recognition
@@ -616,22 +616,22 @@ with tab3:
         """)
 
 with tab4:
-    st.markdown("### 🔍 Cortex Search")
+    st.markdown("###  Cortex Search")
     st.info("Intelligent search across structured and unstructured telecom data using Snowflake's Cortex Search capabilities.")
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.markdown("#### 🔎 Intelligent Search Interface")
+        st.markdown("####  Intelligent Search Interface")
         
         # Search type selector
         search_type = st.selectbox(
             "Search Type:",
             [
-                "🔍 Semantic Search - Find meaning, not just keywords", 
-                "📊 Data Discovery - Explore datasets and schemas",
-                "📋 Document Search - Search technical documentation",
-                "🎯 Contextual Search - Find relevant insights"
+                " Semantic Search - Find meaning, not just keywords", 
+                " Data Discovery - Explore datasets and schemas",
+                " Document Search - Search technical documentation",
+                " Contextual Search - Find relevant insights"
             ],
             key="cortex_search_type"
         )
@@ -643,7 +643,7 @@ with tab4:
         )
         
         # Search filters
-        with st.expander("🎛️ Search Filters"):
+        with st.expander("️ Search Filters"):
             col_a, col_b = st.columns(2)
             
             with col_a:
@@ -667,15 +667,15 @@ with tab4:
                     ["Relevance", "Recency", "Accuracy", "Completeness"]
                 )
         
-        if st.button("🚀 Search with Cortex", type="primary", key="cortex_search"):
+        if st.button(" Search with Cortex", type="primary", key="cortex_search"):
             if search_query:
-                create_ai_progress_tracker(1, 3, "🔍 Understanding search intent...")
+                create_ai_progress_tracker(1, 3, " Understanding search intent...")
                 time.sleep(0.5)
                 
-                create_ai_progress_tracker(2, 3, "🧠 Searching across data sources...")
+                create_ai_progress_tracker(2, 3, " Searching across data sources...")
                 time.sleep(0.5)
                 
-                create_ai_progress_tracker(3, 3, "📊 Ranking and organizing results...")
+                create_ai_progress_tracker(3, 3, " Ranking and organizing results...")
                 
                 if AI_FUNCTIONS_AVAILABLE:
                     try:
@@ -708,10 +708,10 @@ with tab4:
                         
                         if search_results:
                             create_ai_insights_card(
-                                f"🔍 Cortex Search Results", 
+                                f" Cortex Search Results", 
                                 search_results, 
                                 confidence=0.89, 
-                                icon="🎯"
+                                icon=""
                             )
                             
                             # Display search metrics
@@ -725,7 +725,7 @@ with tab4:
                             create_ai_metrics_dashboard(search_metrics)
                             
                             # Related searches
-                            st.markdown("#### 🔗 Related Searches")
+                            st.markdown("####  Related Searches")
                             related_searches = [
                                 f"Similar patterns in {data_sources[0] if data_sources else 'network data'}",
                                 f"Historical trends for '{search_query.split()[0] if search_query.split() else 'query'}'",
@@ -740,12 +740,12 @@ with tab4:
                     except Exception as e:
                         st.error(f"Error performing Cortex search: {e}")
                 else:
-                    st.info("🔧 Cortex Search not available. This would normally provide intelligent search across all your telecom data sources.")
+                    st.info(" Cortex Search not available. This would normally provide intelligent search across all your telecom data sources.")
             else:
                 st.warning("Please enter a search query.")
     
     with col2:
-        st.markdown("#### 🎯 Search Capabilities")
+        st.markdown("####  Search Capabilities")
         st.markdown("""
         **Semantic Understanding:**
         - Natural language queries
@@ -768,24 +768,24 @@ with tab4:
         """)
 
 with tab5:
-    st.markdown("### ⚙️ Setup & Configuration")
+    st.markdown("### ️ Setup & Configuration")
     st.info("Configure Snowflake Intelligence agents, models, and access controls for your telecom network system.")
     
     # Configuration sections
     config_section = st.selectbox(
         "Configuration Section:",
         [
-            "🤖 Agent Management",
-            "🏗️ Semantic Models", 
-            "🔍 Search Services",
-            "🛡️ Access Controls",
-            "🌐 Cross-Region Inference",
-            "📊 Model Configuration"
+            " Agent Management",
+            "️ Semantic Models", 
+            " Search Services",
+            "️ Access Controls",
+            " Cross-Region Inference",
+            " Model Configuration"
         ]
     )
     
-    if config_section == "🤖 Agent Management":
-        st.markdown("#### 🤖 AI Agent Configuration")
+    if config_section == " Agent Management":
+        st.markdown("####  AI Agent Configuration")
         
         col1, col2 = st.columns(2)
         
@@ -808,8 +808,8 @@ with tab5:
             )
             
             if st.button("Create Agent", type="primary"):
-                st.success(f"✅ Agent '{agent_name}' created successfully!")
-                st.info("💡 Agent is now available in the AI Agents tab for user interactions.")
+                st.success(f" Agent '{agent_name}' created successfully!")
+                st.info(" Agent is now available in the AI Agents tab for user interactions.")
         
         with col2:
             st.markdown("**Existing Agents**")
@@ -831,8 +831,8 @@ with tab5:
                 </div>
                 """, unsafe_allow_html=True)
     
-    elif config_section == "🏗️ Semantic Models":
-        st.markdown("#### 🏗️ Semantic Model Configuration")
+    elif config_section == "️ Semantic Models":
+        st.markdown("#### ️ Semantic Model Configuration")
         
         st.code("""
 -- Create semantic model for telecom network data
@@ -855,11 +855,11 @@ CREATE SEMANTIC MODEL telco_network_model AS (
 GRANT USAGE ON SEMANTIC MODEL telco_network_model TO ROLE PUBLIC;
         """, language="sql")
         
-        if st.button("📋 Copy Setup Commands", type="secondary"):
-            st.success("✅ Commands copied to clipboard!")
+        if st.button(" Copy Setup Commands", type="secondary"):
+            st.success(" Commands copied to clipboard!")
     
-    elif config_section == "🔍 Search Services":
-        st.markdown("#### 🔍 Cortex Search Service Setup")
+    elif config_section == " Search Services":
+        st.markdown("####  Cortex Search Service Setup")
         
         st.code("""
 -- Create Cortex Search service for telecom documents
@@ -890,8 +890,8 @@ GRANT USAGE ON CORTEX SEARCH SERVICE telco_search_service TO ROLE PUBLIC;
             </div>
             """, unsafe_allow_html=True)
     
-    elif config_section == "🛡️ Access Controls":
-        st.markdown("#### 🛡️ Role-Based Access Control")
+    elif config_section == "️ Access Controls":
+        st.markdown("#### ️ Role-Based Access Control")
         
         col1, col2 = st.columns(2)
         
@@ -926,8 +926,8 @@ GRANT USAGE ON SCHEMA snowflake_intelligence.agents
 TO ROLE INTELLIGENCE_USER;
             """, language="sql")
     
-    elif config_section == "🌐 Cross-Region Inference":
-        st.markdown("#### 🌐 Cross-Region Model Access")
+    elif config_section == " Cross-Region Inference":
+        st.markdown("####  Cross-Region Model Access")
         
         st.markdown("""
         Enable access to AI models across different regions for optimal performance:
@@ -947,7 +947,7 @@ TO ROLE INTELLIGENCE_USER;
                 st.write(f"Available models: {', '.join(config['models'])}")
             with col_b:
                 if config["status"] == "Enabled":
-                    st.success("✅ Enabled")
+                    st.success(" Enabled")
                 else:
                     st.info("ℹ️ Available")
         
@@ -960,7 +960,7 @@ SELECT CORTEX.COMPLETE('claude-4-sonnet', 'Test cross-region access');
         """, language="sql")
     
     else:  # Model Configuration
-        st.markdown("#### 📊 AI Model Configuration")
+        st.markdown("####  AI Model Configuration")
         
         col1, col2 = st.columns(2)
         
@@ -991,8 +991,8 @@ SELECT CORTEX.COMPLETE('claude-4-sonnet', 'Test cross-region access');
             
             st.dataframe(model_stats, use_container_width=True)
         
-        if st.button("💾 Save Configuration", type="primary"):
-            st.success("✅ Model configuration saved successfully!")
+        if st.button(" Save Configuration", type="primary"):
+            st.success(" Model configuration saved successfully!")
 
 # Add footer
 add_page_footer()
@@ -1001,7 +1001,7 @@ add_page_footer()
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: #666; padding: 1rem;">
-    <p>🧠 <strong>Snowflake Intelligence</strong> - Powered by Cortex AISQL, Cortex Analyst, and Cortex Search</p>
+    <p> <strong>Snowflake Intelligence</strong> - Powered by Cortex AISQL, Cortex Analyst, and Cortex Search</p>
     <p><small>Natural language analytics | AI agents | Intelligent search | Cross-region inference</small></p>
 </div>
 """, unsafe_allow_html=True)

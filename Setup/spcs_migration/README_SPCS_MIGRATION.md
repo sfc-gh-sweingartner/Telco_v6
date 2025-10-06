@@ -7,12 +7,12 @@ This guide walks through migrating the Telco Network Intelligence Suite from **W
 ## Why Migrate to SPCS?
 
 ### Benefits
-✅ **Full Streamlit Support** - `st.cache_resource` and `st.cache_data` work perfectly  
-✅ **Latest Streamlit** - Use newest versions as soon as they're published on PyPI  
-✅ **Any Python Package** - Install any package from PyPI (not limited to Anaconda)  
-✅ **Experimental Features** - Access streamlit-nightly for cutting-edge features  
-✅ **Long-Running Service** - Faster load times for users (3-day keep-alive)  
-✅ **Better Performance** - Single container with persistent state
+ **Full Streamlit Support** - `st.cache_resource` and `st.cache_data` work perfectly  
+ **Latest Streamlit** - Use newest versions as soon as they're published on PyPI  
+ **Any Python Package** - Install any package from PyPI (not limited to Anaconda)  
+ **Experimental Features** - Access streamlit-nightly for cutting-edge features  
+ **Long-Running Service** - Faster load times for users (3-day keep-alive)  
+ **Better Performance** - Single container with persistent state
 
 ### Key Differences from Warehouse Runtime
 
@@ -29,10 +29,10 @@ This guide walks through migrating the Telco Network Intelligence Suite from **W
 
 Before migrating, ensure you have:
 
-1. ✅ **Data Loaded**: CELL_TOWER and SUPPORT_TICKETS tables populated
-2. ✅ **ACCOUNTADMIN Role**: Required for creating compute pools and integrations
-3. ✅ **Warehouse**: TELCO_WH or similar for query execution
-4. ✅ **Git Integration**: Code deployed to Snowflake stage (if using Git)
+1.  **Data Loaded**: CELL_TOWER and SUPPORT_TICKETS tables populated
+2.  **ACCOUNTADMIN Role**: Required for creating compute pools and integrations
+3.  **Warehouse**: TELCO_WH or similar for query execution
+4.  **Git Integration**: Code deployed to Snowflake stage (if using Git)
 
 ## Migration Steps
 
@@ -160,7 +160,7 @@ Your app needs to communicate with **two external services**:
 - pydeck, h3-py, matplotlib
 - All packages from pyproject.toml
 
-**Without This:** ❌ Container build fails, app won't start
+**Without This:**  Container build fails, app won't start
 
 #### 2. Mapbox Access (mapbox_access_integration)
 **Purpose:** Load map tiles for geospatial visualizations  
@@ -174,7 +174,7 @@ Your app needs to communicate with **two external services**:
 - `st.map()` in Geospatial Analysis
 - H3 hexagon overlays
 
-**Without This:** ❌ Maps show blank, no tiles load
+**Without This:**  Maps show blank, no tiles load
 
 ### How They Work Together
 

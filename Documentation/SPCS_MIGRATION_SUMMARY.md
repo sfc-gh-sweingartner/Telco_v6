@@ -6,7 +6,7 @@
 
 ---
 
-## ✅ What Was Done
+##  What Was Done
 
 ### 1. Created Python Configuration Files
 
@@ -49,7 +49,7 @@
 
 ---
 
-## 🔑 Key Concept: External Access Integrations
+##  Key Concept: External Access Integrations
 
 ### The Critical Question Answered
 
@@ -81,7 +81,7 @@
 
 **When Used:** Container build time (once during initial startup)
 
-**Without This:** ❌ Container fails to build, app won't start at all
+**Without This:**  Container fails to build, app won't start at all
 
 #### 2. Mapbox Access Integration (`mapbox_access_integration`)
 
@@ -101,7 +101,7 @@
 
 **When Used:** Runtime (every time user views a map)
 
-**Without This:** ❌ Maps render blank, no tiles load, white screens
+**Without This:**  Maps render blank, no tiles load, white screens
 
 ### Why Both Are Needed
 
@@ -138,16 +138,16 @@ CREATE STREAMLIT my_app
 
 ---
 
-## 📂 New File Structure
+##  New File Structure
 
 ```
 Telco_v6/
-├── pyproject.toml                 # ✨ NEW: Python 3.11 + dependencies
-├── requirements.txt               # ✅ UPDATED: streamlit>=1.49.0
-├── SPCS_MIGRATION_SUMMARY.md      # ✨ NEW: This summary
+├── pyproject.toml                 #  NEW: Python 3.11 + dependencies
+├── requirements.txt               #  UPDATED: streamlit>=1.49.0
+├── SPCS_MIGRATION_SUMMARY.md      #  NEW: This summary
 │
 └── Setup/
-    └── spcs_migration/            # ✨ NEW: Migration folder
+    └── spcs_migration/            #  NEW: Migration folder
         ├── README_SPCS_MIGRATION.md    # Complete guide
         ├── QUICK_REFERENCE.md          # Quick reference
         ├── 00_RUN_ALL_MIGRATION_STEPS.sql
@@ -158,7 +158,7 @@ Telco_v6/
 
 ---
 
-## 🚀 How to Execute Migration
+##  How to Execute Migration
 
 ### Option 1: Individual Steps (Recommended)
 
@@ -184,7 +184,7 @@ Telco_v6/
 
 ---
 
-## ✨ Benefits After Migration
+##  Benefits After Migration
 
 | Feature | Before (Warehouse) | After (SPCS) |
 |---------|-------------------|--------------|
@@ -199,7 +199,7 @@ Telco_v6/
 
 ---
 
-## 📋 Migration Checklist
+##  Migration Checklist
 
 Before you begin:
 - [ ] You have ACCOUNTADMIN role access
@@ -230,7 +230,7 @@ Post-migration:
 
 ---
 
-## 🐛 Common Issues
+##  Common Issues
 
 ### App Won't Start
 **Symptom:** Container build fails or app shows error  
@@ -250,7 +250,7 @@ Post-migration:
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 ### Documentation Files
 - **Complete Guide:** `Setup/spcs_migration/README_SPCS_MIGRATION.md`
@@ -267,7 +267,7 @@ Post-migration:
 
 ---
 
-## 🎓 Technical Details
+##  Technical Details
 
 ### Compute Pool Configuration
 - **Name:** TELCO_STREAMLIT_POOL
@@ -292,7 +292,7 @@ Post-migration:
 
 ---
 
-## 💡 Key Takeaways
+##  Key Takeaways
 
 1. **Two integrations required:** PyPI for packages, Mapbox for maps
 2. **First launch is slow:** 2-5 minutes for container build (one-time)
@@ -304,7 +304,7 @@ Post-migration:
 
 ---
 
-## 🎉 Next Steps
+##  Next Steps
 
 After successful migration:
 
@@ -322,4 +322,4 @@ After successful migration:
 
 **Ready to migrate?** Start with Step 1: `@Setup/spcs_migration/01_create_compute_pool.sql`
 
-🚀 **Happy migrating!**
+ **Happy migrating!**

@@ -7,7 +7,7 @@ from snowflake.snowpark.context import get_active_session
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
     page_title="Cell Tower Lookup",
-    page_icon="📱",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )

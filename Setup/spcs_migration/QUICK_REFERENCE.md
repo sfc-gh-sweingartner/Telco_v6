@@ -1,6 +1,6 @@
 # SPCS Migration - Quick Reference
 
-## 🚀 Quick Start (3 Commands)
+##  Quick Start (3 Commands)
 
 ```sql
 -- 1. Create compute pool
@@ -13,20 +13,20 @@
 !source 03_create_streamlit_app_spcs.sql
 ```
 
-## 📋 One-Liner Summary
+##  One-Liner Summary
 
 **Migration adds TWO external access integrations:**
 1. **`pypi_access_integration`** - Installs Python packages from PyPI
 2. **`mapbox_access_integration`** - Loads map tiles for geospatial features
 
-## 🎯 The Key Answer: External Access Integrations
+##  The Key Answer: External Access Integrations
 
 ### What You Need
 
 | Integration | Purpose | When Used | Without It |
 |-------------|---------|-----------|------------|
-| **PyPI** | Install packages (streamlit, pandas, plotly, pydeck, etc.) | Container build | ❌ App won't start |
-| **Mapbox** | Load map tiles for pydeck/st.map | Runtime (map display) | ❌ Maps show blank |
+| **PyPI** | Install packages (streamlit, pandas, plotly, pydeck, etc.) | Container build |  App won't start |
+| **Mapbox** | Load map tiles for pydeck/st.map | Runtime (map display) |  Maps show blank |
 
 ### Why Both?
 
@@ -62,7 +62,7 @@ SPCS App Lifecycle:
 - `c.tiles.mapbox.com` - Tile server C
 - `d.tiles.mapbox.com` - Tile server D
 
-## 🔧 Essential Commands
+##  Essential Commands
 
 ### Check Status
 ```sql
@@ -93,7 +93,7 @@ ALTER STREAMLIT TELCO_NETWORK_INTELLIGENCE_SPCS
   SET RUNTIME_NAME = 'SYSTEM$WAREHOUSE_RUNTIME';
 ```
 
-## 🐛 Troubleshooting Checklist
+##  Troubleshooting Checklist
 
 ### App Won't Start
 - [ ] Compute pool is ACTIVE/IDLE (not ERROR)
@@ -114,7 +114,7 @@ ALTER STREAMLIT TELCO_NETWORK_INTELLIGENCE_SPCS
 - [ ] No conflicting package versions in pyproject.toml
 - [ ] All packages support Python 3.11
 
-## 📊 Performance Expectations
+##  Performance Expectations
 
 | Metric | Expected Value | Notes |
 |--------|---------------|-------|
@@ -124,7 +124,7 @@ ALTER STREAMLIT TELCO_NETWORK_INTELLIGENCE_SPCS
 | Query execution | Same as before | Uses warehouse, not compute pool |
 | Keep-alive | 3 days | Auto-shutdown after inactivity |
 
-## 💰 Cost Factors
+##  Cost Factors
 
 | Resource | Cost Driver | Control |
 |----------|-------------|---------|
@@ -134,18 +134,18 @@ ALTER STREAMLIT TELCO_NETWORK_INTELLIGENCE_SPCS
 
 **Recommendation:** Start with MIN_NODES=1 for dev, MIN_NODES=2 for prod
 
-## 📚 File Changes
+##  File Changes
 
 | File | Change | Required |
 |------|--------|----------|
-| `pyproject.toml` | **NEW** - Python 3.11 + deps | ✅ Yes |
-| `requirements.txt` | Updated - streamlit>=1.49 | ✅ Yes |
-| SQL scripts | New migration folder | ✅ Yes |
+| `pyproject.toml` | **NEW** - Python 3.11 + deps |  Yes |
+| `requirements.txt` | Updated - streamlit>=1.49 |  Yes |
+| SQL scripts | New migration folder |  Yes |
 | `main.py` | No changes | ⬜ No |
 | `pages/*.py` | No changes | ⬜ No |
 | `utils/*.py` | No changes | ⬜ No |
 
-## 🎓 Key Concepts
+##  Key Concepts
 
 ### Compute Pool vs Warehouse
 - **Compute Pool**: Runs Python runtime (Streamlit container)
@@ -162,7 +162,7 @@ ALTER STREAMLIT TELCO_NETWORK_INTELLIGENCE_SPCS
 - **Fallback**: `requirements.txt`
 - **Priority**: If both exist, pyproject.toml used first
 
-## 🔗 Resources
+##  Resources
 
 - Full Guide: `README_SPCS_MIGRATION.md`
 - Snowflake Docs: https://docs.snowflake.com/LIMITEDACCESS/streamlit/container-runtime
@@ -170,4 +170,4 @@ ALTER STREAMLIT TELCO_NETWORK_INTELLIGENCE_SPCS
 
 ---
 
-**TL;DR:** Need TWO integrations (PyPI + Mapbox), run 3 SQL scripts, wait 5 mins, done! 🎉
+**TL;DR:** Need TWO integrations (PyPI + Mapbox), run 3 SQL scripts, wait 5 mins, done! 

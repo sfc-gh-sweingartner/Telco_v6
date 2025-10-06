@@ -657,7 +657,7 @@ def inject_custom_css():
 # COMMON COMPONENTS
 # =============================================================================
 
-def create_page_header(title: str, description: str, icon: str = "📊"):
+def create_page_header(title: str, description: str, icon: str = ""):
     """Create a professional page header with consistent styling"""
     st.markdown(f"""
     <div class="app-header">
@@ -689,9 +689,9 @@ def create_info_box(message: str, box_type: str = "info"):
     """Create professional info/alert boxes"""
     icons = {
         "info": "ℹ️",
-        "success": "✅", 
-        "warning": "⚠️",
-        "error": "❌"
+        "success": "", 
+        "warning": "️",
+        "error": ""
     }
     
     icon = icons.get(box_type, "ℹ️")
@@ -853,7 +853,7 @@ def create_sidebar_navigation():
         <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; 
                     background: rgba(255, 102, 0, 0.05); border-radius: 50%;"></div>
         <div style="position: relative; z-index: 2;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📡</div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;"></div>
             <h3 style="color: white; margin: 0; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; 
                        font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">TELCO</h3>
             <p style="color: rgba(255,255,255,0.9); margin: 0.25rem 0 0 0; font-size: 0.8rem; text-transform: uppercase;
@@ -864,7 +864,7 @@ def create_sidebar_navigation():
     
 
     # Executive quick stats in sidebar
-    st.sidebar.markdown("### 📊 System Status")
+    st.sidebar.markdown("###  System Status")
     st.sidebar.markdown("""
     <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius); 
                 box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); margin-bottom: 1rem;">
@@ -900,7 +900,7 @@ def add_page_footer():
     st.markdown("""
     <div style="text-align: center; color: var(--exec-text-secondary); font-size: 0.875rem; padding: 2rem 0 1rem 0;
                 font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">
-        <p style="margin: 0;">🤖 Powered by <strong>Snowflake Cortex AISQL</strong> | Built with <strong>Streamlit</strong></p>
+        <p style="margin: 0;"> Powered by <strong>Snowflake Cortex AISQL</strong> | Built with <strong>Streamlit</strong></p>
         <p style="margin: 0.5rem 0 0 0;">© 2025 <strong style="color: var(--exec-primary);">Telco</strong> Network Intelligence Suite</p>
         <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; opacity: 0.8;">
             Compliant with <a href="https://mediabank.ericsson.net/admin/mb/?h=dbeb87a1bcb16fa379c0020bdf713872#View%20document" 
@@ -946,7 +946,7 @@ def create_ai_chat_interface():
         font-style: italic;
     }
     .ai-thinking::before {
-        content: "🤖";
+        content: "";
         margin-right: 8px;
         animation: thinking 2s infinite;
     }
@@ -957,7 +957,7 @@ def create_ai_chat_interface():
     </style>
     """, unsafe_allow_html=True)
 
-def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, icon: str = "🧠") -> None:
+def create_ai_insights_card(title: str, insight: str, confidence: float = 0.0, icon: str = "") -> None:
     """
     Create AI insights card with confidence indicator and professional formatting
     
@@ -1024,7 +1024,7 @@ def format_ai_insight_text(text: str) -> str:
             if current_section:
                 formatted_lines.append("</div>")
             section_name = line.replace(':', '')
-            formatted_lines.append(f'<div style="margin: 1.5rem 0 0.75rem 0;"><h5 style="color: #1565c0; margin: 0; font-weight: 600; font-size: 1.1rem;">🔹 {section_name}</h5>')
+            formatted_lines.append(f'<div style="margin: 1.5rem 0 0.75rem 0;"><h5 style="color: #1565c0; margin: 0; font-weight: 600; font-size: 1.1rem;"> {section_name}</h5>')
             current_section = section_name
         
         # Handle numbered items (1., 2., etc.)
@@ -1049,7 +1049,7 @@ def format_ai_insight_text(text: str) -> str:
         
         # Handle priority/urgent items
         elif 'IMMEDIATE' in line.upper() or 'URGENT' in line.upper() or 'CRITICAL' in line.upper():
-            formatted_lines.append(f'<div style="margin: 0.5rem 0; padding: 0.5rem; background: #ffebee; border-left: 3px solid #f44336; border-radius: 4px;"><strong style="color: #c62828;">⚠️ {line}</strong></div>')
+            formatted_lines.append(f'<div style="margin: 0.5rem 0; padding: 0.5rem; background: #ffebee; border-left: 3px solid #f44336; border-radius: 4px;"><strong style="color: #c62828;">️ {line}</strong></div>')
         
         # Handle regular paragraphs
         else:
@@ -1072,9 +1072,9 @@ def create_ai_loading_spinner(message: str = "AI is analyzing...") -> None:
     st.markdown(f"""
     <div style="text-align: center; padding: 2rem; color: #1565c0;">
         <div style="font-size: 2rem; margin-bottom: 1rem;">
-            <span style="animation: spin 2s linear infinite;">🤖</span>
-            <span style="animation: pulse 1s ease-in-out infinite;">🧠</span>
-            <span style="animation: spin 2s linear infinite reverse;">⚡</span>
+            <span style="animation: spin 2s linear infinite;"></span>
+            <span style="animation: pulse 1s ease-in-out infinite;"></span>
+            <span style="animation: spin 2s linear infinite reverse;"></span>
         </div>
         <div style="font-weight: 500; color: #666;">{message}</div>
     </div>
@@ -1102,7 +1102,7 @@ def create_ai_recommendation_list(recommendations: list, title: str = "AI Recomm
         return
     
     # Use native Streamlit components for better rendering
-    st.markdown(f"### 💡 {title}")
+    st.markdown(f"###  {title}")
     
     for i, rec in enumerate(recommendations, 1):
         with st.expander(f"**Recommendation {i}**", expanded=True):
@@ -1118,12 +1118,12 @@ def create_ai_recommendation_list(recommendations: list, title: str = "AI Recomm
                     if line.lower().startswith('timeline:'):
                         st.success(f"⏱️ **Timeline**: {line.replace('Timeline:', '').strip()}")
                     elif line.lower().startswith('requires:'):
-                        st.info(f"🔧 **Requirements**: {line.replace('Requires:', '').strip()}")
+                        st.info(f" **Requirements**: {line.replace('Requires:', '').strip()}")
                     elif line and not line.startswith('-') and line != cleaned_rec:
                         st.caption(f"ℹ️ {line}")
     
     # Add implementation guide
-    st.info("📋 **Implementation Guide**: These recommendations are prioritized by impact and feasibility. Items with immediate timelines can be started today with minimal risk to network operations.")
+    st.info(" **Implementation Guide**: These recommendations are prioritized by impact and feasibility. Items with immediate timelines can be started today with minimal risk to network operations.")
 
 
 def create_ai_metrics_dashboard(metrics: dict) -> None:
@@ -1138,7 +1138,7 @@ def create_ai_metrics_dashboard(metrics: dict) -> None:
         
     cols = st.columns(min(4, len(metrics)))
     
-    icons = ["🎯", "📊", "⚡", "🚀", "🔍", "💡", "🎪", "🌟"]
+    icons = ["", "", "", "", "", "", "", ""]
     
     for i, (metric, value) in enumerate(metrics.items()):
         with cols[i % len(cols)]:
@@ -1166,9 +1166,9 @@ def create_ai_progress_tracker(current_step: int, total_steps: int, step_name: s
     progress_value = current_step / total_steps
     
     # Simple progress indicator 
-    st.progress(progress_value, text=f"🤖 {step_name} (Step {current_step}/{total_steps})")
+    st.progress(progress_value, text=f" {step_name} (Step {current_step}/{total_steps})")
 
-def create_model_selector(models: list, default_model: str = "claude-3-5-sonnet") -> str:
+def create_model_selector(models: list, default_model: str = "claude-4-sonnet") -> str:
     """
     Create AI model selector component
     
@@ -1179,70 +1179,70 @@ def create_model_selector(models: list, default_model: str = "claude-3-5-sonnet"
     Returns:
         Selected model name
     """
-    st.markdown("### 🤖 AI Model Configuration")
+    st.markdown("###  AI Model Configuration")
     
     model_descriptions = {
         # Claude Models (Anthropic) - Premium reasoning and analysis
-        "claude-4-sonnet": "🎯 Claude 4 Sonnet - Best balance of speed and intelligence",
-        "claude-4-opus": "🏆 Claude 4 Opus - Maximum intelligence for complex tasks",
-        "claude-3-5-sonnet": "🚀 Claude 3.5 Sonnet - DEFAULT: Fast, highly capable",
-        "claude-3-7-sonnet": "📊 Claude 3.7 Sonnet - Enhanced analytical capabilities",
+        "claude-4-sonnet": " Claude 4 Sonnet - DEFAULT: Best balance of speed and intelligence",
+        "claude-4-opus": " Claude 4 Opus - Maximum intelligence for complex tasks",
+        "claude-3-5-sonnet": " Claude 3.5 Sonnet - Fast, highly capable",
+        "claude-3-7-sonnet": " Claude 3.7 Sonnet - Enhanced analytical capabilities",
         
         # Mistral Models - High performance open-source
-        "mistral-large": "🏆 Mistral Large - Best overall performance",
-        "mistral-large2": "✨ Mistral Large 2 - Latest Mistral flagship",
-        "mistral-7b": "⚡ Mistral 7B - Fast, efficient responses", 
-        "mixtral-8x7b": "🎯 Mixtral 8x7B - Balanced performance and speed",
+        "mistral-large": " Mistral Large - Best overall performance",
+        "mistral-large2": " Mistral Large 2 - Latest Mistral flagship",
+        "mistral-7b": " Mistral 7B - Fast, efficient responses", 
+        "mixtral-8x7b": " Mixtral 8x7B - Balanced performance and speed",
         
         # OpenAI Models - Industry-leading capabilities
-        "openai-gpt-4.1": "🤖 GPT-4.1 - Advanced reasoning and creativity",
-        "openai-o4-mini": "⚡ O4-Mini - Fast GPT-4 level performance",
-        "openai-gpt-5": "🌟 GPT-5 - Next-generation AI model",
-        "openai-gpt-5-mini": "⚡ GPT-5 Mini - Efficient GPT-5 variant",
-        "openai-gpt-5-nano": "🔹 GPT-5 Nano - Ultra-fast responses",
-        "openai-gpt-5-chat": "💬 GPT-5 Chat - Optimized for conversations",
-        "openai-gpt-oss-120b": "🔓 GPT OSS 120B - Open-source large model",
-        "openai-gpt-oss-20b": "🔓 GPT OSS 20B - Open-source medium model",
+        "openai-gpt-4.1": " GPT-4.1 - Advanced reasoning and creativity",
+        "openai-o4-mini": " O4-Mini - Fast GPT-4 level performance",
+        "openai-gpt-5": " GPT-5 - Next-generation AI model",
+        "openai-gpt-5-mini": " GPT-5 Mini - Efficient GPT-5 variant",
+        "openai-gpt-5-nano": " GPT-5 Nano - Ultra-fast responses",
+        "openai-gpt-5-chat": " GPT-5 Chat - Optimized for conversations",
+        "openai-gpt-oss-120b": " GPT OSS 120B - Open-source large model",
+        "openai-gpt-oss-20b": " GPT OSS 20B - Open-source medium model",
         
         # Llama Models (Meta) - Open-source powerhouses
-        "llama4-maverick": "🦙 Llama 4 Maverick - Next-gen Meta model",
-        "llama4-scout": "🔍 Llama 4 Scout - Specialized for analysis",
-        "llama2-70b-chat": "💬 Llama 2 70B Chat - Conversational AI",
-        "llama3-8b": "🦙 Llama 3 8B - Efficient general purpose",
-        "llama3-70b": "🦙 Llama 3 70B - High-performance reasoning",
-        "llama3.1-8b": "🦙 Llama 3.1 8B - Enhanced efficiency",
-        "llama3.1-70b": "🦙 Llama 3.1 70B - Powerful reasoning",
-        "llama3.1-405b": "🦙 Llama 3.1 405B - Meta's largest model",
-        "llama3.2-1b": "🦙 Llama 3.2 1B - Ultra-lightweight",
-        "llama3.2-3b": "🦙 Llama 3.2 3B - Compact and efficient",
-        "llama3.3-70b": "🦙 Llama 3.3 70B - Latest Meta release",
+        "llama4-maverick": " Llama 4 Maverick - Next-gen Meta model",
+        "llama4-scout": " Llama 4 Scout - Specialized for analysis",
+        "llama2-70b-chat": " Llama 2 70B Chat - Conversational AI",
+        "llama3-8b": " Llama 3 8B - Efficient general purpose",
+        "llama3-70b": " Llama 3 70B - High-performance reasoning",
+        "llama3.1-8b": " Llama 3.1 8B - Enhanced efficiency",
+        "llama3.1-70b": " Llama 3.1 70B - Powerful reasoning",
+        "llama3.1-405b": " Llama 3.1 405B - Meta's largest model",
+        "llama3.2-1b": " Llama 3.2 1B - Ultra-lightweight",
+        "llama3.2-3b": " Llama 3.2 3B - Compact and efficient",
+        "llama3.3-70b": " Llama 3.3 70B - Latest Meta release",
         
         # Snowflake-Optimized Models - Enterprise-tuned
-        "snowflake-arctic": "❄️ Snowflake Arctic - Enterprise optimized",
-        "snowflake-llama-3.3-70b": "❄️ Snowflake Llama 3.3 70B - Snowflake-tuned",
-        "snowflake-llama-3.1-405b": "❄️ Snowflake Llama 3.1 405B - Enterprise-scale",
-        "snowflake-arctic-embed-m": "❄️ Arctic Embed M - Document embeddings",
+        "snowflake-arctic": "️ Snowflake Arctic - Enterprise optimized",
+        "snowflake-llama-3.3-70b": "️ Snowflake Llama 3.3 70B - Snowflake-tuned",
+        "snowflake-llama-3.1-405b": "️ Snowflake Llama 3.1 405B - Enterprise-scale",
+        "snowflake-arctic-embed-m": "️ Arctic Embed M - Document embeddings",
         
         # Specialized Models - Purpose-built
-        "reka-core": "🧠 Reka Core - Advanced reasoning",
-        "reka-flash": "⚡ Reka Flash - Speed optimized",
-        "jamba-instruct": "🎯 Jamba Instruct - Instruction following",
-        "jamba-1.5-mini": "⚡ Jamba 1.5 Mini - Compact instruction model",
-        "jamba-1.5-large": "🏆 Jamba 1.5 Large - Advanced instruction model",
-        "deepseek-r1": "🔬 DeepSeek R1 - Research and reasoning",
-        "gemma-7b": "💎 Gemma 7B - Google's efficient model",
+        "reka-core": " Reka Core - Advanced reasoning",
+        "reka-flash": " Reka Flash - Speed optimized",
+        "jamba-instruct": " Jamba Instruct - Instruction following",
+        "jamba-1.5-mini": " Jamba 1.5 Mini - Compact instruction model",
+        "jamba-1.5-large": " Jamba 1.5 Large - Advanced instruction model",
+        "deepseek-r1": " DeepSeek R1 - Research and reasoning",
+        "gemma-7b": " Gemma 7B - Google's efficient model",
         
         # Embedding Models - Semantic understanding
-        "e5-base-v2": "🔗 E5 Base v2 - General embeddings",
-        "nv-embed-qa-4": "🔗 NV Embed QA-4 - NVIDIA Q&A embeddings", 
-        "multilingual-e5-large": "🌍 Multilingual E5 Large - Global embeddings",
-        "voyage-multilingual-2": "🌍 Voyage Multilingual 2 - Cross-language embeddings"
+        "e5-base-v2": " E5 Base v2 - General embeddings",
+        "nv-embed-qa-4": " NV Embed QA-4 - NVIDIA Q&A embeddings", 
+        "multilingual-e5-large": " Multilingual E5 Large - Global embeddings",
+        "voyage-multilingual-2": " Voyage Multilingual 2 - Cross-language embeddings"
     }
     
     # Create selection with descriptions
     options = []
     for model in models:
-        description = model_descriptions.get(model, f"🤖 {model}")
+        description = model_descriptions.get(model, f" {model}")
         options.append(f"{description}")
     
     selected_option = st.selectbox(
@@ -1270,7 +1270,7 @@ def format_ai_response(response: str, title: str = "AI Insights") -> None:
         title: Title for the response section
     """
     if response:
-        st.markdown(f"### 🤖 {title}")
+        st.markdown(f"###  {title}")
         st.markdown(f"""
         <div style="background: #f8f9fa; 
                     padding: 1.5rem; border-radius: 12px; margin: 1rem 0; 
@@ -1302,8 +1302,8 @@ def create_executive_dashboard(kpis: dict, trends: dict = None) -> None:
         with cols[i % len(cols)]:
             value = kpi_data.get('value', 'N/A')
             trend = kpi_data.get('trend', 0)
-            icon = kpi_data.get('icon', '📊')
-            trend_icon = "📈" if trend > 0 else "📉" if trend < 0 else "📊"
+            icon = kpi_data.get('icon', '')
+            trend_icon = "" if trend > 0 else "" if trend < 0 else ""
             trend_class = "positive" if trend > 0 else "negative" if trend < 0 else "neutral"
             trend_color = "var(--exec-success)" if trend > 0 else "var(--exec-secondary)" if trend < 0 else "var(--exec-text-secondary)"
             
@@ -1333,7 +1333,7 @@ def create_executive_navigation_grid(nav_items: list) -> None:
         with cols[i % 3]:
             title = item.get('title', 'Navigation Item')
             description = item.get('description', '')
-            icon = item.get('icon', '📊')
+            icon = item.get('icon', '')
             badge = item.get('badge', 'AVAILABLE')
             page_key = item.get('page_key', '')
             
@@ -1345,7 +1345,7 @@ def create_executive_navigation_grid(nav_items: list) -> None:
             </div>
             """, unsafe_allow_html=True)
 
-def create_executive_summary_card(title: str, content: str, metrics: dict = None, icon: str = "📋") -> None:
+def create_executive_summary_card(title: str, content: str, metrics: dict = None, icon: str = "") -> None:
     """
     Create executive summary card with key insights
     
@@ -1412,9 +1412,9 @@ def create_executive_alert_banner(message: str, alert_type: str = "info", dismis
     }
     
     icon_map = {
-        "success": "✅",
-        "warning": "⚠️",
-        "error": "🚨", 
+        "success": "",
+        "warning": "️",
+        "error": "", 
         "info": "ℹ️"
     }
     
@@ -1457,7 +1457,7 @@ def create_executive_demo_controller() -> dict:
     
     return st.session_state.exec_demo_state
 
-def create_immediate_action_items(action_items: str, title: str = "💡 Immediate Action Items") -> None:
+def create_immediate_action_items(action_items: str, title: str = " Immediate Action Items") -> None:
     """
     Create formatted immediate action items using native Streamlit components
     
@@ -1513,7 +1513,7 @@ def create_immediate_action_items(action_items: str, title: str = "💡 Immediat
         elif line.lower().startswith('- requires:'):
             requirements = line.replace('- Requires:', '').replace('- requires:', '').strip()
             if requirements:
-                st.info(f"🔧 **Requirements**: {requirements}")
+                st.info(f" **Requirements**: {requirements}")
                 st.markdown("---")
                 current_item = ""  # Reset after displaying
         elif not line.startswith('These items') and line:
@@ -1530,9 +1530,9 @@ def create_immediate_action_items(action_items: str, title: str = "💡 Immediat
                 st.markdown(f"**{current_item}**")
     
     # Add implementation guide
-    st.info("📋 **Implementation Guide**: These action items are prioritized by urgency. Items marked IMMEDIATE can be started today with minimal risk to network operations.")
+    st.info(" **Implementation Guide**: These action items are prioritized by urgency. Items marked IMMEDIATE can be started today with minimal risk to network operations.")
 
-def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "🤖") -> None:
+def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "") -> None:
     """
     Create AI-specific metric card
     

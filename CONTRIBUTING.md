@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to the Telco Network Intelligence Suite! This document provides guidelines for contributing to the project.
 
-## 🤝 How to Contribute
+##  How to Contribute
 
 ### Reporting Issues
 
@@ -90,14 +90,14 @@ from utils.design_system import create_page_header, create_metric_card
 
 st.set_page_config(
     page_title="Your Page",
-    page_icon="📊",
+    page_icon="",
     layout="wide"
 )
 
 create_page_header(
     title="Your Page Title",
     description="Description of what this page does",
-    icon="📊"
+    icon=""
 )
 ```
 
@@ -170,7 +170,7 @@ Keep in sync:
 - `Documentation/enhancements.md` - Enhancement roadmap
 - Inline code comments
 
-## 🎯 Areas for Contribution
+##  Areas for Contribution
 
 We're particularly interested in contributions for:
 
@@ -195,7 +195,7 @@ We're particularly interested in contributions for:
 - [ ] Troubleshooting guides
 - [ ] Best practices guide
 
-## 🐛 Bug Reports
+##  Bug Reports
 
 Include in bug reports:
 
@@ -207,7 +207,7 @@ Include in bug reports:
 - **Steps to reproduce**
 - **Data volume** (approximate row counts)
 
-## 💡 Feature Requests
+##  Feature Requests
 
 Good feature requests include:
 
@@ -218,13 +218,13 @@ Good feature requests include:
 - **Example** workflow
 - **Priority** (nice-to-have vs critical)
 
-## 📞 Questions?
+##  Questions?
 
 - **Email**: deepjyoti.dev@snowflake.com
 - **Issues**: Use GitHub Issues for questions
 - **Discussions**: Consider opening a GitHub Discussion for broader topics
 
-## 🙏 Thank You!
+##  Thank You!
 
 Your contributions help make this project better for everyone in the telecommunications community!
 

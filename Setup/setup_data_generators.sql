@@ -553,7 +553,7 @@ SELECT 'Step 5 Complete: Serverless tasks created (run every MINUTE for demo str
 -- SETUP COMPLETE
 -- ===============================================================================
 
-SELECT '✅ DATA GENERATOR SETUP COMPLETE - DEMO STREAMING MODE!' AS STATUS;
+SELECT ' DATA GENERATOR SETUP COMPLETE - DEMO STREAMING MODE!' AS STATUS;
 SELECT '' AS BLANK_LINE;
 SELECT 'Summary:' AS SECTION;
 SELECT '- GENERATE schema created' AS ITEM

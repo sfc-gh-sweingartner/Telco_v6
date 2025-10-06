@@ -33,13 +33,13 @@ except ImportError:
     AI_FUNCTIONS_AVAILABLE = False
     
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting for better display
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
         st.info(formatted_insight)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_metrics_dashboard(metrics):
         cols = st.columns(len(metrics))
         for i, (key, value) in enumerate(metrics.items()):
@@ -50,7 +50,7 @@ except ImportError:
     def format_ai_response(response, title="AI Response"):
         st.markdown(f"### {title}")
         st.write(response)
-    def create_ai_metric_card(title, value, description="", icon="🤖"):
+    def create_ai_metric_card(title, value, description="", icon=""):
         st.metric(title, value, help=description)
 
 try:
@@ -59,18 +59,18 @@ except ImportError:
     def get_ai_analytics(session):
         class FallbackAnalytics:
             def generate_executive_summary(self, *args, **kwargs):
-                return "🤖 AI Network Assistant is being deployed. Advanced conversational analytics will be available shortly!"
+                return " AI Network Assistant is being deployed. Advanced conversational analytics will be available shortly!"
         return FallbackAnalytics()
     def get_ai_processor(session):
         class FallbackProcessor:
             def ai_complete(self, prompt, **kwargs):
-                return "🗨️ AI conversational interface is being updated. Full natural language network analysis capabilities will be available shortly!"
+                return "️ AI conversational interface is being updated. Full natural language network analysis capabilities will be available shortly!"
         return FallbackProcessor()
 
 # Page configuration
 st.set_page_config(
     page_title="AI Network Assistant",
-    page_icon="💬",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -89,7 +89,7 @@ ai_processor = get_ai_processor(session)
 create_page_header(
     title="AI Network Assistant",
     description="Natural language interface for network analysis - ask questions in plain English and get intelligent insights",
-    icon="💬"
+    icon=""
 )
 
 # Initialize chat history in session state
@@ -97,14 +97,14 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
     st.session_state.chat_history.append({
         "role": "assistant",
-        "content": "👋 Hi! I'm your AI Network Assistant. I can help you analyze your telecom network using natural language. Try asking me questions like:\n\n• 'Show me cell towers with high failure rates'\n• 'Which areas have the most customer complaints?'\n• 'What's causing network issues in California?'\n• 'Predict where we might have problems next month'\n\nWhat would you like to know about your network?",
+        "content": " Hi! I'm your AI Network Assistant. I can help you analyze your telecom network using natural language. Try asking me questions like:\n\n• 'Show me cell towers with high failure rates'\n• 'Which areas have the most customer complaints?'\n• 'What's causing network issues in California?'\n• 'Predict where we might have problems next month'\n\nWhat would you like to know about your network?",
         "timestamp": datetime.now()
     })
 
 # Show deployment status if AI functions are not fully available
 if not AI_FUNCTIONS_AVAILABLE:
     st.warning("""
-    🚀 **AI Network Assistant Deployment in Progress**
+     **AI Network Assistant Deployment in Progress**
     
     The conversational AI interface is being deployed with advanced capabilities including:
     - Natural language query processing
@@ -115,18 +115,18 @@ if not AI_FUNCTIONS_AVAILABLE:
     **Expected availability:** 5-10 minutes
     """)
     
-    if st.button("🔄 Check AI Assistant Status", type="primary"):
+    if st.button(" Check AI Assistant Status", type="primary"):
         st.rerun()
 
 # Main chat interface
-st.markdown("## 💬 Network Analysis Chat")
+st.markdown("##  Network Analysis Chat")
 
 # Display chat history
 for message in st.session_state.chat_history:
     with st.chat_message(message["role"]):
         st.write(message["content"])
         if "timestamp" in message:
-            st.caption(f"🕒 {message['timestamp'].strftime('%H:%M:%S')}")
+            st.caption(f" {message['timestamp'].strftime('%H:%M:%S')}")
 
 # Chat input
 if prompt := st.chat_input("Ask me anything about your network..."):
@@ -141,11 +141,11 @@ if prompt := st.chat_input("Ask me anything about your network..."):
     # Display user message
     with st.chat_message("user"):
         st.write(prompt)
-        st.caption(f"🕒 {user_message['timestamp'].strftime('%H:%M:%S')}")
+        st.caption(f" {user_message['timestamp'].strftime('%H:%M:%S')}")
     
     # Generate AI response
     with st.chat_message("assistant"):
-        with st.spinner("🤖 Analyzing your question..."):
+        with st.spinner(" Analyzing your question..."):
             
             # Determine the type of query and generate appropriate response
             response = process_network_query(prompt, session, ai_processor, ai_analytics)
@@ -173,31 +173,31 @@ if prompt := st.chat_input("Ask me anything about your network..."):
             assistant_message["data"] = response["data"]
         
         st.session_state.chat_history.append(assistant_message)
-        st.caption(f"🕒 {assistant_message['timestamp'].strftime('%H:%M:%S')}")
+        st.caption(f" {assistant_message['timestamp'].strftime('%H:%M:%S')}")
 
 # Sidebar with conversation tools
 with st.sidebar:
     st.markdown("---")
-    st.markdown("### 🛠️ Conversation Tools")
+    st.markdown("### ️ Conversation Tools")
     
-    if st.button("🗑️ Clear Chat History", type="secondary"):
+    if st.button("️ Clear Chat History", type="secondary"):
         st.session_state.chat_history = []
         st.rerun()
     
-    if st.button("💾 Export Chat", type="secondary"):
+    if st.button(" Export Chat", type="secondary"):
         chat_export = {
             "timestamp": datetime.now().isoformat(),
             "conversation": st.session_state.chat_history
         }
         st.download_button(
-            label="📁 Download Chat JSON",
+            label=" Download Chat JSON",
             data=json.dumps(chat_export, indent=2, default=str),
             file_name=f"network_chat_{datetime.now().strftime('%Y%m%d_%H%M')}.json",
             mime="application/json"
         )
     
     st.markdown("---")
-    st.markdown("### 💡 Example Questions")
+    st.markdown("###  Example Questions")
     
     example_queries = [
         "Show me the worst performing cell towers",
@@ -211,7 +211,7 @@ with st.sidebar:
     ]
     
     for query in example_queries:
-        if st.button(f"💭 {query}", key=f"example_{hash(query)}", use_container_width=True):
+        if st.button(f" {query}", key=f"example_{hash(query)}", use_container_width=True):
             # Add the example query as if the user typed it
             st.session_state.example_query = query
             st.rerun()
@@ -397,7 +397,7 @@ def process_network_query(query: str, session, ai_processor, ai_analytics):
 # Help section
 with st.expander("🆘 How to Use the AI Network Assistant", expanded=False):
     st.markdown("""
-    ### 💬 Conversation Tips
+    ###  Conversation Tips
     
     **Ask Natural Questions:**
     - "Show me towers with high failure rates"
@@ -405,10 +405,10 @@ with st.expander("🆘 How to Use the AI Network Assistant", expanded=False):
     - "Predict network issues for next month"
     
     **Query Types I Handle:**
-    - 📊 **Data Requests**: "Show me...", "List...", "Find..."
-    - 🔍 **Analysis**: "Why...", "What causes...", "Explain..."
-    - 🔮 **Predictions**: "Predict...", "Forecast...", "What will happen..."
-    - ⚖️ **Comparisons**: "Compare...", "Which is better...", "Difference between..."
+    -  **Data Requests**: "Show me...", "List...", "Find..."
+    -  **Analysis**: "Why...", "What causes...", "Explain..."
+    -  **Predictions**: "Predict...", "Forecast...", "What will happen..."
+    - ️ **Comparisons**: "Compare...", "Which is better...", "Difference between..."
     
     **Best Practices:**
     - Be specific about metrics or regions

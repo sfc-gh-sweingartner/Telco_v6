@@ -33,7 +33,7 @@ except ImportError:
         create_sidebar_navigation, add_page_footer, execute_query_with_loading
     )
     # Define fallback AI and executive functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
         st.info(formatted_insight)
@@ -47,7 +47,7 @@ except ImportError:
         formatted_response = response.replace('\\n', '\n') if '\\n' in response else response
         st.write(formatted_response)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
         for i, rec in enumerate(recommendations, 1):
@@ -61,10 +61,10 @@ except ImportError:
         cols = st.columns(3)
         for i, item in enumerate(nav_items):
             with cols[i % 3]:
-                st.markdown(f"### {item.get('icon', '📊')} {item.get('title', 'Item')}")
+                st.markdown(f"### {item.get('icon', '')} {item.get('title', 'Item')}")
                 st.markdown(item.get('description', ''))
                 st.info(item.get('badge', 'Available'))
-    def create_executive_summary_card(title, content, metrics=None, icon="📋"):
+    def create_executive_summary_card(title, content, metrics=None, icon=""):
         st.markdown(f"### {icon} {title}")
         st.markdown(content)
         if metrics:
@@ -83,7 +83,7 @@ except ImportError:
             st.info(message)
     def create_executive_demo_controller():
         return {'current_scenario': 'baseline', 'demo_active': False}
-    def create_immediate_action_items(action_items, title="💡 Immediate Action Items"):
+    def create_immediate_action_items(action_items, title=" Immediate Action Items"):
         st.markdown(f"### {title}")
         st.markdown(action_items)
 
@@ -94,7 +94,7 @@ except ImportError:
     def get_ai_analytics(session):
         class FallbackAnalytics:
             def generate_executive_summary(self, *args, **kwargs):
-                return "🤖 AI analysis functionality is being updated. Please refresh the page in a few minutes to access the full AI capabilities!"
+                return " AI analysis functionality is being updated. Please refresh the page in a few minutes to access the full AI capabilities!"
             def analyze_network_issues(self, *args, **kwargs):
                 return {"root_causes": "AI root cause analysis temporarily unavailable", "recommendations": "Please check back shortly for AI-powered recommendations"}
         return FallbackAnalytics()
@@ -110,7 +110,7 @@ except ImportError:
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
     page_title="Telco Network Intelligence Suite",
-    page_icon="📡",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -131,7 +131,7 @@ session = get_snowflake_session()
 create_page_header(
     title="Telco Network Intelligence Suite",
     description="AI-Powered Network Operations Command Center • Real-Time Analytics • Predictive Intelligence • Executive Insights • Powered by Snowflake Cortex",
-    icon="📡"
+    icon=""
 )
 
 # Telco brand compliance notice
@@ -148,7 +148,7 @@ st.markdown("""
 # Executive alert for live demo status
 if demo_state.get('demo_active', False):
     create_executive_alert_banner(
-        f"🎬 Executive Demo Active - Scenario: {demo_state.get('current_scenario', 'baseline').replace('_', ' ').title()}",
+        f" Executive Demo Active - Scenario: {demo_state.get('current_scenario', 'baseline').replace('_', ' ').title()}",
         "info"
     )
 
@@ -296,27 +296,27 @@ def load_executive_dashboard_data():
                 "Network Health": {
                     "value": f"{network_health_score:.1f}%" if network_health_score > 0 else "Calculating...",
                     "trend": 1.8 if network_health_score >= 95 else -1.8 if network_health_score < 90 else 0.2,
-                    "icon": "🟢" if network_health_score >= 95 else "🟡" if network_health_score >= 85 else "🔴"
+                    "icon": "🟢" if network_health_score >= 95 else "🟡" if network_health_score >= 85 else ""
                 },
                 "Active Infrastructure": {
                     "value": f"{total_towers:,}" if total_towers > 0 else "Loading...",
                     "trend": 1.2,
-                    "icon": "📡"
+                    "icon": ""
                 },
                 "Customer Satisfaction": {
                     "value": f"{customer_satisfaction:.1f}%" if total_tickets > 0 else "No data",
                     "trend": 0.8 if avg_sentiment > -0.2 else -2.1,
-                    "icon": "😊" if avg_sentiment > -0.2 else "😐" if avg_sentiment > -0.5 else "😟"
+                    "icon": "" if avg_sentiment > -0.2 else "" if avg_sentiment > -0.5 else ""
                 },
                 "Revenue Protection": {
                     "value": f"${estimated_monthly_revenue/1000000:.1f}M" if estimated_monthly_revenue > 0 else "$0",
                     "trend": 4.2 if risk_level == "LOW" else -1.5,
-                    "icon": "💰"
+                    "icon": ""
                 },
                 "Critical Issues": {
                     "value": f"{critical_issues:,}" if total_towers > 0 else "0",
                     "trend": -5.4 if critical_issues < 50 else 3.2 if critical_issues > 200 else 0.0,
-                    "icon": "⚠️" if critical_issues > 0 else "✅"
+                    "icon": "️" if critical_issues > 0 else ""
                 },
                 "Premium Performance": {
                     "value": f"{premium_percentage:.1f}%" if total_towers > 0 else "0%",
@@ -350,17 +350,17 @@ exec_kpis, network_metrics, customer_metrics = load_executive_dashboard_data()
 
 if exec_kpis and network_metrics and customer_metrics:
     # Executive KPI Dashboard
-    st.markdown("## 🏆 Executive Performance Dashboard")
-    st.caption(f"📊 **Data Source**: Live data from {network_metrics['TOTAL_TOWERS']:,} cell towers and {customer_metrics['TOTAL_TICKETS']:,} support tickets")
+    st.markdown("##  Executive Performance Dashboard")
+    st.caption(f" **Data Source**: Live data from {network_metrics['TOTAL_TOWERS']:,} cell towers and {customer_metrics['TOTAL_TICKETS']:,} support tickets")
     
     create_executive_dashboard(exec_kpis)
     
     # Add actual data insights section
-    with st.expander("📋 **View Raw Data Insights**", expanded=False):
+    with st.expander(" **View Raw Data Insights**", expanded=False):
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("### 📡 **Network Data Summary**")
+            st.markdown("###  **Network Data Summary**")
             st.metric("Total Cell Towers", f"{network_metrics['TOTAL_TOWERS']:,}")
             # Success rate is stored as decimal (0-1) in enhanced_net_metrics, convert to percentage
             success_rate_decimal = network_metrics.get('AVG_SUCCESS_RATE', 0)
@@ -369,14 +369,14 @@ if exec_kpis and network_metrics and customer_metrics:
             st.metric("Premium Towers", f"{network_metrics['PREMIUM_TOWERS']:,} ({(network_metrics['PREMIUM_TOWERS']/max(network_metrics['TOTAL_TOWERS'],1)*100):.1f}%)")
         
         with col2:
-            st.markdown("### 🎫 **Customer Data Summary**")
+            st.markdown("###  **Customer Data Summary**")
             st.metric("Total Support Tickets", f"{customer_metrics['TOTAL_TICKETS']:,}")
             st.metric("Unique Customers", f"{customer_metrics['UNIQUE_CUSTOMERS']:,}")
             st.metric("Average Sentiment", f"{customer_metrics['AVG_SENTIMENT']:.3f}")
             st.metric("Negative Sentiment Tickets", f"{getattr(customer_metrics, 'VERY_NEGATIVE_TICKETS', 0):,}")
             
         # Service type breakdown
-        st.markdown("### 📱 **Service Type Distribution**")
+        st.markdown("###  **Service Type Distribution**")
         service_col1, service_col2, service_col3 = st.columns(3)
         
         with service_col1:
@@ -388,9 +388,9 @@ if exec_kpis and network_metrics and customer_metrics:
     
     # Executive Action Center
     st.markdown("---")
-    st.markdown("### ⚡ Executive Action Center")
+    st.markdown("###  Executive Action Center")
     
-    if st.button("🧠 Generate AI Strategic Report", type="primary"):
+    if st.button(" Generate AI Strategic Report", type="primary"):
         create_ai_loading_spinner("AI is analyzing network data and market trends for strategic insights...")
         
         time.sleep(2)  # Simulate AI processing
@@ -427,21 +427,21 @@ if exec_kpis and network_metrics and customer_metrics:
             "Strategic Intelligence Analysis",
             strategic_report,
             confidence=0.92,
-            icon="📊"
+            icon=""
         )
 
 # Add fallback message if no network data is available  
 else:
-    create_executive_alert_banner("⚠️ Network data synchronization in progress. Executive dashboard will be available momentarily.", "warning")
+    create_executive_alert_banner("️ Network data synchronization in progress. Executive dashboard will be available momentarily.", "warning")
     
     # Show executive capabilities preview
-    st.markdown("### 🏆 Executive Intelligence Preview")
+    st.markdown("###  Executive Intelligence Preview")
     
     preview_kpis = {
         "Network Performance": {"value": "94.2%", "trend": 2.1, "icon": "🟢"},
-        "Revenue Protection": {"value": "$2.8M", "trend": 5.7, "icon": "💰"},
-        "AI Efficiency": {"value": "92%", "trend": 3.4, "icon": "🤖"},
-        "Risk Mitigation": {"value": "67%", "trend": -8.3, "icon": "🛡️"}
+        "Revenue Protection": {"value": "$2.8M", "trend": 5.7, "icon": ""},
+        "AI Efficiency": {"value": "92%", "trend": 3.4, "icon": ""},
+        "Risk Mitigation": {"value": "67%", "trend": -8.3, "icon": "️"}
     }
     
     create_executive_dashboard(preview_kpis)
@@ -468,53 +468,53 @@ else:
         "Executive AI Intelligence Platform",
         capabilities_content,
         exec_metrics,
-        "🏆"
+        ""
     )
 
 # Executive Navigation Grid
 st.markdown("---")
-st.markdown("## 🚀 Executive Intelligence Platform")
+st.markdown("##  Executive Intelligence Platform")
 
 navigation_items = [
     {
         "title": "AI Customer Intelligence",
         "description": "Advanced customer analytics with AI-powered churn prediction, sentiment analysis, and personalized retention strategies. Real-time customer experience optimization.",
-        "icon": "👥",
+        "icon": "",
         "badge": "AI POWERED",
         "page_key": "Customer_Profile"
     },
     {
         "title": "Network Performance Command",
         "description": "Comprehensive cell tower monitoring with predictive failure analysis, capacity optimization, and automated performance enhancement recommendations.",
-        "icon": "📡", 
+        "icon": "", 
         "badge": "REAL-TIME",
         "page_key": "Cell_Tower_Lookup"
     },
     {
         "title": "Geospatial Intelligence",
         "description": "Advanced geographic analysis with AI pattern recognition, coverage optimization, and location-based performance insights for strategic planning.",
-        "icon": "🗺️",
+        "icon": "️",
         "badge": "GEO AI",
         "page_key": "Geospatial_Analysis"
     },
     {
         "title": "Executive AI Dashboard",
         "description": "Real-time executive insights with automated reporting, strategic recommendations, and business impact analysis powered by advanced AI algorithms.",
-        "icon": "🎯",
+        "icon": "",
         "badge": "EXECUTIVE",
         "page_key": "AI_Insights_and_Recommendations"
     },
     {
         "title": "Predictive Analytics Suite",
         "description": "Machine learning models for network forecasting, failure prediction, and capacity planning with 92% accuracy rate for proactive operations.",
-        "icon": "🔮",
+        "icon": "",
         "badge": "PREDICTIVE",
         "page_key": "Predictive_Analytics"
     },
     {
         "title": "Snowflake Intelligence",
         "description": "Natural language querying, intelligent agents, and conversational analytics powered by Snowflake's advanced AI platform for instant insights.",
-        "icon": "🧠",
+        "icon": "",
         "badge": "NEXT-GEN",
         "page_key": "Snowflake_Intelligence"
     }
@@ -524,7 +524,7 @@ create_executive_navigation_grid(navigation_items)
 
 # Technology Excellence Section
 st.markdown("---")
-st.markdown("## ⚡ Technology Excellence Platform")
+st.markdown("##  Technology Excellence Platform")
 
 col1, col2, col3 = st.columns(3)
 
@@ -533,13 +533,13 @@ with col1:
     <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius-lg); 
                 box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); min-height: 320px; height: auto;">
         <div style="text-align: center; margin-bottom: 1.25rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">❄️</div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">️</div>
             <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700; font-size: 1.1rem;">Snowflake Cortex AISQL</h3>
         </div>
         <div style="color: var(--exec-text-secondary); line-height: 1.5; font-size: 0.9rem;">
-            <div style="margin-bottom: 0.75rem;"><strong>✨ Models:</strong> Claude 4, GPT-4.1, Mistral, Llama 3.3</div>
-            <div style="margin-bottom: 0.75rem;"><strong>🎯 Functions:</strong> AI_COMPLETE, AI_CLASSIFY, AI_SENTIMENT</div>
-            <div><strong>🚀 Performance:</strong> Sub-second response times with scalability</div>
+            <div style="margin-bottom: 0.75rem;"><strong> Models:</strong> Claude 4, GPT-4.1, Mistral, Llama 3.3</div>
+            <div style="margin-bottom: 0.75rem;"><strong> Functions:</strong> AI_COMPLETE, AI_CLASSIFY, AI_SENTIMENT</div>
+            <div><strong> Performance:</strong> Sub-second response times with scalability</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -549,13 +549,13 @@ with col2:
     <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius-lg); 
                 box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); min-height: 320px; height: auto;">
         <div style="text-align: center; margin-bottom: 1.25rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🧠</div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;"></div>
             <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700; font-size: 1.1rem;">AI Analytics Engine</h3>
         </div>
         <div style="color: var(--exec-text-secondary); line-height: 1.5; font-size: 0.9rem;">
-            <div style="margin-bottom: 0.75rem;"><strong>🔍 Recognition:</strong> Network anomalies and failure patterns</div>
-            <div style="margin-bottom: 0.75rem;"><strong>📊 Prediction:</strong> 92% accuracy in failure prediction</div>
-            <div><strong>💡 Insights:</strong> Real-time streaming telemetry analysis</div>
+            <div style="margin-bottom: 0.75rem;"><strong> Recognition:</strong> Network anomalies and failure patterns</div>
+            <div style="margin-bottom: 0.75rem;"><strong> Prediction:</strong> 92% accuracy in failure prediction</div>
+            <div><strong> Insights:</strong> Real-time streaming telemetry analysis</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -565,20 +565,20 @@ with col3:
     <div style="background: var(--exec-bg-primary); padding: 1.5rem; border-radius: var(--exec-border-radius-lg); 
                 box-shadow: var(--exec-shadow); border: 1px solid var(--exec-border); min-height: 320px; height: auto;">
         <div style="text-align: center; margin-bottom: 1.25rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">💼</div>
+            <div style="font-size: 2.5rem; margin-bottom: 0.75rem;"></div>
             <h3 style="color: var(--exec-primary); margin: 0; font-weight: 700; font-size: 1.1rem;">Executive Intelligence</h3>
         </div>
         <div style="color: var(--exec-text-secondary); line-height: 1.5; font-size: 0.9rem;">
-            <div style="margin-bottom: 0.75rem;"><strong>📈 Impact:</strong> Revenue protection and ROI optimization</div>
-            <div style="margin-bottom: 0.75rem;"><strong>🎯 Planning:</strong> AI-powered market insights</div>
-            <div><strong>⚡ Support:</strong> Real-time executive dashboards</div>
+            <div style="margin-bottom: 0.75rem;"><strong> Impact:</strong> Revenue protection and ROI optimization</div>
+            <div style="margin-bottom: 0.75rem;"><strong> Planning:</strong> AI-powered market insights</div>
+            <div><strong> Support:</strong> Real-time executive dashboards</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 # Executive Success Metrics
 st.markdown("---")
-st.markdown("## 📊 Executive Success Metrics")
+st.markdown("##  Executive Success Metrics")
 
 success_col1, success_col2, success_col3, success_col4 = st.columns(4)
 
@@ -586,7 +586,7 @@ with success_col1:
     st.markdown("""
     <div style="text-align: center; padding: 2rem; background: var(--exec-bg-primary); 
                 border-radius: var(--exec-border-radius-lg); box-shadow: var(--exec-shadow);">
-        <div style="font-size: 2.5rem; color: var(--exec-success); margin-bottom: 0.5rem;">📈</div>
+        <div style="font-size: 2.5rem; color: var(--exec-success); margin-bottom: 0.5rem;"></div>
         <div style="font-size: 2rem; font-weight: 800; color: var(--exec-primary);">340%</div>
         <div style="color: var(--exec-text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.9rem;">ROI Achieved</div>
     </div>
@@ -596,7 +596,7 @@ with success_col2:
     st.markdown("""
     <div style="text-align: center; padding: 2rem; background: var(--exec-bg-primary); 
                 border-radius: var(--exec-border-radius-lg); box-shadow: var(--exec-shadow);">
-        <div style="font-size: 2.5rem; color: var(--exec-warning); margin-bottom: 0.5rem;">⚡</div>
+        <div style="font-size: 2.5rem; color: var(--exec-warning); margin-bottom: 0.5rem;"></div>
         <div style="font-size: 2rem; font-weight: 800; color: var(--exec-primary);">67%</div>
         <div style="color: var(--exec-text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.9rem;">MTTR Reduction</div>
     </div>
@@ -606,7 +606,7 @@ with success_col3:
     st.markdown("""
     <div style="text-align: center; padding: 2rem; background: var(--exec-bg-primary); 
                 border-radius: var(--exec-border-radius-lg); box-shadow: var(--exec-shadow);">
-        <div style="font-size: 2.5rem; color: var(--exec-success); margin-bottom: 0.5rem;">🎯</div>
+        <div style="font-size: 2.5rem; color: var(--exec-success); margin-bottom: 0.5rem;"></div>
         <div style="font-size: 2rem; font-weight: 800; color: var(--exec-primary);">92%</div>
         <div style="color: var(--exec-text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.9rem;">Prediction Accuracy</div>
     </div>
@@ -616,7 +616,7 @@ with success_col4:
     st.markdown("""
     <div style="text-align: center; padding: 2rem; background: var(--exec-bg-primary); 
                 border-radius: var(--exec-border-radius-lg); box-shadow: var(--exec-shadow);">
-        <div style="font-size: 2.5rem; color: var(--exec-secondary); margin-bottom: 0.5rem;">💰</div>
+        <div style="font-size: 2.5rem; color: var(--exec-secondary); margin-bottom: 0.5rem;"></div>
         <div style="font-size: 2rem; font-weight: 800; color: var(--exec-primary);">$2.8M</div>
         <div style="color: var(--exec-text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.9rem;">Revenue Protected</div>
     </div>
@@ -630,7 +630,7 @@ st.markdown("""
 <div style="text-align: center; background: var(--exec-gradient-primary); color: white; 
             padding: 2rem; border-radius: var(--exec-border-radius-lg); margin: 2rem 0;
             font-family: 'Ericsson Hilda', 'Source Sans Pro', sans-serif;">
-    <h3 style="margin: 0 0 1rem 0; color: white;">📡 Telco Support & Innovation Services</h3>
+    <h3 style="margin: 0 0 1rem 0; color: white;"> Telco Support & Innovation Services</h3>
     <p style="margin: 0; opacity: 0.9; font-size: 1.1rem;">
         24/7 Network Operations Support • AI-Driven Insights • Custom Network Analytics
     </p>

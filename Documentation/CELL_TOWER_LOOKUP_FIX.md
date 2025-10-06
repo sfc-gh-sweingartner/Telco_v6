@@ -1,11 +1,11 @@
-# ✅ Cell Tower Lookup Page - Fixed
+#  Cell Tower Lookup Page - Fixed
 
 **Date**: October 6, 2025  
 **Page**: `pages/2_Cell_Tower_Lookup.py`
 
 ---
 
-## 🐛 Issues Fixed
+##  Issues Fixed
 
 ### 1. IndentationError (Line 121)
 
@@ -62,7 +62,7 @@ Map background not displaying (similar to Geospatial Analysis page issue).
 st.session_state.event = st.pydeck_chart(
     pdk.Deck(
         map_provider="mapbox",
-        map_style="mapbox://styles/mapbox/light-v9",  # ❌ Requires auth
+        map_style="mapbox://styles/mapbox/light-v9",  #  Requires auth
 ```
 
 **After:**
@@ -72,38 +72,38 @@ st.session_state.event = st.pydeck_chart(
 st.session_state.event = st.pydeck_chart(
     pdk.Deck(
         map_provider="mapbox",
-        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",  # ✅ Public
+        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",  #  Public
 ```
 
 **Note:** This fix was already applied in the previous session but comments updated for clarity.
 
 ---
 
-## ✅ Verification
+##  Verification
 
 **Linter Check:**
 ```bash
-✅ No linter errors found.
+ No linter errors found.
 ```
 
 **Syntax Check:**
-- ✅ File compiles without IndentationError
-- ✅ All code blocks properly nested
-- ✅ Consistent 4-space indentation throughout
+-  File compiles without IndentationError
+-  All code blocks properly nested
+-  Consistent 4-space indentation throughout
 
 ---
 
-## 🗺️ Map Technology
+## ️ Map Technology
 
 **Now using Carto basemaps:**
-- ✅ Public, no API key required
-- ✅ Works with `MAPBOX_ACCESS_INTEGRATION` (19 tile servers)
-- ✅ Fast, reliable global CDN
-- ✅ Clean light gray background perfect for data overlays
+-  Public, no API key required
+-  Works with `MAPBOX_ACCESS_INTEGRATION` (19 tile servers)
+-  Fast, reliable global CDN
+-  Clean light gray background perfect for data overlays
 
 ---
 
-## 🚀 What to Do Next
+##  What to Do Next
 
 ### If Using Git:
 
@@ -118,33 +118,33 @@ git push origin main
 1. **Update app** (if Git-connected, it will detect new commit)
 2. **Restart app** for changes to take effect
 3. **Test the page:**
-   - ✅ Page loads without IndentationError
-   - ✅ Map displays with Carto basemap background
-   - ✅ Cell selection and AI analysis works
-   - ✅ Charts display correctly
+   -  Page loads without IndentationError
+   -  Map displays with Carto basemap background
+   -  Cell selection and AI analysis works
+   -  Charts display correctly
 
 ---
 
-## 📊 Summary of Changes
+##  Summary of Changes
 
 | Issue | Status | Fix |
 |-------|--------|-----|
-| IndentationError line 121 | ✅ Fixed | 5 lines corrected to 4-space indentation |
-| IndentationError line 128 | ✅ Fixed | `col1, col2, col3` properly indented |
-| IndentationError line 138 | ✅ Fixed | `cell_ids_list` properly indented |
-| IndentationError line 158 | ✅ Fixed | `set_index()` properly indented |
-| IndentationError line 168 | ✅ Fixed | `set_xticklabels()` properly indented |
-| SQL query indentation | ✅ Fixed | Standardized to 4 spaces |
-| Mapbox basemap | ✅ Fixed | Changed to Carto (already done) |
-| Comments | ✅ Updated | Reflect Carto usage |
+| IndentationError line 121 |  Fixed | 5 lines corrected to 4-space indentation |
+| IndentationError line 128 |  Fixed | `col1, col2, col3` properly indented |
+| IndentationError line 138 |  Fixed | `cell_ids_list` properly indented |
+| IndentationError line 158 |  Fixed | `set_index()` properly indented |
+| IndentationError line 168 |  Fixed | `set_xticklabels()` properly indented |
+| SQL query indentation |  Fixed | Standardized to 4 spaces |
+| Mapbox basemap |  Fixed | Changed to Carto (already done) |
+| Comments |  Updated | Reflect Carto usage |
 
 ---
 
-## 🎯 Expected Results
+##  Expected Results
 
 After pushing changes and restarting:
 
-### ✅ Cell Tower Lookup Page
+###  Cell Tower Lookup Page
 - Page loads successfully (no IndentationError)
 - Map displays with light gray Carto basemap
 - Grid cells show color-coded failure rates
@@ -157,7 +157,7 @@ After pushing changes and restarting:
 
 ---
 
-## 🔍 How the Indentation Bug Happened
+##  How the Indentation Bug Happened
 
 **Pattern:**
 The code had inconsistent indentation mixing 2-space and 4-space indents, likely from:
@@ -170,14 +170,14 @@ Always use consistent indentation (4 spaces for Python) and enable editor settin
 
 ---
 
-## ✨ All Fixed!
+##  All Fixed!
 
 **Both issues resolved:**
-- ✅ IndentationError eliminated (6 lines fixed)
-- ✅ Carto basemap working (no API key needed)
-- ✅ Comments updated to reflect Carto
-- ✅ No linter errors
+-  IndentationError eliminated (6 lines fixed)
+-  Carto basemap working (no API key needed)
+-  Comments updated to reflect Carto
+-  No linter errors
 
-**Push your changes and test the page!** 🎉
+**Push your changes and test the page!** 
 
 

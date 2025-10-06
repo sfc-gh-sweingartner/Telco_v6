@@ -1,4 +1,4 @@
-# 📡 Telco Network Intelligence Suite
+#  Telco Network Intelligence Suite
 
 > **AI-Powered Network Operations Command Center for Telecommunications**
 
@@ -10,7 +10,7 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 
 ---
 
-## 🚀 Features
+##  Features
 
 ### **Executive Dashboard**
 - Real-time network health metrics
@@ -47,7 +47,7 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
@@ -61,7 +61,7 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 
 ---
 
-## 🔧 Prerequisites
+##  Prerequisites
 
 ### Required
 - **Snowflake Account** with Cortex AI enabled
@@ -76,7 +76,7 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 
 ---
 
-## ⚡ Quick Start
+##  Quick Start
 
 ### Prerequisites Setup (5 minutes)
 
@@ -117,29 +117,29 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 3. **Enable External Access** (critical!):
    - Click app menu (⋮) → **App settings**
    - Go to **External networks** tab
-   - ✅ Enable `PYPI_ACCESS_INTEGRATION`
-   - ✅ Enable `MAPBOX_ACCESS_INTEGRATION`
+   -  Enable `PYPI_ACCESS_INTEGRATION`
+   -  Enable `MAPBOX_ACCESS_INTEGRATION`
    - Click **Save**
 
 4. **First Launch** (2-5 minutes for container build):
    - App will build container and install dependencies
    - Subsequent launches are much faster (10-30 seconds)
 
-📖 **Detailed Guide**: See `CREATE_APP_IN_SNOWSIGHT.md` for step-by-step instructions with screenshots
+ **Detailed Guide**: See `CREATE_APP_IN_SNOWSIGHT.md` for step-by-step instructions with screenshots
 
 ---
 
-## 🚀 SPCS Deployment (Snowpark Container Services)
+##  SPCS Deployment (Snowpark Container Services)
 
 **This app runs on SPCS for best performance and features!**
 
 ### Why SPCS?
 
-✅ **Full Streamlit Features** - Complete `st.cache_resource` and `st.cache_data` support  
-✅ **Latest Streamlit** - Use newest versions (>=1.49) as soon as published  
-✅ **Any PyPI Package** - No longer limited to Anaconda channel  
-✅ **Better Performance** - Long-running service (3-day keep-alive)  
-✅ **Professional Grade** - Container-based runtime for production workloads
+ **Full Streamlit Features** - Complete `st.cache_resource` and `st.cache_data` support  
+ **Latest Streamlit** - Use newest versions (>=1.49) as soon as published  
+ **Any PyPI Package** - No longer limited to Anaconda channel  
+ **Better Performance** - Long-running service (3-day keep-alive)  
+ **Professional Grade** - Container-based runtime for production workloads
 
 ### Key Components
 
@@ -156,12 +156,12 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 **`pypi_access_integration`** - Package installation
 - Downloads Python packages from PyPI during container build
 - Required for: streamlit, pandas, plotly, pydeck, h3, all dependencies
-- Without it: ❌ Container build fails, app won't start
+- Without it:  Container build fails, app won't start
 
 **`mapbox_access_integration`** - Map tiles
 - Loads Carto basemap tiles for geospatial visualizations
 - Required for: PyDeck maps, H3 hexagon overlays, geospatial analysis
-- Without it: ❌ Maps show blank, no background
+- Without it:  Maps show blank, no background
 
 #### 3. Carto Basemaps
 - **Public** - No API key required
@@ -171,7 +171,7 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 
 ### Deployment Method
 
-**⚠️ IMPORTANT**: Must create app via **Snowsight UI**, not SQL!
+**️ IMPORTANT**: Must create app via **Snowsight UI**, not SQL!
 
 The UI properly configures:
 - Git integration and stages
@@ -179,7 +179,7 @@ The UI properly configures:
 - Compute pool assignment
 - Runtime environment
 
-📖 **Detailed Instructions**: See `CREATE_APP_IN_SNOWSIGHT.md` or `QUICK_CREATE_GUIDE.md`
+ **Detailed Instructions**: See `CREATE_APP_IN_SNOWSIGHT.md` or `QUICK_CREATE_GUIDE.md`
 
 ### Troubleshooting
 
@@ -191,7 +191,7 @@ If you encounter issues:
 
 ---
 
-## 📦 Detailed Setup
+##  Detailed Setup
 
 ### Step 1: Database Setup
 
@@ -253,7 +253,7 @@ Upload `telco_network_opt.yaml` to Snowflake as a semantic model to enable natur
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Telco_v6/
@@ -297,7 +297,7 @@ Telco_v6/
 │   ├── resume_cortex_searches.sql  # Resume services
 │   └── suspend_cortex_searches.sql # Suspend services
 │
-├── Documentation/                  # 📚 Detailed documentation
+├── Documentation/                  #  Detailed documentation
 │   ├── FILE_ORGANIZATION.md        # Documentation guide
 │   ├── SPCS_MIGRATION_SUMMARY.md   # SPCS overview and benefits
 │   ├── CLEANUP_SUMMARY.md          # Cleanup documentation
@@ -316,7 +316,7 @@ Telco_v6/
 
 ---
 
-## 🎯 Usage Guide
+##  Usage Guide
 
 ### Executive Dashboard
 Access the main dashboard to see:
@@ -345,7 +345,7 @@ Access the main dashboard to see:
 
 ---
 
-## 🎬 Demo Mode
+##  Demo Mode
 
 ### Starting Live Demo
 
@@ -376,7 +376,7 @@ CALL MANAGE_DATA_GENERATORS('STOP');
 
 ---
 
-## 🔍 Troubleshooting
+##  Troubleshooting
 
 ### Maps Not Displaying
 
@@ -424,7 +424,7 @@ SELECT 'SUPPORT_TICKETS', COUNT(*) FROM SUPPORT_TICKETS;
 
 ---
 
-## 🏗️ Architecture
+## ️ Architecture
 
 ### Technology Stack
 - **Platform**: Snowflake (Data Cloud)
@@ -449,7 +449,7 @@ SELECT 'SUPPORT_TICKETS', COUNT(*) FROM SUPPORT_TICKETS;
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 This is a demonstration project for Snowflake Cortex AI capabilities in telecommunications. For questions or collaboration:
 
@@ -457,13 +457,13 @@ This is a demonstration project for Snowflake Cortex AI capabilities in telecomm
 
 ---
 
-## 📄 License
+##  License
 
 This project is provided as-is for demonstration purposes.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Built on [Snowflake's network optimization quickstart](https://github.com/sfc-gh-sweingartner/network_optmise)
 - Powered by Snowflake Cortex AI
@@ -471,7 +471,7 @@ This project is provided as-is for demonstration purposes.
 
 ---
 
-## 📊 Dataset Information
+##  Dataset Information
 
 - **Cell Towers**: ~2.6M performance records
   - Ericsson LTE towers in California
@@ -489,4 +489,4 @@ This project is provided as-is for demonstration purposes.
 
 ---
 
-**Built with ❄️ Snowflake Cortex AI • Demonstrating the Future of Network Operations**
+**Built with ️ Snowflake Cortex AI • Demonstrating the Future of Network Operations**

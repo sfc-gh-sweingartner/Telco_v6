@@ -73,7 +73,7 @@ class TelcoAISQLProcessor:
             # Embedding Models
             'e5-base-v2', 'nv-embed-qa-4', 'multilingual-e5-large', 'voyage-multilingual-2'
         ]
-        self.default_model = 'claude-3-5-sonnet'  # Fast, highly capable Claude model
+        self.default_model = 'claude-4-sonnet'  # Best balance of speed and intelligence
         
     def ai_complete(self, prompt: str, model: str = None, max_tokens: int = 150) -> str:
         """
@@ -681,7 +681,7 @@ def format_ai_response(response: str, title: str = "AI Insights") -> None:
         title: Title for the response section
     """
     if response:
-        st.markdown(f"### 🤖 {title}")
+        st.markdown(f"###  {title}")
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%); 
                     padding: 1.5rem; border-radius: 12px; margin: 1rem 0; 
@@ -692,7 +692,7 @@ def format_ai_response(response: str, title: str = "AI Insights") -> None:
     else:
         st.warning(f"No {title.lower()} available at this time.")
 
-def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "🤖") -> None:
+def create_ai_metric_card(title: str, value: str, description: str = "", icon: str = "") -> None:
     """
     Create AI-specific metric card
     
@@ -909,7 +909,7 @@ def create_ai_cost_dashboard(monitor: AIPerformanceMonitor):
     """Create a cost monitoring dashboard"""
     metrics = monitor.get_metrics()
     
-    st.markdown("### 💰 AI Cost & Performance Dashboard")
+    st.markdown("###  AI Cost & Performance Dashboard")
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -926,7 +926,7 @@ def create_ai_cost_dashboard(monitor: AIPerformanceMonitor):
         st.metric("Cache Hit Rate", f"{metrics['cache_hit_rate']:.1f}%")
     
     # Performance metrics
-    st.markdown("#### 📊 Performance Metrics")
+    st.markdown("####  Performance Metrics")
     perf_col1, perf_col2, perf_col3 = st.columns(3)
     
     with perf_col1:

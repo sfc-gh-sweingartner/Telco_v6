@@ -54,13 +54,13 @@ except ImportError:
     )
     AI_FUNCTIONS_AVAILABLE = False
     # Define fallback AI functions
-    def create_ai_insights_card(title, insight, confidence=0.0, icon="🧠"):
+    def create_ai_insights_card(title, insight, confidence=0.0, icon=""):
         st.markdown(f"### {icon} {title}")
         # Fix newline formatting for better display
         formatted_insight = insight.replace('\\n', '\n') if '\\n' in insight else insight
         st.info(formatted_insight)
     def create_ai_loading_spinner(message="AI is analyzing..."):
-        st.info(f"🤖 {message}")
+        st.info(f" {message}")
     def create_ai_recommendation_list(recommendations, title="AI Recommendations"):
         st.markdown(f"### {title}")
         for i, rec in enumerate(recommendations, 1):
@@ -73,7 +73,7 @@ except ImportError:
     def format_ai_response(response, title="AI Insights"):
         st.markdown(f"### {title}")
         st.write(response)
-    def create_ai_metric_card(title, value, description="", icon="🤖"):
+    def create_ai_metric_card(title, value, description="", icon=""):
         st.metric(title, value, help=description)
 
 try:
@@ -89,7 +89,7 @@ except ImportError:
     def get_ai_processor(session):
         class FallbackProcessor:
             def ai_complete(self, prompt, **kwargs):
-                return "🗺️ AI geographic analysis is being deployed. Full geospatial AI capabilities will be available shortly!"
+                return "️ AI geographic analysis is being deployed. Full geospatial AI capabilities will be available shortly!"
             def ai_classify(self, text, categories):
                 return categories[0] if categories else "Unknown"
         return FallbackProcessor()
@@ -97,7 +97,7 @@ except ImportError:
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
     page_title="Geospatial Analysis",
-    page_icon="🗺️",
+    page_icon="️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -115,7 +115,7 @@ ai_processor = get_ai_processor(session)
 create_page_header(
     title="AI-Powered Geospatial Analysis",
     description="Advanced AI-driven geographic analysis with predictive pattern detection and intelligent network optimization recommendations",
-    icon="🤖"
+    icon=""
 )
 
 # Debugging section - will only appear when debug is enabled
@@ -140,13 +140,13 @@ session = get_snowflake_session()
 # Professional Sidebar Configuration  
 st.sidebar.markdown("""
 <div style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #17a2b8;">
-    <h4 style="color: #17a2b8; margin: 0 0 0.5rem 0;">📊 Visualization Controls</h4>
+    <h4 style="color: #17a2b8; margin: 0 0 0.5rem 0;"> Visualization Controls</h4>
     <p style="margin: 0; color: #6c757d; font-size: 0.9rem;">Configure your analysis parameters</p>
 </div>
 """, unsafe_allow_html=True)
 
 # Add a clear cache button
-if st.sidebar.button("🔄 Clear Data Cache", help="Refresh all data from the database"):
+if st.sidebar.button(" Clear Data Cache", help="Refresh all data from the database"):
     # Clear all cached data
     st.cache_data.clear()
     # Show a message instead of using experimental_rerun
@@ -181,7 +181,7 @@ if not selected_metrics:
     selected_metrics = ["Failure Rate"]  # Default if nothing selected
 
 # Add metric definitions
-with st.sidebar.expander("📊 Metric Definitions"):
+with st.sidebar.expander(" Metric Definitions"):
     st.markdown("""
     ### Failure Rate
     
@@ -297,7 +297,7 @@ layer_configs = {}
 
 # Move layer configuration to a function to reduce code duplication
 def get_layer_config(metric_name, index):
-    with st.sidebar.expander(f"⚙️ {metric_name} Layer Settings", expanded=(index == 0)):
+    with st.sidebar.expander(f"️ {metric_name} Layer Settings", expanded=(index == 0)):
         # Resolution selector for H3 level
         resolution = st.slider(
             f"{metric_name} H3 Resolution (Grid Size)",
@@ -865,7 +865,7 @@ height: 600px !important;
 """, unsafe_allow_html=True)
 
 # Create and display the map with PyDeck - full width
-st.subheader("🗺️ Multi-Metric Geospatial Analysis")
+st.subheader("️ Multi-Metric Geospatial Analysis")
 
 # Always render the main visualization using H3HexagonLayers
 st.pydeck_chart(
@@ -896,7 +896,7 @@ if 'map_selection' not in st.session_state:
     st.session_state.selected_hexagon = None
 
 # Statistics section - Now using tabs for better organization
-st.subheader("📈 Data Analysis")
+st.subheader(" Data Analysis")
 tab1, tab2 = st.tabs(["Key Statistics", "Raw Data"])
 
 with tab1:
@@ -1078,19 +1078,19 @@ with tab2:
 
 # AI-Powered Geographic Intelligence Section
 st.markdown("---")
-st.markdown("## 🤖 AI Geographic Intelligence")
+st.markdown("##  AI Geographic Intelligence")
 
 # Create tabs for different AI analyses
-ai_tab1, ai_tab2, ai_tab3 = st.tabs(["🧠 Pattern Analysis", "🔮 Predictive Mapping", "💡 Optimization Recommendations"])
+ai_tab1, ai_tab2, ai_tab3 = st.tabs([" Pattern Analysis", " Predictive Mapping", " Optimization Recommendations"])
 
 with ai_tab1:
-    st.markdown("### 🔍 AI-Powered Geographic Pattern Detection")
+    st.markdown("###  AI-Powered Geographic Pattern Detection")
     st.info("Discover hidden patterns in network performance across geographic regions")
     
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button("🚀 Analyze Geographic Patterns", type="primary", key="geo_pattern_analysis"):
+        if st.button(" Analyze Geographic Patterns", type="primary", key="geo_pattern_analysis"):
             create_ai_loading_spinner("AI is analyzing geographic patterns in network performance...")
             
             try:
@@ -1133,10 +1133,10 @@ with ai_tab1:
                     
                     if geo_insights:
                         create_ai_insights_card(
-                            "🗺️ Geographic Pattern Analysis", 
+                            "️ Geographic Pattern Analysis", 
                             geo_insights, 
                             confidence=0.81, 
-                            icon="🗺️"
+                            icon="️"
                         )
                         
                         # Create geographic metrics
@@ -1155,7 +1155,7 @@ with ai_tab1:
                 st.error(f"Error in geographic pattern analysis: {e}")
     
     with col2:
-        st.markdown("#### 🎯 Quick Geographic Facts")
+        st.markdown("####  Quick Geographic Facts")
         
         # Generate quick geographic insights
         if not cell_data.empty:
@@ -1172,11 +1172,11 @@ with ai_tab1:
                     "AI Geographic Insight",
                     quick_geo_fact,
                     description=f"Coverage: {total_towers} towers, {regions} regions",
-                    icon="🗺️"
+                    icon="️"
                 )
 
 with ai_tab2:
-    st.markdown("### 🔮 AI Predictive Geographic Mapping")
+    st.markdown("###  AI Predictive Geographic Mapping")
     st.info("Predict future network issues and capacity needs based on geographic trends")
     
     prediction_scope = st.selectbox(
@@ -1185,7 +1185,7 @@ with ai_tab2:
         key="geo_prediction_scope"
     )
     
-    if st.button("🔮 Generate Predictive Map Analysis", type="primary", key="geo_predictions"):
+    if st.button(" Generate Predictive Map Analysis", type="primary", key="geo_predictions"):
         create_ai_loading_spinner("AI is generating predictive geographic analysis...")
         
         try:
@@ -1228,10 +1228,10 @@ with ai_tab2:
                 
                 if predictions:
                     create_ai_insights_card(
-                        f"🔮 {prediction_scope} Predictions", 
+                        f" {prediction_scope} Predictions", 
                         predictions, 
                         confidence=0.74, 
-                        icon="📍"
+                        icon=""
                     )
                     
                     # Create prediction action items
@@ -1250,7 +1250,7 @@ with ai_tab2:
             st.error(f"Error in predictive geographic analysis: {e}")
 
 with ai_tab3:
-    st.markdown("### 💡 AI Network Optimization Recommendations")
+    st.markdown("###  AI Network Optimization Recommendations")
     st.info("Get intelligent recommendations for geographic network optimization")
     
     optimization_focus = st.selectbox(
@@ -1259,7 +1259,7 @@ with ai_tab3:
         key="geo_optimization_focus"
     )
     
-    if st.button("🎯 Generate Optimization Recommendations", type="primary", key="geo_recommendations"):
+    if st.button(" Generate Optimization Recommendations", type="primary", key="geo_recommendations"):
         create_ai_loading_spinner("AI is analyzing your network for optimization opportunities...")
         
         try:
@@ -1304,10 +1304,10 @@ with ai_tab3:
                 
                 if recommendations:
                     create_ai_insights_card(
-                        f"💡 {optimization_focus} Recommendations", 
+                        f" {optimization_focus} Recommendations", 
                         recommendations, 
                         confidence=0.87, 
-                        icon="🎯"
+                        icon=""
                     )
                     
                     # Create specific optimization metrics
@@ -1336,7 +1336,7 @@ with ai_tab3:
             st.error(f"Error generating optimization recommendations: {e}")
 
 # Cell Data Explorer remains as a useful tool
-with st.expander("🔧 Cell Data Explorer", expanded=False):
+with st.expander(" Cell Data Explorer", expanded=False):
     try:
         all_cell_ids = []
         if not cell_data.empty:

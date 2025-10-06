@@ -1,6 +1,6 @@
 # External Access Integrations - Visual Guide
 
-## 🎯 The Big Picture
+##  The Big Picture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -36,7 +36,7 @@
                                 └─────────────────────────┘
 ```
 
-## 📦 Integration 1: PyPI Access
+##  Integration 1: PyPI Access
 
 ### Purpose
 Install Python packages during container build
@@ -70,7 +70,7 @@ Container Build Process (2-5 minutes, ONE TIME)
 │
 └─ [5] Start Streamlit app
        ⏱ 10 seconds
-       ✅ App Ready!
+        App Ready!
 ```
 
 ### Network Hosts
@@ -83,13 +83,13 @@ files.pythonhosted.org → Package file downloads
 
 ### What Happens Without It?
 ```
-❌ Container build fails
-❌ Error: "Unable to download packages"
-❌ App never starts
-❌ Users see error page
+ Container build fails
+ Error: "Unable to download packages"
+ App never starts
+ Users see error page
 ```
 
-## 🗺️ Integration 2: Mapbox Access
+## ️ Integration 2: Mapbox Access
 
 ### Purpose
 Load map tiles for geospatial visualizations
@@ -114,7 +114,7 @@ Every Time User Views a Map
 │
 └─ Map renders with tiles
    ⏱ 200ms
-   ✅ Map Visible!
+    Map Visible!
 ```
 
 ### Network Hosts
@@ -128,23 +128,23 @@ d.tiles.mapbox.com    → Tile server D (load balanced)
 
 ### What Uses Mapbox?
 ```
-📍 Cell Tower Lookup (2_Cell_Tower_Lookup.py)
+ Cell Tower Lookup (2_Cell_Tower_Lookup.py)
    └─ PyDeck 3D map with cell tower locations
 
-📍 Geospatial Analysis (3_Geospatial_Analysis.py)
+ Geospatial Analysis (3_Geospatial_Analysis.py)
    ├─ st.map() for support ticket heatmap
    └─ H3 hexagon overlays for coverage analysis
 ```
 
 ### What Happens Without It?
 ```
-❌ Maps render as blank white rectangles
-❌ Browser console: "Failed to load resource"
-❌ Network tab shows 403/blocked for tiles.mapbox.com
-❌ Users can't see geographic data
+ Maps render as blank white rectangles
+ Browser console: "Failed to load resource"
+ Network tab shows 403/blocked for tiles.mapbox.com
+ Users can't see geographic data
 ```
 
-## 🔧 How They're Created
+##  How They're Created
 
 ### Step 1: Network Rules (Allow Outbound Traffic)
 ```sql
@@ -195,7 +195,7 @@ CREATE STREAMLIT my_app
   );
 ```
 
-## 🔄 Data Flow Diagrams
+##  Data Flow Diagrams
 
 ### Build Time Flow (PyPI)
 ```
@@ -219,10 +219,10 @@ CREATE STREAMLIT my_app
 └──────────┬───────────┘
            │
            │ 3. Allowed hosts:
-           │    - pypi.org ✓
-           │    - pypi.python.org ✓
-           │    - pythonhosted.org ✓
-           │    - files.pythonhosted.org ✓
+           │    - pypi.org 
+           │    - pypi.python.org 
+           │    - pythonhosted.org 
+           │    - files.pythonhosted.org 
            ▼
 ┌─────────────────────┐
 │ Download packages   │
@@ -232,7 +232,7 @@ CREATE STREAMLIT my_app
            │ 4. Install with uv
            ▼
 ┌─────────────────────┐
-│ ✅ Container Ready  │
+│  Container Ready  │
 └─────────────────────┘
 ```
 
@@ -271,8 +271,8 @@ CREATE STREAMLIT my_app
 └──────────┬───────────┘
            │
            │ 5. Allowed hosts:
-           │    - api.mapbox.com ✓
-           │    - *.tiles.mapbox.com ✓
+           │    - api.mapbox.com 
+           │    - *.tiles.mapbox.com 
            ▼
 ┌─────────────────────┐
 │ Fetch map tiles     │
@@ -282,11 +282,11 @@ CREATE STREAMLIT my_app
            │ 6. Return tiles to browser
            ▼
 ┌─────────────────────┐
-│ ✅ Map Renders      │
+│  Map Renders      │
 └─────────────────────┘
 ```
 
-## ❓ Common Questions
+##  Common Questions
 
 ### Q: Why can't I use just one integration?
 
@@ -332,36 +332,36 @@ But for this demo, the integration alone (no key) is sufficient.
 
 Easy to fix: Just ALTER the app to add the missing integration.
 
-## 🎯 Validation Checklist
+##  Validation Checklist
 
 After creating integrations, verify:
 
 ```sql
--- ✓ Both integrations exist
+--  Both integrations exist
 SHOW EXTERNAL ACCESS INTEGRATIONS;
 -- Should show: pypi_access_integration, mapbox_access_integration
 
--- ✓ Both are enabled
+--  Both are enabled
 DESC INTEGRATION pypi_access_integration;
 DESC INTEGRATION mapbox_access_integration;
 -- Both should show: enabled = true
 
--- ✓ Network rules exist
+--  Network rules exist
 SHOW NETWORK RULES;
 -- Should show: pypi_network_rule, mapbox_network_rule
 
--- ✓ App has both integrations
+--  App has both integrations
 DESC STREAMLIT my_app;
 -- Look for: external_access_integrations = both
 
--- ✓ Can access PyPI (test)
+--  Can access PyPI (test)
 -- Try building the app - should succeed
 
--- ✓ Can access Mapbox (test)
+--  Can access Mapbox (test)
 -- Open Cell Tower Lookup page - maps should load
 ```
 
-## 📚 Summary
+##  Summary
 
 ### The Answer to Your Question
 

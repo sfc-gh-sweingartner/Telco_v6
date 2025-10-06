@@ -1,12 +1,12 @@
-# 🚀 Quick Create Guide - "Network Optimisation v6"
+#  Quick Create Guide - "Network Optimisation v6"
 
 ## Why Create in UI?
-✅ **Snowsight UI handles Git integration and stages automatically**  
-❌ SQL creation has issues with source locations for SPCS
+ **Snowsight UI handles Git integration and stages automatically**  
+ SQL creation has issues with source locations for SPCS
 
 ---
 
-## ⚡ Quick Steps
+##  Quick Steps
 
 ### 1️⃣ Create App (2 minutes)
 **Snowsight → Projects → Streamlit → + Streamlit App**
@@ -24,8 +24,8 @@ Warehouse:     MYWH
 **App menu (⋮) → App settings → External networks tab**
 
 Enable BOTH:
-- ✅ `PYPI_ACCESS_INTEGRATION` (for Python packages)
-- ✅ `MAPBOX_ACCESS_INTEGRATION` (for Carto map tiles)
+-  `PYPI_ACCESS_INTEGRATION` (for Python packages)
+-  `MAPBOX_ACCESS_INTEGRATION` (for Carto map tiles)
 
 Click **Save**
 
@@ -36,35 +36,35 @@ Click **Save**
 ### 4️⃣ Launch & Wait
 - Click **Run** or open app
 - **Wait 2-5 minutes** for first build
-- ✅ Done!
+-  Done!
 
 ---
 
-## ⚠️ CRITICAL Settings
+## ️ CRITICAL Settings
 
 | Setting | MUST BE | Why |
 |---------|---------|-----|
 | Python environment | **Run on container** | SPCS requires this |
-| Compute pool | `TELCO_STREAMLIT_POOL` | Already created ✅ |
-| PyPI integration | **✅ Enabled** | Or build fails! |
-| Mapbox integration | **✅ Enabled** | Or Carto maps blank! |
+| Compute pool | `TELCO_STREAMLIT_POOL` | Already created  |
+| PyPI integration | ** Enabled** | Or build fails! |
+| Mapbox integration | ** Enabled** | Or Carto maps blank! |
 
 ---
 
-## 🎯 What You Already Have Ready
+##  What You Already Have Ready
 
-✅ Compute pool: `TELCO_STREAMLIT_POOL` (2 idle nodes)  
-✅ PyPI integration: `PYPI_ACCESS_INTEGRATION`  
-✅ Carto integration: `MAPBOX_ACCESS_INTEGRATION` (19 tile servers)  
-✅ Dependencies: `pyproject.toml` + `requirements.txt`  
-✅ All code: `main.py` + pages + utils  
-✅ Carto basemaps: Public, no API key required
+ Compute pool: `TELCO_STREAMLIT_POOL` (2 idle nodes)  
+ PyPI integration: `PYPI_ACCESS_INTEGRATION`  
+ Carto integration: `MAPBOX_ACCESS_INTEGRATION` (19 tile servers)  
+ Dependencies: `pyproject.toml` + `requirements.txt`  
+ All code: `main.py` + pages + utils  
+ Carto basemaps: Public, no API key required
 
 **Just create the app in UI and connect it!**
 
 ---
 
-## 🐛 If Something Goes Wrong
+##  If Something Goes Wrong
 
 ### Can't select "Run on container"
 → Check your account has SPCS access
@@ -85,7 +85,7 @@ GRANT USAGE ON COMPUTE POOL TELCO_STREAMLIT_POOL TO ROLE ACCOUNTADMIN;
 
 ---
 
-## ✨ After It Works
+##  After It Works
 
 Test these:
 1. Maps in Cell Tower Lookup (should show Carto basemap tiles!)

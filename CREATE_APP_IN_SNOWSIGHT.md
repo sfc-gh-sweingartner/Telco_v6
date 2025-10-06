@@ -1,10 +1,10 @@
-# ✅ Create "Network Optimisation v6" in Snowsight
+#  Create "Network Optimisation v6" in Snowsight
 
 **Why through UI?** Snowsight automatically sets up Git integration and stages properly for SPCS apps.
 
 ---
 
-## 📋 Step-by-Step Instructions
+##  Step-by-Step Instructions
 
 ### 1. Open Snowsight
 Navigate to your Snowflake account in browser
@@ -47,15 +47,15 @@ Navigate to your Snowflake account in browser
 1. Click the **⋮** (three dots) menu → **App settings**
 2. Go to **External networks** tab
 3. **Enable BOTH:**
-   - ✅ `PYPI_ACCESS_INTEGRATION` (required for packages)
-   - ✅ `MAPBOX_ACCESS_INTEGRATION` (required for maps)
+   -  `PYPI_ACCESS_INTEGRATION` (required for packages)
+   -  `MAPBOX_ACCESS_INTEGRATION` (required for maps)
 4. Click **Save**
 
 ### 6. Configure Dependencies
 
 If the app has a code editor, ensure these files exist in root:
 
-**`pyproject.toml`** (exists in your repo ✅)
+**`pyproject.toml`** (exists in your repo )
 ```toml
 [project]
 requires-python = "==3.11.*"
@@ -73,7 +73,7 @@ dependencies = [
 ]
 ```
 
-**`requirements.txt`** (exists in your repo ✅)
+**`requirements.txt`** (exists in your repo )
 ```
 streamlit>=1.49.0
 pandas==2.3.1
@@ -89,7 +89,7 @@ numpy==2.2.5
    - Python 3.11 environment created
    - Packages install from PyPI
    - App starts
-3. ✅ App loads!
+3.  App loads!
 
 ### 8. Test
 
@@ -101,25 +101,25 @@ Verify these work:
 
 ---
 
-## ⚙️ Configuration Checklist
+## ️ Configuration Checklist
 
 **MUST HAVE for SPCS:**
-- ✅ Python environment: **Run on container**
-- ✅ Compute pool: `TELCO_STREAMLIT_POOL`
-- ✅ External access: **PYPI_ACCESS_INTEGRATION** (critical!)
-- ✅ External access: **MAPBOX_ACCESS_INTEGRATION** (for maps!)
-- ✅ Main file: `main.py`
-- ✅ Dependencies: `pyproject.toml` or `requirements.txt` with streamlit>=1.49
+-  Python environment: **Run on container**
+-  Compute pool: `TELCO_STREAMLIT_POOL`
+-  External access: **PYPI_ACCESS_INTEGRATION** (critical!)
+-  External access: **MAPBOX_ACCESS_INTEGRATION** (for maps!)
+-  Main file: `main.py`
+-  Dependencies: `pyproject.toml` or `requirements.txt` with streamlit>=1.49
 
 ---
 
-## 🎯 Key Settings
+##  Key Settings
 
 ### Python Environment
 **MUST select:** "Run on container" (not "Run on warehouse")
 
 ### Compute Pool
-**Use:** `TELCO_STREAMLIT_POOL` (already created ✅)
+**Use:** `TELCO_STREAMLIT_POOL` (already created )
 
 ### External Access Integrations
 **Enable BOTH in App Settings → External networks:**
@@ -132,7 +132,7 @@ Verify these work:
 
 ---
 
-## 🐛 Common Issues
+##  Common Issues
 
 ### Can't see app in Snowsight
 - **Fix:** Create through UI, not SQL
@@ -152,14 +152,14 @@ Verify these work:
 
 ---
 
-## 📝 Summary
+##  Summary
 
 **Create in Snowsight UI because:**
-✅ Handles Git integration automatically  
-✅ Creates proper stages and connections  
-✅ Better for SPCS apps  
-✅ Easier to configure external access  
-✅ Visual interface for all settings  
+ Handles Git integration automatically  
+ Creates proper stages and connections  
+ Better for SPCS apps  
+ Easier to configure external access  
+ Visual interface for all settings  
 
 **Critical settings:**
 1. **Run on container** (not warehouse)
@@ -168,7 +168,7 @@ Verify these work:
 
 ---
 
-## ✨ After Creation
+##  After Creation
 
 Once created and running:
 
@@ -184,8 +184,8 @@ DROP STREAMLIT OMNOPM_OLUQ7ORZM;  -- After v6 works perfectly
 
 ---
 
-## 🎉 You're Ready!
+##  You're Ready!
 
 **Go to Snowsight now and create your app following these steps!**
 
-The UI will handle everything properly, and your app will be running on SPCS with all the benefits! 🚀
+The UI will handle everything properly, and your app will be running on SPCS with all the benefits! 

@@ -1,4 +1,4 @@
-# ✅ Map Background Fix - Summary
+#  Map Background Fix - Summary
 
 ## Issue
 Background map tiles were not displaying in Geospatial Analysis and Cell Tower Lookup pages.
@@ -8,7 +8,7 @@ Background map tiles were not displaying in Geospatial Analysis and Cell Tower L
 2. PyDeck couldn't access all required Mapbox/Carto tile servers
 3. Original map style required Mapbox authentication
 
-## ✅ Solution Applied
+##  Solution Applied
 
 ### 1. Expanded Network Rule (5 → 19 hosts)
 
@@ -42,7 +42,7 @@ map_style="mapbox://styles/mapbox/light-v9"
 map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
 ```
 
-## 📋 What You Need to Do
+##  What You Need to Do
 
 ### Option 1: Using Git (Recommended)
 
@@ -69,7 +69,7 @@ git push origin main
 
 3. **Restart the app**
 
-### ⚠️ CRITICAL: Restart Required!
+### ️ CRITICAL: Restart Required!
 
 **After pushing/updating, you MUST restart the app:**
 - Go to Snowsight
@@ -78,37 +78,37 @@ git push origin main
 
 This ensures the new external access integration is loaded.
 
-## ✨ Expected Results
+##  Expected Results
 
 After restart, you should see:
 
-### ✅ Geospatial Analysis Page
+###  Geospatial Analysis Page
 - Light gray Carto basemap with roads and labels
 - Hexagonal overlays displaying metrics
 - 3D elevation working correctly
 - Smooth zooming and panning
 
-### ✅ Cell Tower Lookup Page
+###  Cell Tower Lookup Page
 - Same Carto basemap background
 - Grid cells with color coding
 - Interactive selection working
 - Tooltips showing cell data
 
-## 🗺️ About Carto Basemaps
+## ️ About Carto Basemaps
 
 **Advantages:**
-- ✅ Public, no API key required
-- ✅ Fast, reliable tile delivery
-- ✅ Works perfectly with PyDeck
-- ✅ Clean, professional styling
-- ✅ Free to use
+-  Public, no API key required
+-  Fast, reliable tile delivery
+-  Works perfectly with PyDeck
+-  Clean, professional styling
+-  Free to use
 
 **Styles Available:**
-- Positron (light) - what we're using ✅
+- Positron (light) - what we're using 
 - Dark Matter (dark)
 - Voyager (colorful)
 
-## 🔧 Network Rule Details
+##  Network Rule Details
 
 **Before:**
 - 5 hosts
@@ -125,11 +125,11 @@ SHOW NETWORK RULES LIKE 'MAPBOX_NETWORK_RULE';
 -- Should show 19 entries_in_valuelist
 ```
 
-## 🐛 If Maps Still Don't Show
+##  If Maps Still Don't Show
 
 ### Check 1: External Access Integration
 In Snowsight App Settings → External networks:
-- ✅ `MAPBOX_ACCESS_INTEGRATION` should be enabled
+-  `MAPBOX_ACCESS_INTEGRATION` should be enabled
 
 ### Check 2: App Restarted
 - Make sure you restarted the app after network rule changes
@@ -151,7 +151,7 @@ grep "basemaps.cartocdn.com" pages/3_Geospatial_Analysis.py
 grep "basemaps.cartocdn.com" pages/2_Cell_Tower_Lookup.py
 ```
 
-## 📊 Files Changed
+##  Files Changed
 
 | File | Type | Change |
 |------|------|--------|
@@ -160,7 +160,7 @@ grep "basemaps.cartocdn.com" pages/2_Cell_Tower_Lookup.py
 | `pages/2_Cell_Tower_Lookup.py` | Python | Updated map_style to Carto |
 | `MAPBOX_FIX_SUMMARY.md` | Doc | This file |
 
-## ✅ Success Checklist
+##  Success Checklist
 
 - [x] Network rule updated (19 hosts)
 - [x] External access integration recreated
@@ -170,7 +170,7 @@ grep "basemaps.cartocdn.com" pages/2_Cell_Tower_Lookup.py
 - [ ] App restarted in Snowsight (your action)
 - [ ] Maps display correctly (verify after restart)
 
-## 🎉 After Restart
+##  After Restart
 
 You should see beautiful light gray Carto basemaps with:
 - Roads and highways
@@ -181,4 +181,4 @@ You should see beautiful light gray Carto basemaps with:
 
 ---
 
-**Push your changes and restart the app now!** 🚀
+**Push your changes and restart the app now!** 
