@@ -602,7 +602,7 @@ def prepare_visualization_data(metric_name, config):
         return pd.DataFrame(), 0, 0, title, value_column
 
     # --- Stage 1: Prepare per-cell data --- 
-    df['h3_actual_index'] = df.apply(lambda row: h3.geo_to_h3(float(row['latitude']), float(row['longitude']), config['resolution']), axis=1)
+    df['h3_actual_index'] = df.apply(lambda row: h3.latlng_to_cell(float(row['latitude']), float(row['longitude']), config['resolution']), axis=1)
     df['numeric_metric_value'] = pd.to_numeric(df[value_column], errors='coerce')
     df = df.dropna(subset=['numeric_metric_value', 'h3_actual_index'])
     df['cell_id_str'] = df['cell_id'].astype(str) # Ensure cell_id is string for aggregation
