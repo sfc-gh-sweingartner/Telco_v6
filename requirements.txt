@@ -1,8 +1,9 @@
-# Telco Network Optimization Suite - Snowflake-Compatible Dependencies
-# These versions are specifically tested and supported in Snowflake's Streamlit environment
+# Telco Network Optimization Suite - SPCS (Container Runtime) Dependencies
+# For Streamlit in Snowflake on SPCS - Python 3.11
+# Note: Streamlit >= 1.49 required for SPCS support
 
 # Core Streamlit and data processing
-streamlit
+streamlit>=1.49.0
 pandas==2.3.1
 numpy==2.2.5
 

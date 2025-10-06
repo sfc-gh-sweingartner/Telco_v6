@@ -1,0 +1,30 @@
+[project]
+name = "telco-network-optimization"
+version = "1.0.0"
+description = "Telco Network Intelligence Suite - AI-Powered Network Operations Command Center"
+requires-python = "==3.11.*"
+dependencies = [
+    # Streamlit - must be >= 1.49 for SPCS
+    "streamlit>=1.49.0",
+    
+    # Core data processing
+    "pandas==2.3.1",
+    "numpy==2.2.5",
+    
+    # Geospatial and visualization
+    "pydeck==0.9.1",
+    "plotly==5.22.0",
+    "matplotlib==3.10.0",
+    "h3-py==3.7.6",
+    "branca==0.6.0",
+    
+    # Statistical analysis
+    "scipy==1.15.3",
+    
+    # Additional utilities
+    "altair==5.5.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -120,6 +120,52 @@ CREATE OR REPLACE API INTEGRATION git_telco_v4
 
 ---
 
+## 🆕 SPCS Migration (Snowpark Container Services)
+
+**NEW: Run Streamlit on containers for better performance and features!**
+
+### Why Migrate to SPCS?
+
+✅ **Full Streamlit Features** - Complete `st.cache_resource` and `st.cache_data` support  
+✅ **Latest Streamlit** - Use newest versions (>=1.49) as soon as published  
+✅ **Any PyPI Package** - No longer limited to Anaconda channel  
+✅ **Better Performance** - Long-running service (3-day keep-alive)  
+✅ **Experimental Features** - Access streamlit-nightly for cutting edge  
+
+### Quick SPCS Migration (3 Steps)
+
+```sql
+-- 1. Create compute pool
+@Setup/spcs_migration/01_create_compute_pool.sql
+
+-- 2. Create external access integrations (PyPI + Mapbox)
+@Setup/spcs_migration/02_create_external_access_integrations.sql
+
+-- 3. Create SPCS Streamlit app
+@Setup/spcs_migration/03_create_streamlit_app_spcs.sql
+```
+
+### External Access Integrations Explained
+
+**Two integrations are required:**
+
+1. **`pypi_access_integration`** - Downloads Python packages from PyPI during container build
+   - Required for: streamlit, pandas, plotly, pydeck, all dependencies
+   - Without it: Container build fails, app won't start
+
+2. **`mapbox_access_integration`** - Loads map tiles for geospatial features
+   - Required for: pydeck maps, st.map(), H3 hexagon visualizations
+   - Without it: Maps show blank, no tiles load
+
+### Migration Documentation
+
+- **Full Guide**: `Setup/spcs_migration/README_SPCS_MIGRATION.md` - Complete migration walkthrough
+- **Quick Reference**: `Setup/spcs_migration/QUICK_REFERENCE.md` - Commands and troubleshooting
+- **Individual Scripts**: Run `01_*.sql`, `02_*.sql`, `03_*.sql` separately for control
+- **Master Script**: `00_RUN_ALL_MIGRATION_STEPS.sql` - All steps in one (requires manual app creation)
+
+---
+
 ## 📦 Detailed Setup
 
 ### Step 1: Database Setup
@@ -177,9 +223,10 @@ Upload `telco_network_opt.yaml` to Snowflake as a semantic model to enable natur
 ## 📁 Project Structure
 
 ```
-Telco_v4/
+Telco_v6/
 ├── main.py                          # Main dashboard and landing page
-├── requirements.txt                 # Python dependencies
+├── requirements.txt                 # Python dependencies (SPCS: streamlit>=1.49)
+├── pyproject.toml                   # NEW: Python 3.11 + dependency management for SPCS
 ├── telco_network_opt.yaml          # Semantic model for Snowflake Intelligence
 ├── .gitignore                      # Git ignore rules
 │
@@ -205,7 +252,14 @@ Telco_v4/
 │   ├── manage_data_generators.sql  # Generator management
 │   ├── START_DEMO.sql              # Quick demo start
 │   ├── STOP_DEMO.sql               # Quick demo stop
-│   └── regenerate_demo_data.sql    # Data refresh
+│   ├── regenerate_demo_data.sql    # Data refresh
+│   └── spcs_migration/            # NEW: SPCS Container Runtime Migration
+│       ├── README_SPCS_MIGRATION.md          # Complete migration guide
+│       ├── QUICK_REFERENCE.md                # Quick commands and troubleshooting
+│       ├── 00_RUN_ALL_MIGRATION_STEPS.sql    # Master migration script
+│       ├── 01_create_compute_pool.sql        # Step 1: Compute pool
+│       ├── 02_create_external_access_integrations.sql  # Step 2: PyPI + Mapbox
+│       └── 03_create_streamlit_app_spcs.sql  # Step 3: Create SPCS app
 │
 ├── CortexSearch/                   # Cortex Search configuration
 │   ├── create_cortex_searches.sql  # Create search services
