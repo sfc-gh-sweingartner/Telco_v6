@@ -103,7 +103,7 @@ for obj in cell_tower_objects:
 df = pd.DataFrame(selection_data)
 
 if len(selection_data) > 0:
-  prompt = f"""
+    prompt = f"""
     You are a network engineer analyzing multiple failed cells in a cell tower. 
     Provide a concise summary of the failed cells using the following data:
 
