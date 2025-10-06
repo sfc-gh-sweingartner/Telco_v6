@@ -24,8 +24,8 @@ Warehouse:     MYWH
 **App menu (⋮) → App settings → External networks tab**
 
 Enable BOTH:
-- ✅ `PYPI_ACCESS_INTEGRATION`
-- ✅ `MAPBOX_ACCESS_INTEGRATION`
+- ✅ `PYPI_ACCESS_INTEGRATION` (for Python packages)
+- ✅ `MAPBOX_ACCESS_INTEGRATION` (for Carto map tiles)
 
 Click **Save**
 
@@ -47,7 +47,7 @@ Click **Save**
 | Python environment | **Run on container** | SPCS requires this |
 | Compute pool | `TELCO_STREAMLIT_POOL` | Already created ✅ |
 | PyPI integration | **✅ Enabled** | Or build fails! |
-| Mapbox integration | **✅ Enabled** | Or maps blank! |
+| Mapbox integration | **✅ Enabled** | Or Carto maps blank! |
 
 ---
 
@@ -55,9 +55,10 @@ Click **Save**
 
 ✅ Compute pool: `TELCO_STREAMLIT_POOL` (2 idle nodes)  
 ✅ PyPI integration: `PYPI_ACCESS_INTEGRATION`  
-✅ Mapbox integration: `MAPBOX_ACCESS_INTEGRATION`  
+✅ Carto integration: `MAPBOX_ACCESS_INTEGRATION` (19 tile servers)  
 ✅ Dependencies: `pyproject.toml` + `requirements.txt`  
 ✅ All code: `main.py` + pages + utils  
+✅ Carto basemaps: Public, no API key required
 
 **Just create the app in UI and connect it!**
 
@@ -71,8 +72,10 @@ Click **Save**
 ### Build fails
 → Enable `PYPI_ACCESS_INTEGRATION` in External networks
 
-### Maps blank
+### Maps blank / no background tiles
 → Enable `MAPBOX_ACCESS_INTEGRATION` in External networks
+→ Restart the app after enabling
+→ See `MAPBOX_FIX_SUMMARY.md` for troubleshooting
 
 ### Can't find compute pool
 → Refresh page or run:
@@ -85,10 +88,11 @@ GRANT USAGE ON COMPUTE POOL TELCO_STREAMLIT_POOL TO ROLE ACCOUNTADMIN;
 ## ✨ After It Works
 
 Test these:
-1. Maps in Cell Tower Lookup (should show tiles!)
-2. Geospatial Analysis maps
+1. Maps in Cell Tower Lookup (should show Carto basemap tiles!)
+2. Geospatial Analysis maps (light gray background with roads)
 3. AI features
 4. All pages load
+5. H3 hexagon overlays display correctly
 
 Then delete old app:
 ```sql

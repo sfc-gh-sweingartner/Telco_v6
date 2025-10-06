@@ -78,32 +78,12 @@ A comprehensive multi-page Streamlit application built on Snowflake for real-tim
 
 ## ⚡ Quick Start
 
-### Option 1: Deploy from GitHub (Recommended)
+### Prerequisites Setup (5 minutes)
 
-1. **Create Git API Integration** in Snowflake:
-```sql
-CREATE OR REPLACE API INTEGRATION git_telco_v4
-  API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com/Deepjyoti-ricky/')
-  ENABLED = TRUE;
-```
-
-2. **Deploy Streamlit App**:
-   - Navigate to **Projects > Streamlit** in Snowsight
-   - Click **+ Streamlit App** → **Create from repository**
-   - Repository URL: `https://github.com/Deepjyoti-ricky/Telco_v4`
-   - Select API Integration: `git_telco_v4`
-   - Deploy to: `TELCO_NETWORK_OPTIMIZATION_PROD.RAW`
-   - Main file: `main.py`
-
-3. **Install Required Packages**:
-   - In Streamlit editor, add packages: `altair, branca, h3-py, matplotlib, numpy, pandas, plotly, pydeck, scipy`
-
-4. **Run Setup Scripts** (in order):
+1. **Run Database Setup Scripts** (in order):
    ```sql
    -- Execute in Snowflake worksheet
-   USE DATABASE TELCO_NETWORK_OPTIMIZATION_PROD;
-   USE SCHEMA RAW;
+   USE ROLE ACCOUNTADMIN;
    
    -- 1. Create tables and load data
    @Setup/create_tables.sql
@@ -111,58 +91,103 @@ CREATE OR REPLACE API INTEGRATION git_telco_v4
    -- 2. Setup Cortex Search services
    @CortexSearch/create_cortex_searches.sql
    
-   -- 3. Configure Mapbox access
-   @Setup/connectMapBoxNoKey.sql
+   -- 3. Create SPCS infrastructure (compute pool + external access)
+   @Setup/spcs_migration/01_create_compute_pool.sql
+   @Setup/spcs_migration/02_create_external_access_integrations.sql
+   @Setup/spcs_migration/05_fix_mapbox_access.sql
    
-   -- 4. Setup data generators (optional for live demo)
+   -- 4. Optional: Setup data generators for live demo
    @Setup/setup_data_generators.sql
    ```
 
+### Deploy Streamlit App in Snowsight (2 minutes)
+
+2. **Create App via Snowsight UI** (required for SPCS):
+   - Navigate to **Projects > Streamlit** in Snowsight
+   - Click **+ Streamlit App**
+   - **App title**: `Telco Network Intelligence Suite`
+   - **Database**: `TELCO_NETWORK_OPTIMIZATION_PROD`
+   - **Schema**: `RAW`
+   - **Python environment**: **⭐ Run on container** (critical!)
+   - **Compute pool**: `TELCO_STREAMLIT_POOL`
+   - **Warehouse**: `TELCO_WH` (or your warehouse name)
+   - Connect to your Git repository or upload files
+   - **Main file**: `main.py`
+
+3. **Enable External Access** (critical!):
+   - Click app menu (⋮) → **App settings**
+   - Go to **External networks** tab
+   - ✅ Enable `PYPI_ACCESS_INTEGRATION`
+   - ✅ Enable `MAPBOX_ACCESS_INTEGRATION`
+   - Click **Save**
+
+4. **First Launch** (2-5 minutes for container build):
+   - App will build container and install dependencies
+   - Subsequent launches are much faster (10-30 seconds)
+
+📖 **Detailed Guide**: See `CREATE_APP_IN_SNOWSIGHT.md` for step-by-step instructions with screenshots
+
 ---
 
-## 🆕 SPCS Migration (Snowpark Container Services)
+## 🚀 SPCS Deployment (Snowpark Container Services)
 
-**NEW: Run Streamlit on containers for better performance and features!**
+**This app runs on SPCS for best performance and features!**
 
-### Why Migrate to SPCS?
+### Why SPCS?
 
 ✅ **Full Streamlit Features** - Complete `st.cache_resource` and `st.cache_data` support  
 ✅ **Latest Streamlit** - Use newest versions (>=1.49) as soon as published  
 ✅ **Any PyPI Package** - No longer limited to Anaconda channel  
 ✅ **Better Performance** - Long-running service (3-day keep-alive)  
-✅ **Experimental Features** - Access streamlit-nightly for cutting edge  
+✅ **Professional Grade** - Container-based runtime for production workloads
 
-### Quick SPCS Migration (3 Steps)
+### Key Components
 
-```sql
--- 1. Create compute pool
-@Setup/spcs_migration/01_create_compute_pool.sql
+#### 1. Compute Pool
+- **Name**: `TELCO_STREAMLIT_POOL`
+- **Purpose**: Runs Python container (not SQL queries)
+- **Instance**: CPU_X64_XS (cost-effective)
+- **Nodes**: 2-5 (auto-scaling)
 
--- 2. Create external access integrations (PyPI + Mapbox)
-@Setup/spcs_migration/02_create_external_access_integrations.sql
-
--- 3. Create SPCS Streamlit app
-@Setup/spcs_migration/03_create_streamlit_app_spcs.sql
-```
-
-### External Access Integrations Explained
+#### 2. External Access Integrations
 
 **Two integrations are required:**
 
-1. **`pypi_access_integration`** - Downloads Python packages from PyPI during container build
-   - Required for: streamlit, pandas, plotly, pydeck, all dependencies
-   - Without it: Container build fails, app won't start
+**`pypi_access_integration`** - Package installation
+- Downloads Python packages from PyPI during container build
+- Required for: streamlit, pandas, plotly, pydeck, h3, all dependencies
+- Without it: ❌ Container build fails, app won't start
 
-2. **`mapbox_access_integration`** - Loads map tiles for geospatial features
-   - Required for: pydeck maps, st.map(), H3 hexagon visualizations
-   - Without it: Maps show blank, no tiles load
+**`mapbox_access_integration`** - Map tiles
+- Loads Carto basemap tiles for geospatial visualizations
+- Required for: PyDeck maps, H3 hexagon overlays, geospatial analysis
+- Without it: ❌ Maps show blank, no background
 
-### Migration Documentation
+#### 3. Carto Basemaps
+- **Public** - No API key required
+- **Fast** - Reliable global CDN
+- **Free** - No usage limits
+- **Clean** - Professional styling perfect for data overlays
 
-- **Full Guide**: `Setup/spcs_migration/README_SPCS_MIGRATION.md` - Complete migration walkthrough
-- **Quick Reference**: `Setup/spcs_migration/QUICK_REFERENCE.md` - Commands and troubleshooting
-- **Individual Scripts**: Run `01_*.sql`, `02_*.sql`, `03_*.sql` separately for control
-- **Master Script**: `00_RUN_ALL_MIGRATION_STEPS.sql` - All steps in one (requires manual app creation)
+### Deployment Method
+
+**⚠️ IMPORTANT**: Must create app via **Snowsight UI**, not SQL!
+
+The UI properly configures:
+- Git integration and stages
+- External access integrations
+- Compute pool assignment
+- Runtime environment
+
+📖 **Detailed Instructions**: See `CREATE_APP_IN_SNOWSIGHT.md` or `QUICK_CREATE_GUIDE.md`
+
+### Troubleshooting
+
+If you encounter issues:
+- **Maps blank?** Check `MAPBOX_ACCESS_INTEGRATION` is enabled in App Settings → External networks
+- **Build fails?** Check `PYPI_ACCESS_INTEGRATION` is enabled
+- **App won't start?** Verify compute pool has available nodes
+- See `MAPBOX_FIX_SUMMARY.md` for map troubleshooting
 
 ---
 
@@ -203,18 +228,26 @@ Execute `Setup/create_tables.sql` to create:
 SHOW CORTEX SEARCH SERVICES;
 ```
 
-### Step 4: Configure Network Access
+### Step 4: SPCS Infrastructure Setup
 
 ```sql
--- Setup Mapbox integration (no API key required)
-@Setup/connectMapBoxNoKey.sql
+-- Create compute pool for containerized Streamlit
+@Setup/spcs_migration/01_create_compute_pool.sql
 
--- Update with your Streamlit app name
-ALTER STREAMLIT TELCO_NETWORK_OPTIMIZATION_PROD.RAW.YOUR_APP_NAME
-  SET EXTERNAL_ACCESS_INTEGRATIONS = (map_access_int);
+-- Create external access integrations (PyPI + Carto)
+@Setup/spcs_migration/02_create_external_access_integrations.sql
+@Setup/spcs_migration/05_fix_mapbox_access.sql
 ```
 
-### Step 5: Semantic Model (for Snowflake Intelligence)
+### Step 5: Create Streamlit App in Snowsight UI
+
+**You must use Snowsight UI to create the app** (SQL creation doesn't work well for SPCS)
+
+See detailed instructions in:
+- `CREATE_APP_IN_SNOWSIGHT.md` - Complete guide
+- `QUICK_CREATE_GUIDE.md` - Quick reference
+
+### Step 6: Semantic Model (for Snowflake Intelligence)
 
 Upload `telco_network_opt.yaml` to Snowflake as a semantic model to enable natural language querying.
 
@@ -246,29 +279,36 @@ Telco_v6/
 │
 ├── Setup/                          # SQL setup scripts
 │   ├── create_tables.sql           # Main data setup
-│   ├── connectMapBoxNoKey.sql      # Mapbox configuration
-│   ├── mapbox_access_setup.sql     # Alternative Mapbox setup
 │   ├── setup_data_generators.sql   # Streaming data generators
 │   ├── manage_data_generators.sql  # Generator management
 │   ├── START_DEMO.sql              # Quick demo start
 │   ├── STOP_DEMO.sql               # Quick demo stop
 │   ├── regenerate_demo_data.sql    # Data refresh
-│   └── spcs_migration/            # NEW: SPCS Container Runtime Migration
-│       ├── README_SPCS_MIGRATION.md          # Complete migration guide
+│   └── spcs_migration/            # SPCS Container Runtime Setup
+│       ├── README_SPCS_MIGRATION.md          # Complete deployment guide
 │       ├── QUICK_REFERENCE.md                # Quick commands and troubleshooting
-│       ├── 00_RUN_ALL_MIGRATION_STEPS.sql    # Master migration script
+│       ├── EXTERNAL_ACCESS_DIAGRAM.md        # Visual guide to integrations
 │       ├── 01_create_compute_pool.sql        # Step 1: Compute pool
-│       ├── 02_create_external_access_integrations.sql  # Step 2: PyPI + Mapbox
-│       └── 03_create_streamlit_app_spcs.sql  # Step 3: Create SPCS app
+│       ├── 02_create_external_access_integrations.sql  # Step 2: PyPI + Carto
+│       └── 05_fix_mapbox_access.sql          # Final: Expanded network access
 │
 ├── CortexSearch/                   # Cortex Search configuration
 │   ├── create_cortex_searches.sql  # Create search services
 │   ├── resume_cortex_searches.sql  # Resume services
 │   └── suspend_cortex_searches.sql # Suspend services
 │
-└── Documentation/                  # Additional documentation
-    ├── ExampleQuestions.md         # 30 demo questions for Snowflake Intelligence
-    └── enhancements.md             # Enhancement roadmap
+├── Documentation/                  # Additional documentation
+│   ├── ExampleQuestions.md         # 30 demo questions for Snowflake Intelligence
+│   └── enhancements.md             # Enhancement roadmap
+│
+├── CREATE_APP_IN_SNOWSIGHT.md     # ⭐ Detailed UI deployment guide
+├── QUICK_CREATE_GUIDE.md           # ⭐ Quick deployment reference
+├── MAPBOX_FIX_SUMMARY.md           # Map troubleshooting guide
+├── SPCS_MIGRATION_SUMMARY.md       # SPCS overview and benefits
+│
+└── Trash/                          # Obsolete files (kept for reference)
+    ├── mapbox_access_setup.sql     # Old warehouse Mapbox setup
+    └── connectMapBoxNoKey.sql      # Old warehouse map config
 ```
 
 ---
@@ -398,10 +438,11 @@ SELECT 'SUPPORT_TICKETS', COUNT(*) FROM SUPPORT_TICKETS;
 5. **Real-time Updates** → Optional streaming data generators
 
 ### Key Design Decisions
-- **No API Keys Required**: Leverages Snowflake's built-in Mapbox integration
+- **No API Keys Required**: Uses public Carto basemaps via external access integration
 - **Session Management**: Direct `get_active_session()` without caching
 - **Production Metrics**: Realistic thresholds (95%+ health, <5% critical issues)
 - **AI Integration**: Multiple Cortex models for different use cases
+- **Container Runtime**: SPCS provides full Streamlit features and any PyPI package
 
 ---
 
