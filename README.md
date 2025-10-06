@@ -297,18 +297,21 @@ Telco_v6/
 │   ├── resume_cortex_searches.sql  # Resume services
 │   └── suspend_cortex_searches.sql # Suspend services
 │
-├── Documentation/                  # Additional documentation
-│   ├── ExampleQuestions.md         # 30 demo questions for Snowflake Intelligence
+├── Documentation/                  # 📚 Detailed documentation
+│   ├── FILE_ORGANIZATION.md        # Documentation guide
+│   ├── SPCS_MIGRATION_SUMMARY.md   # SPCS overview and benefits
+│   ├── CLEANUP_SUMMARY.md          # Cleanup documentation
+│   ├── CELL_TOWER_LOOKUP_FIX.md    # Fix documentation
+│   ├── MAPBOX_FIX_SUMMARY.md       # Map troubleshooting
+│   ├── LOGO_REMOVAL_SUMMARY.md     # Logo removal details
+│   ├── ExampleQuestions.md         # Demo questions
 │   └── enhancements.md             # Enhancement roadmap
 │
 ├── CREATE_APP_IN_SNOWSIGHT.md     # ⭐ Detailed UI deployment guide
 ├── QUICK_CREATE_GUIDE.md           # ⭐ Quick deployment reference
-├── MAPBOX_FIX_SUMMARY.md           # Map troubleshooting guide
-├── SPCS_MIGRATION_SUMMARY.md       # SPCS overview and benefits
-│
-└── Trash/                          # Obsolete files (kept for reference)
-    ├── mapbox_access_setup.sql     # Old warehouse Mapbox setup
-    └── connectMapBoxNoKey.sql      # Old warehouse map config
+├── TROUBLESHOOTING.md              # Common issues and solutions
+├── CHANGELOG.md                    # Version history
+├── CONTRIBUTING.md                 # Contribution guidelines
 ```
 
 ---
