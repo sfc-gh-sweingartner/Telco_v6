@@ -72,8 +72,8 @@ view_state = pdk.ViewState(
     pitch=50,
 )
 
-# Display the map using PyDeck without requiring explicit Mapbox API key
-# Snowflake's Streamlit environment provides access to Mapbox tiles by default
+# Display the map using PyDeck with Carto basemap (public, no API key required)
+# External access integration provides access to Carto tile servers
 st.session_state.event = st.pydeck_chart(
     pdk.Deck(
         map_provider="mapbox",
@@ -125,7 +125,7 @@ if len(selection_data) > 0:
     st.markdown(selection_text["RES"][0])
 
     st.write("")
-  col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
     # Plot 1: Bar Chart of Failure Rates
 
     fig1, ax1 = plt.subplots()
@@ -135,8 +135,8 @@ if len(selection_data) > 0:
     col1.pyplot(fig1)
 
 
-  cell_ids_list = df["Cell ID"].to_list()
-  cell_ids_str = ','.join(map(str, cell_ids_list))
+    cell_ids_list = df["Cell ID"].to_list()
+    cell_ids_str = ','.join(map(str, cell_ids_list))
     loyalty_data = session.sql(f"""SELECT 
         c.cell_id,
         COUNT(CASE WHEN cl.status = 'Bronze' THEN 1 END) AS bronze_count,
@@ -155,7 +155,7 @@ if len(selection_data) > 0:
         c.cell_id;
     """).to_pandas()
     # Set 'cell_id' as the index for better visualization
-  loyalty_data.set_index('CELL_ID', inplace=True)
+    loyalty_data.set_index('CELL_ID', inplace=True)
 
     # Plotting the loyalty status counts
     fig2, ax2 = plt.subplots()
@@ -165,21 +165,21 @@ if len(selection_data) > 0:
     ax2.set_title('Loyalty Status Count by Cell', fontsize=16)
     ax2.set_xlabel('Cell ID', fontsize=12)
     ax2.set_ylabel('Customer Count', fontsize=12)
-  ax2.set_xticklabels(loyalty_data.index, rotation=45)
+    ax2.set_xticklabels(loyalty_data.index, rotation=45)
     ax2.legend(title="Loyalty Status", labels=["Bronze", "Silver", "Gold"])
 
     # Show the plot in Streamlit
     col2.pyplot(fig2)
 
     sentiment_score = session.sql(f"""SELECT 
-      cell_id,
+        cell_id,
         AVG(sentiment_score) + 20 AS avg_sentiment_score
-  FROM 
-      TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
-  WHERE cell_id IN ({cell_ids_str})
-  GROUP BY 
-      cell_id
-  ORDER BY 
+    FROM 
+        TELCO_NETWORK_OPTIMIZATION_PROD.RAW.SUPPORT_TICKETS
+    WHERE cell_id IN ({cell_ids_str})
+    GROUP BY 
+        cell_id
+    ORDER BY 
         avg_sentiment_score DESC;
     """).to_pandas()
 
