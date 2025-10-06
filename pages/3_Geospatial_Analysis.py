@@ -870,7 +870,7 @@ st.subheader("🗺️ Multi-Metric Geospatial Analysis")
 # Always render the main visualization using H3HexagonLayers
 st.pydeck_chart(
     pdk.Deck(
-        map_style="mapbox://styles/mapbox/light-v9", 
+        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json", 
         initial_view_state=pdk.ViewState(
             latitude=center_lat,
             longitude=center_lon,

@@ -77,7 +77,7 @@ view_state = pdk.ViewState(
 st.session_state.event = st.pydeck_chart(
     pdk.Deck(
         map_provider="mapbox",
-        map_style="mapbox://styles/mapbox/light-v9",
+        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
         layers=[grid_layer],
         initial_view_state=view_state,
     ), on_select="rerun", selection_mode="single-object"
