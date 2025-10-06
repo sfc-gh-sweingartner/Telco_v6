@@ -98,7 +98,7 @@ st.set_page_config(
 
 # Inject custom CSS and create navigation
 inject_custom_css()
-create_sidebar_navigation()
+# create_sidebar_navigation()  # Removed: Logo not needed in sidebar
 
 # Initialize Snowflake session and AI components
 session = get_snowflake_session()

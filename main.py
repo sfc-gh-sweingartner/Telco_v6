@@ -119,7 +119,7 @@ st.set_page_config(
 inject_custom_css()
 
 # Create executive sidebar navigation with demo controls
-create_sidebar_navigation()
+# create_sidebar_navigation()  # Removed: Logo not needed in sidebar
 
 # Get executive demo state
 demo_state = create_executive_demo_controller()

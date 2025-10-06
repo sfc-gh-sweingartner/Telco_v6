@@ -102,9 +102,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Inject custom CSS and create navigation
+# Inject custom CSS
 inject_custom_css()
-create_sidebar_navigation()
+# create_sidebar_navigation()  # Removed: Logo not needed in sidebar
 
 # Initialize AI components
 session = get_snowflake_session()

@@ -81,7 +81,7 @@ create_page_header(
 )
 
 # Create sidebar navigation
-create_sidebar_navigation()
+# create_sidebar_navigation()  # Removed: Logo not needed in sidebar
 
 # Get Snowflake session
 session = get_snowflake_session()
