@@ -31,18 +31,48 @@ class AICache:
         self.session = session
         self.cache_schema = "TELCO_NETWORK_OPTIMIZATION_PROD.AI_CACHE"
     
-    def _generate_cache_key(self, **params) -> str:
+    def _get_cache_key_params(self, table_name: str, params: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Extract only the parameters that should be used for cache key generation.
+        Excludes metadata fields that don't affect uniqueness.
+        
+        Args:
+            table_name: Name of the cache table
+            params: All parameters passed
+            
+        Returns:
+            Filtered parameters for cache key
+        """
+        # Define which parameters should be used for cache key (user-selectable values only)
+        cache_key_params_map = {
+            'MAIN_PAGE_CACHE': ['report_type'],
+            'AI_INSIGHTS_CACHE': ['report_type', 'sub_type', 'time_horizon', 'category', 'urgency_level'],
+            'CUSTOMER_PROFILE_CACHE': ['customer_id', 'analysis_type', 'recommendation_type'],
+            'EXECUTIVE_SUMMARY_CACHE': ['report_type', 'analysis_period', 'financial_focus',
+                                        'opportunity_scope', 'time_horizon', 'risk_category'],
+            'PREDICTIVE_ANALYTICS_CACHE': ['analysis_type', 'forecast_metric', 'forecast_horizon',
+                                           'anomaly_focus', 'sensitivity_level', 'maintenance_focus',
+                                           'maintenance_window', 'behavior_metric', 'customer_segment']
+        }
+        
+        key_params = cache_key_params_map.get(table_name, [])
+        return {k: v for k, v in params.items() if k in key_params}
+    
+    def _generate_cache_key(self, table_name: str, **params) -> str:
         """
         Generate a unique cache key from parameters
         
         Args:
+            table_name: Name of the cache table
             **params: All parameters that make this request unique
             
         Returns:
             MD5 hash of sorted parameters
         """
+        # Filter to only cache-key parameters
+        key_params = self._get_cache_key_params(table_name, params)
         # Sort parameters for consistent key generation
-        sorted_params = json.dumps(params, sort_keys=True)
+        sorted_params = json.dumps(key_params, sort_keys=True)
         return hashlib.md5(sorted_params.encode()).hexdigest()
     
     def _format_age(self, created_at) -> str:
@@ -97,7 +127,7 @@ class AICache:
             Dictionary with cached data or None if not found
         """
         try:
-            cache_key = self._generate_cache_key(**params)
+            cache_key = self._generate_cache_key(table_name, **params)
             
             query = f"""
             SELECT 
@@ -146,7 +176,7 @@ class AICache:
             True if successful, False otherwise
         """
         try:
-            cache_key = self._generate_cache_key(**{k: v for k, v in params.items() 
+            cache_key = self._generate_cache_key(table_name, **{k: v for k, v in params.items() 
                                                     if k not in ['ai_content', 'ai_model', 'confidence_score']})
             
             # Escape single quotes in content
