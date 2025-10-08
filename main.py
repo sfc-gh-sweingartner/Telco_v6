@@ -311,7 +311,7 @@ def load_executive_dashboard_data():
                 "Network Health": {
                     "value": f"{network_health_score:.1f}%" if network_health_score > 0 else "Calculating...",
                     "trend": 1.8 if network_health_score >= 95 else -1.8 if network_health_score < 90 else 0.2,
-                    "icon": "🟢" if network_health_score >= 95 else "🟡" if network_health_score >= 85 else ""
+                    "icon": ""
                 },
                 "Active Infrastructure": {
                     "value": f"{total_towers:,}" if total_towers > 0 else "Loading...",
@@ -336,7 +336,7 @@ def load_executive_dashboard_data():
                 "Premium Performance": {
                     "value": f"{premium_percentage:.1f}%" if total_towers > 0 else "0%",
                     "trend": 2.8 if premium_percentage > 50 else -0.9 if premium_percentage < 30 else 0.5,
-                    "icon": "⭐"
+                    "icon": ""
                 }
             }
             

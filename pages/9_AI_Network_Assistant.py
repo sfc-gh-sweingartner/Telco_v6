@@ -97,7 +97,7 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
     st.session_state.chat_history.append({
         "role": "assistant",
-        "content": " Hi! I'm your AI Network Assistant. I can help you analyze your telecom network using natural language. Try asking me questions like:\n\n• 'Show me cell towers with high failure rates'\n• 'Which areas have the most customer complaints?'\n• 'What's causing network issues in California?'\n• 'Predict where we might have problems next month'\n\nWhat would you like to know about your network?",
+        "content": "Hi! I'm your AI Network Assistant. I can help you analyze your telecom network using natural language. Try asking me questions like:\n\n• 'Show me cell towers with high failure rates'\n• 'Which areas have the most customer complaints?'\n• 'What's causing network issues in California?'\n• 'Predict where we might have problems next month'\n\nWhat would you like to know about your network?",
         "timestamp": datetime.now()
     })
 
@@ -395,7 +395,7 @@ def process_network_query(query: str, session, ai_processor, ai_analytics):
         }
 
 # Help section
-with st.expander("🆘 How to Use the AI Network Assistant", expanded=False):
+with st.expander("How to Use the AI Network Assistant", expanded=False):
     st.markdown("""
     ###  Conversation Tips
     

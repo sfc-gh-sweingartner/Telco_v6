@@ -214,11 +214,11 @@ if avg_sentiment < -0.5 and ticket_count > 2:
 elif avg_sentiment < 0 or ticket_count > 1:
     risk_score = 45
     risk_color = "warning" 
-    risk_icon = "🟡"
+    risk_icon = ""
 else:
     risk_score = 15
     risk_color = "success"
-    risk_icon = "🟢"
+    risk_icon = ""
 
 satisfaction = min(5, max(1, (avg_sentiment + 1) * 2.5)) if pd.notna(avg_sentiment) else 3
 
@@ -367,7 +367,7 @@ with ai_tab1:
                 "Customer Status",
                 "New Customer",
                 description="No support history available for AI analysis",
-                icon="⭐"
+                icon=""
             )
 
 with ai_tab2:
