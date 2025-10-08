@@ -168,10 +168,32 @@ def inject_custom_css():
     
     /* Main Telco-branded app styling */
     .main > div {
-        padding-top: 0rem;
+        padding-top: 0rem !important;
         font-family: 'Ericsson Hilda', 'Source Sans Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         background: var(--exec-bg-secondary);
         color: var(--exec-text-primary);
+    }
+    
+    /* Remove all top padding from main containers */
+    .main {
+        padding-top: 0 !important;
+    }
+    
+    .block-container {
+        padding-top: 0 !important;
+    }
+    
+    /* Target all potential Streamlit containers that might have top padding */
+    [data-testid="stAppViewContainer"] {
+        padding-top: 0 !important;
+    }
+    
+    [data-testid="stAppViewContainer"] > .main {
+        padding-top: 0 !important;
+    }
+    
+    .appview-container {
+        padding-top: 0 !important;
     }
     
     /* Hide Streamlit branding and header */
