@@ -12,7 +12,7 @@ import base64
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
     page_title="Correlation Analytics",
-    page_icon="📊",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -79,14 +79,14 @@ higher_is_better = {
 }
 
 # Page header
-st.title("📊 Network Metric Correlation Analysis")
+st.title("Network Metric Correlation Analysis")
 st.markdown("""
 This page helps you discover relationships between different network metrics and customer experience indicators.
 Select a primary metric to see how it correlates with other metrics, enabling data-driven network optimization decisions.
 """)
 
 # Create a prominent metric selector at the top of the page
-st.write("### 🎯 Select Your Primary Metric of Interest")
+st.write("### Select Your Primary Metric of Interest")
 
 # Create the container for the metric selector
 metric_selector_container = st.container()
@@ -94,7 +94,7 @@ metric_selector_container = st.container()
 with metric_selector_container:
     # Add explanation text
     st.markdown("""
-    👇 **Change this selection to analyze correlations for a different metric**
+    **Change this selection to analyze correlations for a different metric**
     """)
     
     # The actual selector
@@ -112,7 +112,7 @@ with metric_selector_container:
 st.markdown("---")
 
 # Add metric descriptions below the selector to help users understand metrics
-with st.expander("📊 About the Selected Metric", expanded=False):
+with st.expander("About the Selected Metric", expanded=False):
     st.info(f"**{primary_metric}**: {metric_descriptions[primary_metric]}")
     st.write("Higher values are " + 
              ("better" if higher_is_better[primary_metric] else "worse") + 
@@ -143,20 +143,20 @@ session = init_session()
 
 # Add a clear cache button to sidebar
 st.sidebar.header("Analysis Options")
-if st.sidebar.button("🔄 Clear Data Cache", help="Refresh all data from the database"):
+if st.sidebar.button("Clear Data Cache", help="Refresh all data from the database"):
     st.cache_data.clear()
     st.sidebar.success("Cache cleared! Please refresh the page manually.")
     st.sidebar.info("Please click the 'Refresh' button in your browser or press F5 to load fresh data.")
 
 # Add metric descriptions below the selector to help users understand metrics
-with st.sidebar.expander("📊 Metric Description", expanded=False):
+with st.sidebar.expander("Metric Description", expanded=False):
     st.info(f"**{primary_metric}**: {metric_descriptions[primary_metric]}")
     st.write("Higher values are " + 
              ("better" if higher_is_better[primary_metric] else "worse") + 
              " for this metric.")
 
 # Add filtering options
-with st.sidebar.expander("🔍 Data Filters", expanded=True):
+with st.sidebar.expander("Data Filters", expanded=True):
     # Region filter
     # Since we don't have direct region data, we'll create virtual regions based on lat/long
     st.write("### Geographic Filters")
@@ -449,10 +449,10 @@ correlation_results['Impact'] = correlation_results.apply(
 
 # Create main content tabs
 tab1, tab2, tab3, tab4 = st.tabs([
-    "🔍 Key Insights", 
-    "📊 Correlation Matrix", 
-    "📈 Scatter Plots",
-    "📋 Detailed Analysis"
+    "Key Insights", 
+    "Correlation Matrix", 
+    "Scatter Plots",
+    "Detailed Analysis"
 ])
 
 with tab1:
@@ -460,7 +460,7 @@ with tab1:
     
     # Display a reminder of the selected metric with option to change
     st.markdown(f"**Currently analyzing correlations for: __{primary_metric}__**")
-    if st.button("⬆️ Change Selected Metric", key="change_metric_tab1"):
+    if st.button("Change Selected Metric", key="change_metric_tab1"):
         st.session_state.scroll_to_top = True
         st.experimental_rerun()
     
@@ -530,7 +530,7 @@ with tab1:
             st.info("No statistically significant correlations found.")
     
     # Highlight key insights automatically
-    st.write("### 🔑 Automatic Insights")
+    st.write("### Automatic Insights")
     
     # Insight 1: Strongest correlations
     st.write("#### Strongest Relationships")
@@ -598,7 +598,7 @@ with tab2:
     
     # Display a reminder of the selected metric with option to change
     st.markdown(f"**Currently analyzing correlations for: __{primary_metric}__**")
-    if st.button("⬆️ Change Selected Metric", key="change_metric_tab2"):
+    if st.button("Change Selected Metric", key="change_metric_tab2"):
         st.session_state.scroll_to_top = True
         st.experimental_rerun()
     
@@ -699,7 +699,7 @@ with tab3:
     
     # Display a reminder of the selected metric with option to change
     st.markdown(f"**Currently analyzing correlations for: __{primary_metric}__**")
-    if st.button("⬆️ Change Selected Metric", key="change_metric_tab3"):
+    if st.button("Change Selected Metric", key="change_metric_tab3"):
         st.session_state.scroll_to_top = True
         st.experimental_rerun()
     
@@ -793,7 +793,7 @@ with tab4:
     
     # Display a reminder of the selected metric with option to change
     st.markdown(f"**Currently analyzing correlations for: __{primary_metric}__**")
-    if st.button("⬆️ Change Selected Metric", key="change_metric_tab4"):
+    if st.button("Change Selected Metric", key="change_metric_tab4"):
         st.session_state.scroll_to_top = True
         st.experimental_rerun()
     
@@ -865,7 +865,7 @@ with tab4:
 # Footer with tips
 st.markdown("""
 ---
-### 📝 Tips for Interpretation
+### Tips for Interpretation
 
 1. **Correlation ≠ Causation**: A strong correlation doesn't necessarily mean one metric causes changes in another.
 2. **Look for Patterns**: Similar correlations across related metrics may indicate underlying factors.
