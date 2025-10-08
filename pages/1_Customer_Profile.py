@@ -81,6 +81,21 @@ except ImportError:
                 return categories[0] if categories else "Unknown"
         return FallbackProcessor()
 
+# Import AI Cache utility
+try:
+    from utils.ai_cache import get_customer_profile_cache
+except ImportError:
+    # Fallback if cache module not available
+    def get_customer_profile_cache(session):
+        class FallbackCache:
+            def get_cached_result(self, *args, **kwargs):
+                return None
+            def save_to_cache(self, *args, **kwargs):
+                return False
+            def display_cache_indicator(self, *args, **kwargs):
+                pass
+        return FallbackCache()
+
 # Page configuration
 st.set_page_config(
     page_title="Customer Profile",
@@ -97,6 +112,7 @@ inject_custom_css()
 session = get_snowflake_session()
 ai_analytics = get_ai_analytics(session)
 ai_processor = get_ai_processor(session)
+customer_cache = get_customer_profile_cache(session)
 
 # Professional page header with AI emphasis
 create_page_header(
@@ -219,7 +235,27 @@ with ai_tab1:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button(" Generate AI Customer Insights", type="primary", key="ai_insights"):
+        # Check for cached customer insights
+        cached_insights = customer_cache.get_cached_result(
+            'CUSTOMER_PROFILE_CACHE',
+            customer_id=str(customer_id),
+            analysis_type='customer_insights'
+        )
+        
+        # Display cached result if available
+        if cached_insights:
+            customer_cache.display_cache_indicator(cached_insights)
+            create_ai_insights_card(
+                f"Customer Analysis: {get_customer_field('FIRST_NAME', 'Unknown')}", 
+                cached_insights['content'], 
+                confidence=cached_insights.get('confidence', 0.82), 
+                icon=""
+            )
+        
+        # Button label changes based on cache
+        insights_button_label = " Run/Refresh AI Customer Insights" if cached_insights else " Generate AI Customer Insights"
+        
+        if st.button(insights_button_label, type="primary", key="ai_insights"):
             create_ai_loading_spinner("AI is analyzing customer behavior patterns...")
             
             try:
@@ -261,6 +297,19 @@ with ai_tab1:
                 )
                 
                 if ai_insights:
+                    # Save to cache
+                    customer_cache.save_to_cache(
+                        'CUSTOMER_PROFILE_CACHE',
+                        ai_content=ai_insights,
+                        ai_model='claude-4-sonnet',
+                        confidence_score=0.82,
+                        customer_id=str(customer_id),
+                        analysis_type='customer_insights',
+                        ticket_count=ticket_count,
+                        avg_sentiment=float(avg_sentiment) if pd.notna(avg_sentiment) else 0.0,
+                        risk_score=risk_score
+                    )
+                    
                     create_ai_insights_card(
                         f"Customer Analysis: {get_customer_field('FIRST_NAME', 'Unknown')}", 
                         ai_insights, 
@@ -325,7 +374,40 @@ with ai_tab2:
     st.markdown("###  AI Churn Prediction Model")
     st.info("Advanced machine learning model to predict customer churn risk")
     
-    if st.button(" Run Churn Analysis", type="primary", key="churn_analysis"):
+    # Check for cached churn analysis
+    cached_churn = customer_cache.get_cached_result(
+        'CUSTOMER_PROFILE_CACHE',
+        customer_id=str(customer_id),
+        analysis_type='churn_analysis'
+    )
+    
+    # Display cached result if available
+    if cached_churn:
+        customer_cache.display_cache_indicator(cached_churn)
+        
+        # Determine confidence level based on cached data
+        confidence_level = cached_churn.get('confidence', 0.75)
+        
+        create_ai_insights_card(
+            " Churn Risk Prediction", 
+            cached_churn['content'], 
+            confidence=confidence_level, 
+            icon=""
+        )
+        
+        # Show cached churn metrics
+        churn_metrics = {
+            "Churn Risk Level": f"{risk_icon} {risk_score}%",
+            "Prediction Confidence": f"{confidence_level*100:.0f}%",
+            "Risk Category": "High" if risk_score > 70 else "Medium" if risk_score > 40 else "Low",
+            "Data Quality": "Good" if ticket_count > 2 else "Limited"
+        }
+        create_ai_metrics_dashboard(churn_metrics)
+    
+    # Button label changes based on cache
+    churn_button_label = " Run/Refresh Churn Analysis" if cached_churn else " Run Churn Analysis"
+    
+    if st.button(churn_button_label, type="primary", key="churn_analysis"):
         create_ai_loading_spinner("AI is calculating churn probability using advanced algorithms...")
         
         try:
@@ -365,6 +447,19 @@ with ai_tab2:
             if churn_prediction:
                 # Determine confidence level based on data quality
                 confidence_level = 0.75 if ticket_count > 2 else 0.60 if ticket_count > 0 else 0.45
+                
+                # Save to cache
+                customer_cache.save_to_cache(
+                    'CUSTOMER_PROFILE_CACHE',
+                    ai_content=churn_prediction,
+                    ai_model='claude-4-sonnet',
+                    confidence_score=confidence_level,
+                    customer_id=str(customer_id),
+                    analysis_type='churn_analysis',
+                    ticket_count=ticket_count,
+                    avg_sentiment=float(avg_sentiment) if pd.notna(avg_sentiment) else 0.0,
+                    risk_score=risk_score
+                )
                 
                 create_ai_insights_card(
                     " Churn Risk Prediction", 
@@ -421,7 +516,28 @@ with ai_tab3:
         key="rec_type_customer"
     )
     
-    if st.button(" Generate AI Recommendations", type="primary", key="customer_recommendations"):
+    # Check for cached recommendations
+    cached_recommendations = customer_cache.get_cached_result(
+        'CUSTOMER_PROFILE_CACHE',
+        customer_id=str(customer_id),
+        analysis_type='recommendations',
+        recommendation_type=recommendation_type
+    )
+    
+    # Display cached result if available
+    if cached_recommendations:
+        customer_cache.display_cache_indicator(cached_recommendations)
+        create_ai_insights_card(
+            f" {recommendation_type} for {get_customer_field('FIRST_NAME', 'Unknown')}", 
+            cached_recommendations['content'], 
+            confidence=cached_recommendations.get('confidence', 0.88), 
+            icon=""
+        )
+    
+    # Button label changes based on cache
+    rec_button_label = " Run/Refresh AI Recommendations" if cached_recommendations else " Generate AI Recommendations"
+    
+    if st.button(rec_button_label, type="primary", key="customer_recommendations"):
         create_ai_loading_spinner("AI is generating personalized recommendations...")
         
         try:
@@ -453,6 +569,20 @@ with ai_tab3:
             )
             
             if recommendations:
+                # Save to cache
+                customer_cache.save_to_cache(
+                    'CUSTOMER_PROFILE_CACHE',
+                    ai_content=recommendations,
+                    ai_model='claude-4-sonnet',
+                    confidence_score=0.88,
+                    customer_id=str(customer_id),
+                    analysis_type='recommendations',
+                    recommendation_type=recommendation_type,
+                    ticket_count=ticket_count,
+                    avg_sentiment=float(avg_sentiment) if pd.notna(avg_sentiment) else 0.0,
+                    risk_score=risk_score
+                )
+                
                 create_ai_insights_card(
                     f" {recommendation_type} for {get_customer_field('FIRST_NAME', 'Unknown')}", 
                     recommendations, 

@@ -88,6 +88,20 @@ except ImportError:
                 return " AI predictive analytics are being deployed. Advanced forecasting and anomaly detection will be available shortly!"
         return FallbackProcessor()
 
+# Import AI Cache utility
+try:
+    from utils.ai_cache import get_predictive_analytics_cache
+except ImportError:
+    def get_predictive_analytics_cache(session):
+        class FallbackCache:
+            def get_cached_result(self, *args, **kwargs):
+                return None
+            def save_to_cache(self, *args, **kwargs):
+                return False
+            def display_cache_indicator(self, *args, **kwargs):
+                pass
+        return FallbackCache()
+
 # Page configuration
 st.set_page_config(
     page_title="Predictive Analytics",
@@ -104,6 +118,7 @@ inject_custom_css()
 session = get_snowflake_session()
 ai_analytics = get_ai_analytics(session)
 ai_processor = get_ai_processor(session)
+pred_cache = get_predictive_analytics_cache(session)
 
 # Professional page header
 create_page_header(
@@ -168,7 +183,26 @@ with pred_tab1:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button(" Generate AI Forecast", type="primary", key="generate_forecast"):
+        # Check for cached forecast
+        cached_forecast = pred_cache.get_cached_result(
+            'PREDICTIVE_ANALYTICS_CACHE',
+            analysis_type='forecast',
+            forecast_metric=forecast_metric,
+            forecast_horizon=forecast_horizon
+        )
+        
+        if cached_forecast:
+            pred_cache.display_cache_indicator(cached_forecast)
+            create_ai_insights_card(
+                f" {forecast_metric} Forecast - {forecast_horizon}", 
+                cached_forecast['content'], 
+                confidence=cached_forecast.get('confidence', 0.76), 
+                icon=""
+            )
+        
+        forecast_button_label = " Run/Refresh AI Forecast" if cached_forecast else " Generate AI Forecast"
+        
+        if st.button(forecast_button_label, type="primary", key="generate_forecast"):
             create_ai_progress_tracker(1, 4, "Loading historical data...")
             
             # Load historical data
@@ -242,6 +276,18 @@ with pred_tab1:
                 create_ai_progress_tracker(4, 4, "Finalizing forecast insights...")
                 
                 if forecast_analysis:
+                    # Save to cache
+                    pred_cache.save_to_cache(
+                        'PREDICTIVE_ANALYTICS_CACHE',
+                        ai_content=forecast_analysis,
+                        ai_model=selected_model,
+                        confidence_score=0.76,
+                        analysis_type='forecast',
+                        forecast_metric=forecast_metric,
+                        forecast_horizon=forecast_horizon,
+                        data_quality="Good" if not historical_data.empty else "Limited"
+                    )
+                    
                     create_ai_insights_card(
                         f" {forecast_metric} Forecast - {forecast_horizon}", 
                         forecast_analysis, 
@@ -301,7 +347,26 @@ with pred_tab2:
         help="Higher values detect more anomalies (may include false positives)"
     )
     
-    if st.button(" Run Anomaly Detection", type="primary", key="run_anomaly_detection"):
+    # Check for cached anomaly detection
+    cached_anomaly = pred_cache.get_cached_result(
+        'PREDICTIVE_ANALYTICS_CACHE',
+        analysis_type='anomaly_detection',
+        anomaly_focus=anomaly_focus,
+        sensitivity_level=sensitivity
+    )
+    
+    if cached_anomaly:
+        pred_cache.display_cache_indicator(cached_anomaly)
+        create_ai_insights_card(
+            f" {anomaly_focus} - Anomaly Analysis", 
+            cached_anomaly['content'], 
+            confidence=cached_anomaly.get('confidence', 0.82), 
+            icon=""
+        )
+    
+    anomaly_button_label = " Run/Refresh Anomaly Detection" if cached_anomaly else " Run Anomaly Detection"
+    
+    if st.button(anomaly_button_label, type="primary", key="run_anomaly_detection"):
         create_ai_loading_spinner("AI is scanning for anomalies in network data...")
         
         try:
@@ -355,6 +420,18 @@ with pred_tab2:
             )
             
             if anomaly_analysis:
+                # Save to cache
+                pred_cache.save_to_cache(
+                    'PREDICTIVE_ANALYTICS_CACHE',
+                    ai_content=anomaly_analysis,
+                    ai_model=selected_model,
+                    confidence_score=0.82,
+                    analysis_type='anomaly_detection',
+                    anomaly_focus=anomaly_focus,
+                    sensitivity_level=sensitivity,
+                    data_quality="Good" if not anomaly_data.empty else "Limited"
+                )
+                
                 create_ai_insights_card(
                     f" {anomaly_focus} - Anomaly Analysis", 
                     anomaly_analysis, 
@@ -402,7 +479,26 @@ with pred_tab3:
         key="maintenance_window"
     )
     
-    if st.button(" Generate Maintenance Predictions", type="primary", key="predictive_maintenance"):
+    # Check for cached maintenance predictions
+    cached_maintenance = pred_cache.get_cached_result(
+        'PREDICTIVE_ANALYTICS_CACHE',
+        analysis_type='predictive_maintenance',
+        maintenance_focus=maintenance_focus,
+        maintenance_window=maintenance_window
+    )
+    
+    if cached_maintenance:
+        pred_cache.display_cache_indicator(cached_maintenance)
+        create_ai_insights_card(
+            f" {maintenance_focus} - Predictive Maintenance Plan", 
+            cached_maintenance['content'], 
+            confidence=cached_maintenance.get('confidence', 0.79), 
+            icon="️"
+        )
+    
+    maintenance_button_label = " Run/Refresh Maintenance Predictions" if cached_maintenance else " Generate Maintenance Predictions"
+    
+    if st.button(maintenance_button_label, type="primary", key="predictive_maintenance"):
         create_ai_loading_spinner("AI is analyzing equipment health and predicting maintenance needs...")
         
         try:
@@ -444,6 +540,18 @@ with pred_tab3:
             )
             
             if maintenance_analysis:
+                # Save to cache
+                pred_cache.save_to_cache(
+                    'PREDICTIVE_ANALYTICS_CACHE',
+                    ai_content=maintenance_analysis,
+                    ai_model=selected_model,
+                    confidence_score=0.79,
+                    analysis_type='predictive_maintenance',
+                    maintenance_focus=maintenance_focus,
+                    maintenance_window=maintenance_window,
+                    data_quality="Good"
+                )
+                
                 create_ai_insights_card(
                     f" {maintenance_focus} - Predictive Maintenance Plan", 
                     maintenance_analysis, 
@@ -492,7 +600,26 @@ with pred_tab4:
         key="customer_segment"
     )
     
-    if st.button(" Analyze Customer Behavior", type="primary", key="customer_behavior_analysis"):
+    # Check for cached customer behavior analysis
+    cached_behavior = pred_cache.get_cached_result(
+        'PREDICTIVE_ANALYTICS_CACHE',
+        analysis_type='customer_behavior',
+        behavior_metric=behavior_metric,
+        customer_segment=customer_segment
+    )
+    
+    if cached_behavior:
+        pred_cache.display_cache_indicator(cached_behavior)
+        create_ai_insights_card(
+            f" {customer_segment} - {behavior_metric} Analysis", 
+            cached_behavior['content'], 
+            confidence=cached_behavior.get('confidence', 0.81), 
+            icon=""
+        )
+    
+    behavior_button_label = " Run/Refresh Customer Behavior Analysis" if cached_behavior else " Analyze Customer Behavior"
+    
+    if st.button(behavior_button_label, type="primary", key="customer_behavior_analysis"):
         create_ai_loading_spinner("AI is analyzing customer behavior patterns and trends...")
         
         try:
@@ -547,6 +674,19 @@ with pred_tab4:
             )
             
             if behavior_analysis:
+                # Save to cache
+                pred_cache.save_to_cache(
+                    'PREDICTIVE_ANALYTICS_CACHE',
+                    ai_content=behavior_analysis,
+                    ai_model=selected_model,
+                    confidence_score=0.81,
+                    analysis_type='customer_behavior',
+                    behavior_metric=behavior_metric,
+                    customer_segment=customer_segment,
+                    data_quality="Good" if not customer_data.empty else "Limited",
+                    prediction_accuracy=0.847
+                )
+                
                 create_ai_insights_card(
                     f" {customer_segment} - {behavior_metric} Analysis", 
                     behavior_analysis, 

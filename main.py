@@ -107,6 +107,21 @@ except ImportError:
         st.markdown(f"### {title}")
         st.write(response)
 
+# Import AI Cache utility
+try:
+    from utils.ai_cache import get_main_page_cache
+except ImportError:
+    # Fallback if cache module not available
+    def get_main_page_cache(session):
+        class FallbackCache:
+            def get_cached_result(self, *args, **kwargs):
+                return None
+            def save_to_cache(self, *args, **kwargs):
+                return False
+            def display_cache_indicator(self, *args, **kwargs):
+                pass
+        return FallbackCache()
+
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
     page_title="Telco Network Intelligence Suite",
@@ -390,7 +405,29 @@ if exec_kpis and network_metrics and customer_metrics:
     st.markdown("---")
     st.markdown("###  Executive Action Center")
     
-    if st.button(" Generate AI Strategic Report", type="primary"):
+    # Initialize cache
+    main_cache = get_main_page_cache(session)
+    
+    # Check for cached strategic report
+    cached_strategic_report = main_cache.get_cached_result(
+        'MAIN_PAGE_CACHE',
+        report_type='strategic_report'
+    )
+    
+    # Display cached result if available
+    if cached_strategic_report:
+        main_cache.display_cache_indicator(cached_strategic_report)
+        create_ai_insights_card(
+            "Strategic Intelligence Analysis",
+            cached_strategic_report['content'],
+            confidence=cached_strategic_report.get('confidence', 0.92),
+            icon=""
+        )
+    
+    # Button label changes based on whether cache exists
+    button_label = " Run/Refresh AI Strategic Report" if cached_strategic_report else " Generate AI Strategic Report"
+    
+    if st.button(button_label, type="primary"):
         create_ai_loading_spinner("AI is analyzing network data and market trends for strategic insights...")
         
         time.sleep(2)  # Simulate AI processing
@@ -422,6 +459,15 @@ if exec_kpis and network_metrics and customer_metrics:
         **STRATEGIC RECOMMENDATIONS:**
         Based on current data analysis, focus on {"critical issue resolution" if network_metrics['CRITICAL_ISSUES'] > 5 else "performance optimization"} and {"customer satisfaction improvement" if customer_metrics['AVG_SENTIMENT'] < -0.2 else "service quality maintenance"}.
         """
+        
+        # Save to cache
+        main_cache.save_to_cache(
+            'MAIN_PAGE_CACHE',
+            ai_content=strategic_report,
+            ai_model='claude-4-sonnet',
+            confidence_score=0.92,
+            report_type='strategic_report'
+        )
         
         create_ai_insights_card(
             "Strategic Intelligence Analysis",

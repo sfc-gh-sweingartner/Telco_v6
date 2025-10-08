@@ -87,6 +87,21 @@ except ImportError:
                 return " Executive AI analytics are being deployed. Strategic business intelligence will be available shortly!"
         return FallbackProcessor()
 
+# Import AI Cache utility
+try:
+    from utils.ai_cache import get_executive_summary_cache
+except ImportError:
+    # Fallback if cache module not available
+    def get_executive_summary_cache(session):
+        class FallbackCache:
+            def get_cached_result(self, *args, **kwargs):
+                return None
+            def save_to_cache(self, *args, **kwargs):
+                return False
+            def display_cache_indicator(self, *args, **kwargs):
+                pass
+        return FallbackCache()
+
 # Page configuration
 st.set_page_config(
     page_title="Executive AI Summary",
@@ -103,6 +118,7 @@ inject_custom_css()
 session = get_snowflake_session()
 ai_analytics = get_ai_analytics(session)
 ai_processor = get_ai_processor(session)
+exec_cache = get_executive_summary_cache(session)
 
 # Professional page header
 create_page_header(
@@ -276,7 +292,27 @@ with exec_tab1:
         key="performance_period"
     )
     
-    if st.button(" Generate Business Performance Report", type="primary", key="business_performance"):
+    # Check for cached business performance report
+    cached_business_perf = exec_cache.get_cached_result(
+        'EXECUTIVE_SUMMARY_CACHE',
+        report_type='business_performance',
+        analysis_period=performance_period
+    )
+    
+    # Display cached result if available
+    if cached_business_perf:
+        exec_cache.display_cache_indicator(cached_business_perf)
+        create_ai_insights_card(
+            f" Business Performance Executive Brief - {performance_period}", 
+            cached_business_perf['content'], 
+            confidence=cached_business_perf.get('confidence', 0.89), 
+            icon=""
+        )
+    
+    # Button label changes based on cache
+    business_button_label = " Run/Refresh Business Performance Report" if cached_business_perf else " Generate Business Performance Report"
+    
+    if st.button(business_button_label, type="primary", key="business_performance"):
         create_ai_progress_tracker(1, 4, "Analyzing business metrics...")
         
         try:
@@ -324,6 +360,20 @@ with exec_tab1:
             create_ai_progress_tracker(3, 4, "Preparing executive dashboard...")
             
             if performance_analysis:
+                # Save to cache
+                exec_cache.save_to_cache(
+                    'EXECUTIVE_SUMMARY_CACHE',
+                    ai_content=performance_analysis,
+                    ai_model=selected_model if 'selected_model' in dir() else 'claude-4-sonnet',
+                    confidence_score=0.89,
+                    report_type='business_performance',
+                    analysis_period=performance_period,
+                    total_towers=total_towers,
+                    total_customers=total_customers,
+                    network_health_score=max(0, 100 - failure_rate),
+                    customer_satisfaction=customer_satisfaction
+                )
+                
                 create_ai_insights_card(
                     f" Business Performance Executive Brief - {performance_period}", 
                     performance_analysis, 
@@ -368,7 +418,25 @@ with exec_tab2:
         key="financial_focus"
     )
     
-    if st.button(" Generate Financial Impact Report", type="primary", key="financial_analysis"):
+    # Check for cached financial impact report
+    cached_financial = exec_cache.get_cached_result(
+        'EXECUTIVE_SUMMARY_CACHE',
+        report_type='financial_impact',
+        financial_focus=financial_focus
+    )
+    
+    if cached_financial:
+        exec_cache.display_cache_indicator(cached_financial)
+        create_ai_insights_card(
+            f" {financial_focus} Executive Analysis", 
+            cached_financial['content'], 
+            confidence=cached_financial.get('confidence', 0.86), 
+            icon=""
+        )
+    
+    financial_button_label = " Run/Refresh Financial Impact Report" if cached_financial else " Generate Financial Impact Report"
+    
+    if st.button(financial_button_label, type="primary", key="financial_analysis"):
         create_ai_loading_spinner("AI is analyzing financial impact and ROI opportunities...")
         
         try:
@@ -409,6 +477,18 @@ with exec_tab2:
             )
             
             if financial_analysis:
+                # Save to cache
+                exec_cache.save_to_cache(
+                    'EXECUTIVE_SUMMARY_CACHE',
+                    ai_content=financial_analysis,
+                    ai_model='claude-4-sonnet',
+                    confidence_score=0.86,
+                    report_type='financial_impact',
+                    financial_focus=financial_focus,
+                    total_towers=total_towers,
+                    total_customers=total_customers
+                )
+                
                 create_ai_insights_card(
                     f" {financial_focus} Executive Analysis", 
                     financial_analysis, 
@@ -445,7 +525,26 @@ with exec_tab3:
         key="time_horizon"
     )
     
-    if st.button(" Identify Strategic Opportunities", type="primary", key="strategic_opportunities"):
+    # Check for cached strategic opportunities
+    cached_strategic = exec_cache.get_cached_result(
+        'EXECUTIVE_SUMMARY_CACHE',
+        report_type='strategic_opportunities',
+        opportunity_scope=opportunity_scope,
+        time_horizon=time_horizon
+    )
+    
+    if cached_strategic:
+        exec_cache.display_cache_indicator(cached_strategic)
+        create_ai_insights_card(
+            f" {opportunity_scope} Strategic Analysis - {time_horizon}", 
+            cached_strategic['content'], 
+            confidence=cached_strategic.get('confidence', 0.84), 
+            icon=""
+        )
+    
+    strategic_button_label = " Run/Refresh Strategic Opportunities" if cached_strategic else " Identify Strategic Opportunities"
+    
+    if st.button(strategic_button_label, type="primary", key="strategic_opportunities"):
         create_ai_loading_spinner("AI is identifying strategic opportunities and growth initiatives...")
         
         try:
@@ -488,6 +587,21 @@ with exec_tab3:
             )
             
             if strategic_analysis:
+                # Save to cache
+                exec_cache.save_to_cache(
+                    'EXECUTIVE_SUMMARY_CACHE',
+                    ai_content=strategic_analysis,
+                    ai_model='claude-4-sonnet',
+                    confidence_score=0.84,
+                    report_type='strategic_opportunities',
+                    opportunity_scope=opportunity_scope,
+                    time_horizon=time_horizon,
+                    total_towers=total_towers,
+                    total_customers=total_customers,
+                    network_health_score=max(0, 100 - failure_rate),
+                    customer_satisfaction=customer_satisfaction
+                )
+                
                 create_ai_insights_card(
                     f" {opportunity_scope} Strategic Analysis - {time_horizon}", 
                     strategic_analysis, 
@@ -530,7 +644,25 @@ with exec_tab4:
         key="risk_category"
     )
     
-    if st.button(" Generate Executive Risk Assessment", type="primary", key="executive_risk"):
+    # Check for cached risk assessment
+    cached_risk = exec_cache.get_cached_result(
+        'EXECUTIVE_SUMMARY_CACHE',
+        report_type='risk_assessment',
+        risk_category=risk_category
+    )
+    
+    if cached_risk:
+        exec_cache.display_cache_indicator(cached_risk)
+        create_ai_insights_card(
+            f" {risk_category} Executive Assessment", 
+            cached_risk['content'], 
+            confidence=cached_risk.get('confidence', 0.87), 
+            icon="️"
+        )
+    
+    risk_button_label = " Run/Refresh Executive Risk Assessment" if cached_risk else " Generate Executive Risk Assessment"
+    
+    if st.button(risk_button_label, type="primary", key="executive_risk"):
         create_ai_loading_spinner("AI is conducting comprehensive risk analysis...")
         
         try:
@@ -573,6 +705,20 @@ with exec_tab4:
             )
             
             if risk_analysis:
+                # Save to cache
+                exec_cache.save_to_cache(
+                    'EXECUTIVE_SUMMARY_CACHE',
+                    ai_content=risk_analysis,
+                    ai_model='claude-4-sonnet',
+                    confidence_score=0.87,
+                    report_type='risk_assessment',
+                    risk_category=risk_category,
+                    total_towers=total_towers,
+                    total_customers=total_customers,
+                    network_health_score=max(0, 100 - failure_rate),
+                    customer_satisfaction=customer_satisfaction
+                )
+                
                 create_ai_insights_card(
                     f" {risk_category} Executive Assessment", 
                     risk_analysis, 

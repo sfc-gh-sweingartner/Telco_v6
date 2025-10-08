@@ -132,6 +132,21 @@ except ImportError:
                 return categories[0] if categories else "Unknown"
         return FallbackProcessor()
 
+# Import AI Cache utility
+try:
+    from utils.ai_cache import get_ai_insights_cache
+except ImportError:
+    # Fallback if cache module not available
+    def get_ai_insights_cache(session):
+        class FallbackCache:
+            def get_cached_result(self, *args, **kwargs):
+                return None
+            def save_to_cache(self, *args, **kwargs):
+                return False
+            def display_cache_indicator(self, *args, **kwargs):
+                pass
+        return FallbackCache()
+
 # Page configuration
 st.set_page_config(
     page_title="AI Insights & Recommendations",
@@ -148,6 +163,7 @@ inject_custom_css()
 session = get_snowflake_session()
 ai_analytics = get_ai_analytics(session)
 ai_processor = get_ai_processor(session)
+ai_cache = get_ai_insights_cache(session)
 
 # Professional page header
 create_page_header(
@@ -269,7 +285,39 @@ with tab1:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        if st.button(" Generate AI Executive Report", type="primary", key="exec_report"):
+        # Check for cached executive report
+        cached_exec_report = ai_cache.get_cached_result(
+            'AI_INSIGHTS_CACHE',
+            report_type='executive_report',
+            sub_type=None
+        )
+        
+        # Display cached result if available
+        if cached_exec_report:
+            ai_cache.display_cache_indicator(cached_exec_report)
+            create_ai_insights_card(
+                " Executive Network Analysis", 
+                cached_exec_report['content'], 
+                confidence=cached_exec_report.get('confidence', 0.89), 
+                icon=""
+            )
+            
+            # Show cached metrics if available
+            combined_data = load_executive_dashboard_data_fast(session)
+            if combined_data:
+                network_summary, ticket_summary = combined_data
+                exec_metrics = {
+                    "Network Health": f"{(network_summary['avg_success_rate'] * 100):.1f}%",
+                    "Critical Issues": str(network_summary['critical_issues']),
+                    "Customer Satisfaction": f"{ticket_summary['avg_sentiment']:.2f}",
+                    "Risk Score": "Medium" if ticket_summary['critical_tickets'] > 10 else "Low"
+                }
+                create_ai_metrics_dashboard(exec_metrics)
+        
+        # Button label changes based on cache
+        exec_button_label = " Run/Refresh AI Executive Report" if cached_exec_report else " Generate AI Executive Report"
+        
+        if st.button(exec_button_label, type="primary", key="exec_report"):
             # Streamlined progress - only 2 steps for speed
             create_ai_progress_tracker(1, 2, " Loading data & analyzing patterns...")
             
@@ -288,6 +336,16 @@ with tab1:
                     )
                     
                     if executive_summary:
+                        # Save to cache
+                        ai_cache.save_to_cache(
+                            'AI_INSIGHTS_CACHE',
+                            ai_content=executive_summary,
+                            ai_model=selected_model,
+                            confidence_score=0.89,
+                            report_type='executive_report',
+                            sub_type=None
+                        )
+                        
                         create_ai_insights_card(
                             " Executive Network Analysis", 
                             executive_summary, 
@@ -316,13 +374,43 @@ with tab1:
     with col2:
         st.markdown("####  Quick AI Insights")
         
+        # Check for cached quick insight
+        cached_quick_insight = ai_cache.get_cached_result(
+            'AI_INSIGHTS_CACHE',
+            report_type='quick_insight',
+            sub_type=None
+        )
+        
+        # Display cached result if available
+        if cached_quick_insight:
+            ai_cache.display_cache_indicator(cached_quick_insight, show_refresh_hint=False)
+            create_ai_metric_card(
+                "AI Quick Insight",
+                cached_quick_insight['content'],
+                description="Generated using " + cached_quick_insight.get('model', selected_model),
+                icon=""
+            )
+        
+        # Button label changes based on cache
+        quick_button_label = " Refresh Quick Insight" if cached_quick_insight else " Generate Quick Insight"
+        
         # Quick AI fact generation
-        if st.button(" Generate Quick Insight", key="quick_insight"):
+        if st.button(quick_button_label, key="quick_insight"):
             quick_insight = ai_processor.ai_complete(
                 "Provide ONE key telecom network optimization insight in EXACTLY 100 words. Be specific and actionable.",
                 max_tokens=150
             )
             if quick_insight:
+                # Save to cache
+                ai_cache.save_to_cache(
+                    'AI_INSIGHTS_CACHE',
+                    ai_content=quick_insight,
+                    ai_model=selected_model,
+                    confidence_score=0.75,
+                    report_type='quick_insight',
+                    sub_type=None
+                )
+                
                 create_ai_metric_card(
                     "AI Quick Insight",
                     quick_insight,
@@ -340,7 +428,35 @@ with tab2:
         key="pattern_analysis_type"
     )
     
-    if st.button(" Analyze Patterns", type="primary", key="pattern_analysis"):
+    # Check for cached pattern analysis
+    cached_pattern = ai_cache.get_cached_result(
+        'AI_INSIGHTS_CACHE',
+        report_type='pattern_analysis',
+        sub_type=analysis_type
+    )
+    
+    # Display cached result if available
+    if cached_pattern:
+        ai_cache.display_cache_indicator(cached_pattern)
+        if analysis_type == "Network Failure Patterns":
+            create_ai_insights_card(
+                " Network Failure Root Causes", 
+                cached_pattern['content'], 
+                confidence=cached_pattern.get('confidence', 0.82), 
+                icon=""
+            )
+        elif analysis_type == "Customer Behavior Patterns":
+            create_ai_insights_card(
+                " Customer Behavior Insights", 
+                cached_pattern['content'], 
+                confidence=cached_pattern.get('confidence', 0.75), 
+                icon=""
+            )
+    
+    # Button label changes based on cache
+    pattern_button_label = " Run/Refresh Pattern Analysis" if cached_pattern else " Analyze Patterns"
+    
+    if st.button(pattern_button_label, type="primary", key="pattern_analysis"):
         create_ai_loading_spinner("AI is analyzing complex patterns in your network data...")
         
         try:
@@ -362,6 +478,16 @@ with tab2:
                     network_insights = ai_analytics.analyze_network_issues(pattern_data)
                     
                     if network_insights.get('root_causes'):
+                        # Save to cache
+                        ai_cache.save_to_cache(
+                            'AI_INSIGHTS_CACHE',
+                            ai_content=network_insights['root_causes'],
+                            ai_model=selected_model,
+                            confidence_score=0.82,
+                            report_type='pattern_analysis',
+                            sub_type=analysis_type
+                        )
+                        
                         create_ai_insights_card(
                             " Network Failure Root Causes", 
                             network_insights['root_causes'], 
@@ -398,6 +524,16 @@ with tab2:
                     )
                     
                     if customer_insights:
+                        # Save to cache
+                        ai_cache.save_to_cache(
+                            'AI_INSIGHTS_CACHE',
+                            ai_content=customer_insights,
+                            ai_model=selected_model,
+                            confidence_score=0.75,
+                            report_type='pattern_analysis',
+                            sub_type=analysis_type
+                        )
+                        
                         create_ai_insights_card(
                             " Customer Behavior Insights", 
                             customer_insights, 
@@ -430,7 +566,36 @@ with tab3:
         key="time_horizon"
     )
     
-    if st.button(" Generate AI Predictions", type="primary", key="predictions"):
+    # Check for cached prediction
+    cached_prediction = ai_cache.get_cached_result(
+        'AI_INSIGHTS_CACHE',
+        report_type='prediction',
+        sub_type=prediction_type,
+        time_horizon=time_horizon
+    )
+    
+    # Display cached result if available
+    if cached_prediction:
+        ai_cache.display_cache_indicator(cached_prediction)
+        if prediction_type == "Network Failure Prediction":
+            create_ai_insights_card(
+                " Network Failure Predictions", 
+                cached_prediction['content'], 
+                confidence=cached_prediction.get('confidence', 0.73), 
+                icon="️"
+            )
+        elif prediction_type == "Customer Churn Risk":
+            create_ai_insights_card(
+                " Customer Churn Risk Analysis", 
+                cached_prediction['content'], 
+                confidence=cached_prediction.get('confidence', 0.78), 
+                icon=""
+            )
+    
+    # Button label changes based on cache
+    prediction_button_label = " Run/Refresh AI Predictions" if cached_prediction else " Generate AI Predictions"
+    
+    if st.button(prediction_button_label, type="primary", key="predictions"):
         create_ai_loading_spinner("AI is building predictive models and analyzing trends...")
         
         try:
@@ -453,6 +618,17 @@ with tab3:
                     predictions = ai_analytics.predict_network_failures(prediction_data)
                     
                     if predictions.get('predictions'):
+                        # Save to cache
+                        ai_cache.save_to_cache(
+                            'AI_INSIGHTS_CACHE',
+                            ai_content=predictions['predictions'],
+                            ai_model=selected_model,
+                            confidence_score=0.73,
+                            report_type='prediction',
+                            sub_type=prediction_type,
+                            time_horizon=time_horizon
+                        )
+                        
                         create_ai_insights_card(
                             " Network Failure Predictions", 
                             predictions['predictions'], 
@@ -485,6 +661,18 @@ with tab3:
                     churn_analysis = ai_analytics.analyze_customer_churn_risk(churn_data, tickets_data)
                     
                     if churn_analysis.get('churn_risk_analysis'):
+                        # Save to cache
+                        ai_cache.save_to_cache(
+                            'AI_INSIGHTS_CACHE',
+                            ai_content=churn_analysis['churn_risk_analysis'],
+                            ai_model=selected_model,
+                            confidence_score=0.78,
+                            report_type='prediction',
+                            sub_type=prediction_type,
+                            time_horizon=time_horizon,
+                            customers_analyzed=churn_analysis.get('customers_analyzed', len(churn_data))
+                        )
+                        
                         create_ai_insights_card(
                             " Customer Churn Risk Analysis", 
                             churn_analysis['churn_risk_analysis'], 
@@ -524,7 +712,28 @@ with tab4:
         key="urgency"
     )
     
-    if st.button(" Generate AI Recommendations", type="primary", key="recommendations"):
+    # Check for cached recommendations
+    cached_recommendations = ai_cache.get_cached_result(
+        'AI_INSIGHTS_CACHE',
+        report_type='recommendation',
+        category=recommendation_category,
+        urgency_level=urgency_level
+    )
+    
+    # Display cached result if available
+    if cached_recommendations:
+        ai_cache.display_cache_indicator(cached_recommendations)
+        create_ai_insights_card(
+            f" {recommendation_category} Recommendations", 
+            cached_recommendations['content'], 
+            confidence=cached_recommendations.get('confidence', 0.85), 
+            icon=""
+        )
+    
+    # Button label changes based on cache
+    rec_button_label = " Run/Refresh AI Recommendations" if cached_recommendations else " Generate AI Recommendations"
+    
+    if st.button(rec_button_label, type="primary", key="recommendations"):
         create_ai_loading_spinner("AI is analyzing your network data and generating personalized recommendations...")
         
         try:
@@ -545,6 +754,17 @@ with tab4:
             recommendations_text = ai_processor.ai_complete(context_prompt + " LIMIT: 100 words exactly.", max_tokens=150)
             
             if recommendations_text:
+                # Save to cache
+                ai_cache.save_to_cache(
+                    'AI_INSIGHTS_CACHE',
+                    ai_content=recommendations_text,
+                    ai_model=selected_model,
+                    confidence_score=0.85,
+                    report_type='recommendation',
+                    category=recommendation_category,
+                    urgency_level=urgency_level
+                )
+                
                 create_ai_insights_card(
                     f" {recommendation_category} Recommendations", 
                     recommendations_text, 
