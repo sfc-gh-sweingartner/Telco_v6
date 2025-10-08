@@ -185,7 +185,8 @@ def inject_custom_css():
         background: var(--exec-solid-primary);
         color: white;
         padding: 1.5rem 2rem;
-        border-radius: var(--exec-border-radius-lg);
+        border-radius: 0;
+        margin-top: 0;
         margin-bottom: 1.5rem;
         box-shadow: var(--exec-shadow-lg);
         position: relative;
