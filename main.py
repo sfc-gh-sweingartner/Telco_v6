@@ -331,7 +331,7 @@ def load_executive_dashboard_data():
                 "Critical Issues": {
                     "value": f"{critical_issues:,}" if total_towers > 0 else "0",
                     "trend": -5.4 if critical_issues < 50 else 3.2 if critical_issues > 200 else 0.0,
-                    "icon": "️" if critical_issues > 0 else ""
+                    "icon": "" 
                 },
                 "Premium Performance": {
                     "value": f"{premium_percentage:.1f}%" if total_towers > 0 else "0%",
