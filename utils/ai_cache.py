@@ -155,6 +155,9 @@ class AICache:
             # Build column list and values based on table
             columns, values = self._build_insert_params(table_name, params)
             
+            # Build column names for SELECT with AS aliases
+            select_columns = self._build_select_columns(table_name, params)
+            
             # Create the MERGE statement for upsert behavior
             merge_query = f"""
             MERGE INTO {self.cache_schema}.{table_name} AS target
@@ -164,8 +167,7 @@ class AICache:
                     '{escaped_content}' AS AI_CONTENT,
                     '{ai_model}' AS AI_MODEL,
                     {confidence_score} AS CONFIDENCE_SCORE,
-                    CURRENT_TIMESTAMP() AS UPDATED_AT
-                    {values}
+                    CURRENT_TIMESTAMP() AS UPDATED_AT{select_columns}
             ) AS source
             ON target.CACHE_KEY = source.CACHE_KEY
             WHEN MATCHED THEN
@@ -185,6 +187,49 @@ class AICache:
         except Exception as e:
             st.error(f"Cache write error: {e}")
             return False
+    
+    def _build_select_columns(self, table_name: str, params: Dict[str, Any]) -> str:
+        """
+        Build SELECT column list with AS aliases for the MERGE source
+        
+        Args:
+            table_name: Name of the cache table
+            params: Dictionary of parameters
+            
+        Returns:
+            String of columns with AS aliases for SELECT
+        """
+        select_cols = []
+        
+        # Map common parameters to table columns
+        param_mapping = {
+            'MAIN_PAGE_CACHE': ['report_type'],
+            'AI_INSIGHTS_CACHE': ['report_type', 'sub_type', 'time_horizon', 'metric', 
+                                 'category', 'urgency_level', 'customers_analyzed'],
+            'CUSTOMER_PROFILE_CACHE': ['customer_id', 'analysis_type', 'recommendation_type',
+                                       'ticket_count', 'avg_sentiment', 'risk_score'],
+            'EXECUTIVE_SUMMARY_CACHE': ['report_type', 'analysis_period', 'financial_focus',
+                                        'opportunity_scope', 'time_horizon', 'risk_category',
+                                        'total_towers', 'total_customers', 'network_health_score',
+                                        'customer_satisfaction'],
+            'PREDICTIVE_ANALYTICS_CACHE': ['analysis_type', 'forecast_metric', 'forecast_horizon',
+                                           'anomaly_focus', 'sensitivity_level', 'maintenance_focus',
+                                           'maintenance_window', 'behavior_metric', 'customer_segment',
+                                           'data_quality', 'prediction_accuracy']
+        }
+        
+        if table_name in param_mapping:
+            for col in param_mapping[table_name]:
+                col_upper = col.upper()
+                if col in params and params[col] is not None:
+                    value = params[col]
+                    if isinstance(value, str):
+                        value = value.replace("'", "''")
+                        select_cols.append(f", '{value}' AS {col_upper}")
+                    else:
+                        select_cols.append(f", {value} AS {col_upper}")
+        
+        return ''.join(select_cols)
     
     def _build_insert_params(self, table_name: str, params: Dict[str, Any]) -> tuple:
         """
