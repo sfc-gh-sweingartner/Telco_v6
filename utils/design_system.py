@@ -174,18 +174,36 @@ def inject_custom_css():
         color: var(--exec-text-primary);
     }
     
-    /* Hide Streamlit branding */
+    /* Hide Streamlit branding and header */
     #MainMenu {visibility: hidden !important;}
     footer {visibility: hidden !important;}
     header {visibility: hidden !important;}
     .stDeployButton {visibility: hidden !important;}
+    
+    /* Hide Streamlit header completely - this creates the 60px gap */
+    .stAppHeader {
+        display: none !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Alternative approach - minimize header height */
+    header[data-testid="stHeader"] {
+        display: none !important;
+        height: 0 !important;
+    }
+    
+    .stAppToolbar {
+        display: none !important;
+    }
     
     /* Executive header styling */
     .app-header {
         background: var(--exec-solid-primary);
         color: white;
         padding: 1.5rem 2rem;
-        border-radius: 0;
+        border-radius: var(--exec-border-radius-lg);
         margin-top: 0;
         margin-bottom: 1.5rem;
         box-shadow: var(--exec-shadow-lg);
