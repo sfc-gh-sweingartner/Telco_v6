@@ -94,6 +94,11 @@ class TelcoAISQLProcessor:
             # Properly escape single quotes in prompt for SQL
             escaped_prompt = prompt.replace("'", "''")
             
+            # Log prompt details for debugging
+            prompt_length = len(prompt)
+            if prompt_length > 5000:
+                st.warning(f"⚠️ Large prompt detected: {prompt_length} chars. This may cause issues.")
+            
             query = f"""
             SELECT SNOWFLAKE.CORTEX.AI_COMPLETE(
                 '{model}', 
@@ -102,9 +107,22 @@ class TelcoAISQLProcessor:
             ) as completion
             """
             result = self.session.sql(query).collect()
-            return result[0]['COMPLETION'] if result else ""
+            
+            if result and result[0]['COMPLETION']:
+                response = result[0]['COMPLETION']
+                # Log success
+                # st.success(f"✅ AI response: {len(response)} chars from {model}")  # Uncomment for debugging
+                return response
+            else:
+                st.error(f"❌ AI returned empty response for model: {model}")
+                return ""
+                
         except Exception as e:
-            st.error(f"AI Complete Error: {e}")
+            st.error(f"❌ AI Complete Error with model '{model}': {e}")
+            st.info(f"🔍 Prompt length: {len(prompt)} chars, Max tokens: {max_tokens}")
+            # Show first 200 chars of prompt for debugging
+            if len(prompt) > 200:
+                st.code(f"Prompt preview: {prompt[:200]}...", language="text")
             return ""
     
     def ai_classify(self, text: str, categories: List[str]) -> str:

@@ -188,6 +188,9 @@ class AICache:
             # Build column names for SELECT with AS aliases
             select_columns = self._build_select_columns(table_name, params)
             
+            # Build the source columns list for INSERT
+            source_column_refs = columns.replace(', ', ', source.')
+            
             # Create the MERGE statement for upsert behavior
             merge_query = f"""
             MERGE INTO {self.cache_schema}.{table_name} AS target
@@ -208,14 +211,17 @@ class AICache:
                     UPDATED_AT = source.UPDATED_AT
             WHEN NOT MATCHED THEN
                 INSERT (CACHE_KEY, AI_CONTENT, AI_MODEL, CONFIDENCE_SCORE{columns})
-                VALUES (source.CACHE_KEY, source.AI_CONTENT, source.AI_MODEL, source.CONFIDENCE_SCORE{columns.replace(',', ', source.')})
+                VALUES (source.CACHE_KEY, source.AI_CONTENT, source.AI_MODEL, source.CONFIDENCE_SCORE{source_column_refs})
             """
             
+            # Execute the merge and log success
             self.session.sql(merge_query).collect()
+            # st.success(f"✅ Successfully cached to {table_name} with key: {cache_key[:16]}...")  # Optional debug message
             return True
             
         except Exception as e:
-            st.error(f"Cache write error: {e}")
+            st.error(f"❌ Cache write error for {table_name}: {e}")
+            st.info(f"🔍 Debug - Parameters passed: {list(params.keys())}")
             return False
     
     def _build_select_columns(self, table_name: str, params: Dict[str, Any]) -> str:
