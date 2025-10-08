@@ -168,7 +168,7 @@ def inject_custom_css():
     
     /* Main Telco-branded app styling */
     .main > div {
-        padding-top: 1rem;
+        padding-top: 0rem;
         font-family: 'Ericsson Hilda', 'Source Sans Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         background: var(--exec-bg-secondary);
         color: var(--exec-text-primary);
@@ -184,9 +184,9 @@ def inject_custom_css():
     .app-header {
         background: var(--exec-solid-primary);
         color: white;
-        padding: 3rem 2.5rem;
+        padding: 1.5rem 2rem;
         border-radius: var(--exec-border-radius-lg);
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         box-shadow: var(--exec-shadow-lg);
         position: relative;
         overflow: hidden;
@@ -207,20 +207,20 @@ def inject_custom_css():
     .app-header h1 {
         margin: 0;
         font-weight: 700;
-        font-size: 3rem;
-        line-height: 1.1;
+        font-size: 1.75rem;
+        line-height: 1.2;
         letter-spacing: -0.02em;
         color: white;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     
     .app-header p {
-        margin: 1rem 0 0 0;
+        margin: 0.5rem 0 0 0;
         opacity: 0.95;
-        font-size: 1.25rem;
+        font-size: 1rem;
         font-weight: 400;
-        line-height: 1.5;
-        max-width: 80%;
+        line-height: 1.4;
+        max-width: 90%;
     }
     
     /* Executive metric cards */
@@ -612,11 +612,16 @@ def inject_custom_css():
     
     @media (max-width: 768px) {
         .app-header {
-            padding: 2rem 1.5rem;
+            padding: 1.25rem 1.5rem;
         }
         
         .app-header h1 {
-            font-size: 2.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .app-header p {
+            font-size: 0.9rem;
+            max-width: 100%;
         }
         
         .metric-card .metric-value {
@@ -641,8 +646,16 @@ def inject_custom_css():
             grid-template-columns: 1fr;
         }
         
+        .app-header {
+            padding: 1rem 1.25rem;
+        }
+        
         .app-header h1 {
-            font-size: 2rem;
+            font-size: 1.25rem;
+        }
+        
+        .app-header p {
+            font-size: 0.85rem;
         }
         
         .exec-kpi-card .kpi-value {

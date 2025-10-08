@@ -3,6 +3,14 @@ import pandas as pd
 import pydeck as pdk
 import matplotlib.pyplot as plt
 from snowflake.snowpark.context import get_active_session
+import sys
+import os
+
+# Add utils to path for imports
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils'))
+
+# Import design system components
+from utils.design_system import inject_custom_css, create_page_header
 
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
@@ -12,7 +20,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.markdown("## Cell Tower Performance: Failure and Success Rate Analysis")
+# Inject custom CSS for consistent styling
+inject_custom_css()
+
+# Professional page header
+create_page_header(
+    title="Cell Tower Lookup",
+    description="Cell Tower Performance: Failure and Success Rate Analysis with interactive map visualization",
+    icon=""
+)
 
 # Initialize a Snowpark session for executing queries
 session = get_active_session()

@@ -8,6 +8,14 @@ from snowflake.snowpark.context import get_active_session
 import scipy.stats as stats
 from io import BytesIO
 import base64
+import sys
+import os
+
+# Add utils to path for imports
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'utils'))
+
+# Import design system components
+from utils.design_system import inject_custom_css, create_page_header
 
 # Page configuration - must be the first Streamlit command
 st.set_page_config(
@@ -15,6 +23,16 @@ st.set_page_config(
     page_icon="",
     layout="wide",
     initial_sidebar_state="expanded"
+)
+
+# Inject custom CSS for consistent styling
+inject_custom_css()
+
+# Professional page header
+create_page_header(
+    title="Correlation Analytics",
+    description="Discover relationships between network metrics and customer experience indicators through advanced statistical analysis",
+    icon=""
 )
 
 # Initialize session state for scrolling
@@ -78,8 +96,7 @@ higher_is_better = {
     "Signal Connection Success Rate": True
 }
 
-# Page header
-st.title("Network Metric Correlation Analysis")
+# Additional page information (header is already created above)
 st.markdown("""
 This page helps you discover relationships between different network metrics and customer experience indicators.
 Select a primary metric to see how it correlates with other metrics, enabling data-driven network optimization decisions.
