@@ -356,19 +356,29 @@ with ai_tab1:
             )
             
             if quick_summary:
-                create_ai_metric_card(
-                    "AI Summary",
-                    quick_summary,
-                    description=f"Risk Level: {risk_icon} {risk_score}%",
-                    icon=""
-                )
+                # Fix formatting: replace \n with actual line breaks and display as normal text
+                formatted_summary = quick_summary.replace('\\n', '\n') if '\\n' in quick_summary else quick_summary
+                
+                st.markdown(f"""
+                <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #1f4e79;">
+                    <h4 style="color: #1f4e79; margin: 0 0 1rem 0; font-size: 1rem;">AI Summary</h4>
+                    <div style="color: #495057; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap;">
+                        {formatted_summary}
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef; font-size: 0.85rem; color: #6c757d;">
+                        Risk Level: {risk_icon} {risk_score}%
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
         else:
-            create_ai_metric_card(
-                "Customer Status",
-                "New Customer",
-                description="No support history available for AI analysis",
-                icon=""
-            )
+            st.markdown("""
+            <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 4px solid #28a745;">
+                <h4 style="color: #28a745; margin: 0 0 1rem 0; font-size: 1rem;">Customer Status</h4>
+                <div style="color: #495057; font-size: 0.9rem; line-height: 1.6;">
+                    New Customer - No support history available for AI analysis
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 with ai_tab2:
     st.markdown("###  AI Churn Prediction Model")

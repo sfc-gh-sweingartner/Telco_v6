@@ -370,53 +370,6 @@ with tab1:
                     
             except Exception as e:
                 st.error(f"Error generating executive summary: {e}")
-    
-    with col2:
-        st.markdown("####  Quick AI Insights")
-        
-        # Check for cached quick insight
-        cached_quick_insight = ai_cache.get_cached_result(
-            'AI_INSIGHTS_CACHE',
-            report_type='quick_insight',
-            sub_type=None
-        )
-        
-        # Display cached result if available
-        if cached_quick_insight:
-            ai_cache.display_cache_indicator(cached_quick_insight, show_refresh_hint=False)
-            create_ai_metric_card(
-                "AI Quick Insight",
-                cached_quick_insight['content'],
-                description="Generated using " + cached_quick_insight.get('model', selected_model),
-                icon=""
-            )
-        
-        # Button label changes based on cache
-        quick_button_label = " Refresh Quick Insight" if cached_quick_insight else " Generate Quick Insight"
-        
-        # Quick AI fact generation
-        if st.button(quick_button_label, key="quick_insight"):
-            quick_insight = ai_processor.ai_complete(
-                "Provide ONE key telecom network optimization insight in EXACTLY 100 words. Be specific and actionable.",
-                max_tokens=150
-            )
-            if quick_insight:
-                # Save to cache
-                ai_cache.save_to_cache(
-                    'AI_INSIGHTS_CACHE',
-                    ai_content=quick_insight,
-                    ai_model=selected_model,
-                    confidence_score=0.75,
-                    report_type='quick_insight',
-                    sub_type=None
-                )
-                
-                create_ai_metric_card(
-                    "AI Quick Insight",
-                    quick_insight,
-                    description="Generated using " + selected_model,
-                    icon=""
-                )
 
 with tab2:
     st.markdown("###  AI Pattern Analysis")
